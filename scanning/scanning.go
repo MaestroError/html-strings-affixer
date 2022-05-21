@@ -8,8 +8,34 @@ import (
 	"strings"
 )
 
-// @todo create modul for scanning files
-func scan_recursive(dir_path string, ignore []string) ([]string, []string) {
+type Scan struct {
+	folder                   string
+	allowed_files            []string
+	denied_files_and_folders []string
+	found                    []string
+}
+
+/*
+	@todo make following function as methods of Scan
+	@todo give Scan's properties from main
+	@todo make tests for Scan methods
+*/
+
+func Run() {
+	folders, files := scan_recursive("testdata", []string{"index.blade.php", "denyThisFolder"}, []string{".blade.php", ".jsx"}, true)
+
+	// Files
+	for _, i := range files {
+		fmt.Println(i)
+	}
+
+	// Folders
+	for _, i := range folders {
+		fmt.Println(i)
+	}
+}
+
+func scan_recursive(dir_path string, ignore []string, allowed_files []string, with_dirs bool) ([]string, []string) {
 
 	folders := []string{}
 	files := []string{}
@@ -19,16 +45,8 @@ func scan_recursive(dir_path string, ignore []string) ([]string, []string) {
 
 		_continue := false
 
-		// Loop : Ignore Files & Folders
-		for _, i := range ignore {
-
-			// If ignored path
-			if strings.Index(path, i) != -1 {
-
-				// Continue
-				_continue = true
-			}
-		}
+		// ignore unwanted folders and files
+		deny_files_and_folders(ignore, path, &_continue)
 
 		if _continue == false {
 
@@ -39,21 +57,31 @@ func scan_recursive(dir_path string, ignore []string) ([]string, []string) {
 				log.Fatal(err)
 			}
 
-			// File & Folder Mode
-			f_mode := f.Mode()
+			needed := false
 
-			// Is folder
-			if f_mode.IsDir() {
+			// check if name contains at least one from allowed files
+			check_allowed_types(allowed_files, f.Name(), &needed)
 
-				// Append to Folders Array
-				folders = append(folders, path)
+			if needed {
+				// File & Folder Mode
+				f_mode := f.Mode()
 
-				// Is file
-			} else if f_mode.IsRegular() {
+				// Is folder
+				if f_mode.IsDir() {
 
-				// Append to Files Array
-				files = append(files, path)
+					if with_dirs {
+						// Append to Folders Array
+						folders = append(folders, path)
+					}
+
+					// Is file
+				} else if f_mode.IsRegular() {
+
+					// Append to Files Array
+					files = append(files, path)
+				}
 			}
+
 		}
 
 		return nil
@@ -62,16 +90,24 @@ func scan_recursive(dir_path string, ignore []string) ([]string, []string) {
 	return folders, files
 }
 
-func Run() {
-	folders, files := scan_recursive("C:\\Users\\XPS\\Desktop\\CastelloSupport", []string{".git", "/.git", "/.git/", ".gitignore", ".DS_Store", ".idea", "/.idea/", "/.idea"})
+func deny_files_and_folders(ignore []string, path string, _continue *bool) {
+	// Loop : Ignore Files & Folders
+	for _, i := range ignore {
 
-	// Files
-	for _, i := range files {
-		fmt.Println(i)
+		// If ignored path
+		if strings.Index(path, i) != -1 {
+			// Continue
+			*_continue = true
+		}
 	}
+}
 
-	// Folders
-	for _, i := range folders {
-		fmt.Println(i)
+func check_allowed_types(allowed_files []string, path string, needed *bool) {
+	for _, i := range allowed_files {
+		// If file allowed
+		if strings.Contains(path, i) {
+			// Continue
+			*needed = true
+		}
 	}
 }
