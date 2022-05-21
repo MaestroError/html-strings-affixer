@@ -62,7 +62,7 @@ func scan_recursive(dir_path string, ignore []string) ([]string, []string) {
 	return folders, files
 }
 
-func run() {
+func Run() {
 	folders, files := scan_recursive("C:\\Users\\XPS\\Desktop\\CastelloSupport", []string{".git", "/.git", "/.git/", ".gitignore", ".DS_Store", ".idea", "/.idea/", "/.idea"})
 
 	// Files
