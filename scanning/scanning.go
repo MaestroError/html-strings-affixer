@@ -1,52 +1,74 @@
 package scanning
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-type Scan struct {
+type Scanning struct {
 	folder                   string
-	allowed_files            []string
+	allowed_file_types       []string
 	denied_files_and_folders []string
-	found                    []string
+	found_files              []string
+	found_folders            []string
 }
 
 /*
-	@todo make following function as methods of Scan
-	@todo give Scan's properties from main
+	@todo make following function as methods of Scan +
+	@todo give Scan's properties from main +
+	@todo test if struct is working
 	@todo make tests for Scan methods
 */
 
-func Run() {
-	folders, files := scan_recursive("testdata", []string{"index.blade.php", "denyThisFolder"}, []string{".blade.php", ".jsx"}, true)
-
-	// Files
-	for _, i := range files {
-		fmt.Println(i)
-	}
-
-	// Folders
-	for _, i := range folders {
-		fmt.Println(i)
-	}
+func (scan *Scanning) Run() []string {
+	scan.scan_recursive(false)
+	return scan.found_files
 }
 
-func scan_recursive(dir_path string, ignore []string, allowed_files []string, with_dirs bool) ([]string, []string) {
+func (scan *Scanning) RunWithFolders() ([]string, []string) {
+	scan.scan_recursive(true)
+	return scan.found_files, scan.found_folders
+}
+
+/* Setters */
+// publics
+func (scan *Scanning) SetDeniedFilesAndFolders(files []string) {
+	scan.denied_files_and_folders = files
+}
+
+func (scan *Scanning) SetAllowedFiles(files []string) {
+	scan.allowed_file_types = files
+}
+
+func (scan *Scanning) SetFolder(folder string) {
+	scan.folder = folder
+}
+
+// privates
+func (scan *Scanning) setFoundFiles(files []string) {
+	scan.found_files = files
+}
+
+func (scan *Scanning) setFoundFolders(folders []string) {
+	scan.found_folders = folders
+}
+
+/* Setters End */
+
+func (scan *Scanning) scan_recursive(with_dirs bool) ([]string, []string) {
 
 	folders := []string{}
 	files := []string{}
 
 	// Scan
-	filepath.Walk(dir_path, func(path string, f os.FileInfo, err error) error {
+	filepath.Walk(scan.folder, func(path string, f os.FileInfo, err error) error {
 
 		_continue := false
 
 		// ignore unwanted folders and files
-		deny_files_and_folders(ignore, path, &_continue)
+		scan.deny_files_and_folders(path, &_continue)
 
 		if _continue == false {
 
@@ -60,7 +82,7 @@ func scan_recursive(dir_path string, ignore []string, allowed_files []string, wi
 			needed := false
 
 			// check if name contains at least one from allowed files
-			check_allowed_types(allowed_files, f.Name(), &needed)
+			scan.check_allowed_types(f.Name(), &needed)
 
 			if needed {
 				// File & Folder Mode
@@ -71,14 +93,14 @@ func scan_recursive(dir_path string, ignore []string, allowed_files []string, wi
 
 					if with_dirs {
 						// Append to Folders Array
-						folders = append(folders, path)
+						scan.found_folders = append(folders, path)
 					}
 
 					// Is file
 				} else if f_mode.IsRegular() {
 
 					// Append to Files Array
-					files = append(files, path)
+					scan.found_files = append(files, path)
 				}
 			}
 
@@ -90,9 +112,9 @@ func scan_recursive(dir_path string, ignore []string, allowed_files []string, wi
 	return folders, files
 }
 
-func deny_files_and_folders(ignore []string, path string, _continue *bool) {
+func (scan *Scanning) deny_files_and_folders(path string, _continue *bool) {
 	// Loop : Ignore Files & Folders
-	for _, i := range ignore {
+	for _, i := range scan.denied_files_and_folders {
 
 		// If ignored path
 		if strings.Index(path, i) != -1 {
@@ -102,8 +124,8 @@ func deny_files_and_folders(ignore []string, path string, _continue *bool) {
 	}
 }
 
-func check_allowed_types(allowed_files []string, path string, needed *bool) {
-	for _, i := range allowed_files {
+func (scan *Scanning) check_allowed_types(path string, needed *bool) {
+	for _, i := range scan.allowed_file_types {
 		// If file allowed
 		if strings.Contains(path, i) {
 			// Continue
