@@ -32,6 +32,13 @@ func (scan *Scanning) RunWithFolders() ([]string, []string) {
 	return scan.found_files, scan.found_folders
 }
 
+func (scan *Scanning) Get(folder string, allowed_file_types []string, deny_files_and_folders []string) []string {
+	scan.SetFolder(folder)
+	scan.SetAllowedFiles(allowed_file_types)
+	scan.SetDeniedFilesAndFolders(deny_files_and_folders)
+	return scan.Run()
+}
+
 /* Setters */
 // publics
 func (scan *Scanning) SetDeniedFilesAndFolders(files []string) {
