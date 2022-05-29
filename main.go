@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/MaestroError/html-strings-affixer/scanning"
 )
 
@@ -8,4 +10,6 @@ import (
 func main() {
 	Scan := scanning.Scanning{}
 	Scan.SetFolder("testdata")
+	Scan.SetAllowedFiles([]string{".blade.php", ".jsx"})
+	fmt.Println(Scan.Run())
 }

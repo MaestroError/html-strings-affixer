@@ -18,7 +18,7 @@ type Scanning struct {
 /*
 	@todo make following function as methods of Scan +
 	@todo give Scan's properties from main +
-	@todo test if struct is working
+	@todo test if struct is working +
 	@todo make tests for Scan methods
 */
 
@@ -93,14 +93,14 @@ func (scan *Scanning) scan_recursive(with_dirs bool) ([]string, []string) {
 
 					if with_dirs {
 						// Append to Folders Array
-						scan.found_folders = append(folders, path)
+						scan.found_folders = append(scan.found_folders, path)
 					}
 
 					// Is file
 				} else if f_mode.IsRegular() {
 
 					// Append to Files Array
-					scan.found_files = append(files, path)
+					scan.found_files = append(scan.found_files, path)
 				}
 			}
 
@@ -113,23 +113,27 @@ func (scan *Scanning) scan_recursive(with_dirs bool) ([]string, []string) {
 }
 
 func (scan *Scanning) deny_files_and_folders(path string, _continue *bool) {
-	// Loop : Ignore Files & Folders
-	for _, i := range scan.denied_files_and_folders {
+	if len(scan.denied_files_and_folders) > 0 {
+		// Loop : Ignore Files & Folders
+		for _, i := range scan.denied_files_and_folders {
 
-		// If ignored path
-		if strings.Index(path, i) != -1 {
-			// Continue
-			*_continue = true
+			// If ignored path
+			if strings.Index(path, i) != -1 {
+				// Continue
+				*_continue = true
+			}
 		}
 	}
 }
 
 func (scan *Scanning) check_allowed_types(path string, needed *bool) {
-	for _, i := range scan.allowed_file_types {
-		// If file allowed
-		if strings.Contains(path, i) {
-			// Continue
-			*needed = true
+	if len(scan.allowed_file_types) > 0 {
+		for _, i := range scan.allowed_file_types {
+			// If file allowed
+			if strings.Contains(path, i) {
+				// Continue
+				*needed = true
+			}
 		}
 	}
 }
