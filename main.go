@@ -12,7 +12,7 @@ func main() {
 	files := scanFolder()
 	fmt.Println(files)
 
-	parse := parsehtml.ParseHtml{}
+	parse := parsehtml.Parsehtml{}
 	parse.Init(files[0])
 
 	parse.AddNewString("some founded string", "some founded string to replace")
