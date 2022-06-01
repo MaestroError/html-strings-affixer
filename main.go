@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/MaestroError/html-strings-affixer/parsehtml"
 	"github.com/MaestroError/html-strings-affixer/scanning"
 )
 
@@ -10,6 +11,14 @@ import (
 func main() {
 	files := scanFolder()
 	fmt.Println(files)
+
+	parse := parsehtml.ParseHtml{}
+	parse.Init(files[0])
+
+	parse.AddNewString("some founded string", "some founded string to replace")
+	parse.AddNewString("some founded 1", "string to replace 1")
+
+	fmt.Println(parse.GetFoundStrings())
 }
 
 func scanFolder() []string {
