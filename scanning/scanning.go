@@ -15,13 +15,6 @@ type Scanning struct {
 	found_folders            []string
 }
 
-/*
-	@todo make following function as methods of Scan +
-	@todo give Scan's properties from main +
-	@todo test if struct is working +
-	@todo make tests for Scan methods
-*/
-
 func (scan *Scanning) Run() []string {
 	scan.scan_recursive(false)
 	return scan.found_files

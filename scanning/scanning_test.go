@@ -28,6 +28,7 @@ func TestScanningStructWorks(t *testing.T) {
 
 }
 
+// @todo write benchmark for scanning 1000 files
 func BenchmarkScanningSpeed(b *testing.B) {
 
 }

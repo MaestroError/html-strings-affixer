@@ -8,8 +8,21 @@ import (
 
 // "testdata", []string{"index.blade.php", "denyThisFolder"}, []string{".blade.php", ".jsx"}
 func main() {
+	files := scanFolder()
+	fmt.Println(files)
+}
+
+func scanFolder() []string {
 	Scan := scanning.Scanning{}
+
+	// set scaning folder
 	Scan.SetFolder("testdata")
+
+	// set allowed extensions
 	Scan.SetAllowedFiles([]string{".blade.php", ".jsx"})
-	fmt.Println(Scan.Run())
+
+	// set not allowed files and folder names
+	Scan.SetDeniedFilesAndFolders([]string{})
+
+	return Scan.Run()
 }
