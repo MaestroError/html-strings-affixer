@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"regexp"
+	"strings"
 
 	"github.com/MaestroError/html-strings-affixer/parsehtml"
 	"github.com/MaestroError/html-strings-affixer/scanning"
@@ -19,6 +22,32 @@ func main() {
 	parse.AddNewString("some founded 1", "string to replace 1")
 
 	fmt.Println(parse.GetFoundStrings())
+
+	var r []byte
+	var err1 error
+	r, err1 = ioutil.ReadFile("C:\\Users\\XPS\\Desktop\\html-strings-affixer\\testdata\\pages\\test.blade.php")
+	if err1 != nil {
+		panic(err1)
+	}
+	html := string(r)
+
+	deniedCharacters := []string{"%", "#", "_", ">", "{", "(", "}", ")"}
+	deniedCharString := strings.Join(deniedCharacters, "\\")
+
+	prefix := `\>`
+	subfix := `\<`
+
+	re := regexp.MustCompile(prefix + `[^` + deniedCharString + `].[^` + deniedCharString + `]+` + subfix)
+	fmt.Printf("Pattern: %v\n", re.String()) // print pattern
+
+	fmt.Println("\nText between parentheses:")
+	submatchall := re.FindAllString(html, -1)
+	for _, element := range submatchall {
+		element = strings.Trim(element, ">")
+		element = strings.Trim(element, "</")
+		fmt.Println(element)
+	}
+
 }
 
 func scanFolder() []string {
