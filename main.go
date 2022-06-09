@@ -23,6 +23,7 @@ func main() {
 
 	fmt.Println(parse.GetFoundStrings())
 
+	// Regex
 	var r []byte
 	var err1 error
 	r, err1 = ioutil.ReadFile("C:\\Users\\XPS\\Desktop\\html-strings-affixer\\testdata\\pages\\test.blade.php")
@@ -31,6 +32,9 @@ func main() {
 	}
 	html := string(r)
 
+	// @todo add more denied characters
+	// @todo make it as package with struct and changeable configs
+	// @todo add more check typs (pre-subfix)
 	deniedCharacters := []string{"%", "#", "_", ">", "{", "(", "}", ")"}
 	deniedCharString := strings.Join(deniedCharacters, "\\")
 
