@@ -2,18 +2,23 @@ package parsehtml
 
 import (
 	"bufio"
+	"io/ioutil"
 	"os"
 	"strings"
 )
 
 type Parsehtml struct {
-	file          string
-	found_strings map[string][]map[string]string
-	content       string
+	file              string
+	found_strings     map[string][]map[string]string
+	content           string
+	ignore_characters []string
+	prefix            string
+	suffix            string
+	search_regex      string
 }
 
 /*
-* @todo make Get file content funtion and use it in constructor (Init)
+* @todo make Get file content funtion and use it in constructor (Init) +
 * @todo Simple string extraction function
 * @todo line extraction function from found string (consider dublicate strings)
 * @todo craete list of Visible HTML attributes
@@ -28,6 +33,8 @@ type Parsehtml struct {
 func (parse *Parsehtml) Init(file string) {
 	parse.found_strings = make(map[string][]map[string]string)
 	parse.SetFile(file)
+	parse.getFileContent()
+	parse.setIgnoreCharacters()
 }
 
 // setters
@@ -47,16 +54,28 @@ func (parse *Parsehtml) GetFoundStrings() map[string][]map[string]string {
 	return parse.found_strings
 }
 
+func (parse *Parsehtml) AddIgnoreCharacter(char string) {
+	parse.ignore_characters = append(parse.ignore_characters, char)
+}
+
+func (parse *Parsehtml) SetPrefix(prefix string) {
+	parse.prefix = prefix
+}
+
+func (parse *Parsehtml) SetSuffix(suffix string) {
+	parse.suffix = suffix
+}
+
 // privates
 func (parse *Parsehtml) setFoundStrings(found_strings map[string][]map[string]string) {
 	parse.found_strings = found_strings
 }
 
-// @todo end up this function
-func (parse *Parsehtml) findLineOfString(path string, str string) (int, error) {
-	f, err := os.Open(path)
+func (parse *Parsehtml) findLineOfString(str string) (int, error) {
+	f, err := os.Open(parse.file)
 	if err != nil {
-		return 0, err
+		// return 0, err
+		panic(err)
 	}
 	defer f.Close()
 
@@ -64,9 +83,8 @@ func (parse *Parsehtml) findLineOfString(path string, str string) (int, error) {
 	scanner := bufio.NewScanner(f)
 
 	line := 1
-	// https://golang.org/pkg/bufio/#Scanner.Scan
 	for scanner.Scan() {
-		if strings.Contains(scanner.Text(), "yourstring") {
+		if strings.Contains(scanner.Text(), str) {
 			return line, nil
 		}
 
@@ -75,6 +93,25 @@ func (parse *Parsehtml) findLineOfString(path string, str string) (int, error) {
 
 	if err := scanner.Err(); err != nil {
 		// Handle the error
+		panic(err)
 	}
 	return line, err
+}
+
+func (parse *Parsehtml) getFileContent() {
+	var r []byte
+	var err error
+	r, err = ioutil.ReadFile(parse.file)
+	if err != nil {
+		panic(err)
+	}
+	parse.content = string(r)
+}
+
+func (parse *Parsehtml) setIgnoreCharacters() {
+	parse.ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")"}
+}
+
+func (parse *Parsehtml) generateRegex() {
+
 }

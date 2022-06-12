@@ -26,7 +26,7 @@ func main() {
 	// Regex
 	var r []byte
 	var err1 error
-	r, err1 = ioutil.ReadFile("C:\\Users\\XPS\\Desktop\\html-strings-affixer\\testdata\\pages\\test.blade.php")
+	r, err1 = ioutil.ReadFile("C:\\Users\\XPS\\Desktop\\html-strings-affixer\\testdata\\pages\\checkout.blade.php")
 	if err1 != nil {
 		panic(err1)
 	}
@@ -39,10 +39,10 @@ func main() {
 	deniedCharString := strings.Join(deniedCharacters, "\\")
 
 	// ("|') OR condition with |
-	prefix := `placeholder=("|')`
-	subfix := `("|')`
-	// prefix := `\>`
-	// subfix := `\<`
+	// prefix := `placeholder=("|')`
+	// subfix := `("|')`
+	prefix := `\>`
+	subfix := `\<`
 
 	re := regexp.MustCompile(prefix + `[^` + deniedCharString + `].[^` + deniedCharString + `]+` + subfix)
 	fmt.Printf("Pattern: %v\n", re.String()) // print pattern
