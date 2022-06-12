@@ -1,5 +1,11 @@
 package parsehtml
 
+import (
+	"bufio"
+	"os"
+	"strings"
+)
+
 type Parsehtml struct {
 	file          string
 	found_strings map[string][]map[string]string
@@ -9,6 +15,7 @@ type Parsehtml struct {
 /*
 * @todo make Get file content funtion and use it in constructor (Init)
 * @todo Simple string extraction function
+* @todo line extraction function from found string (consider dublicate strings)
 * @todo craete list of Visible HTML attributes
 * @todo methods for parsing Visible HTML attributes
 * @todo How to catch input type submit's value attribute?
@@ -43,4 +50,31 @@ func (parse *Parsehtml) GetFoundStrings() map[string][]map[string]string {
 // privates
 func (parse *Parsehtml) setFoundStrings(found_strings map[string][]map[string]string) {
 	parse.found_strings = found_strings
+}
+
+// @todo end up this function
+func (parse *Parsehtml) findLineOfString(path string, str string) (int, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return 0, err
+	}
+	defer f.Close()
+
+	// Splits on newlines by default.
+	scanner := bufio.NewScanner(f)
+
+	line := 1
+	// https://golang.org/pkg/bufio/#Scanner.Scan
+	for scanner.Scan() {
+		if strings.Contains(scanner.Text(), "yourstring") {
+			return line, nil
+		}
+
+		line++
+	}
+
+	if err := scanner.Err(); err != nil {
+		// Handle the error
+	}
+	return line, err
 }

@@ -15,5 +15,6 @@
     <p>Testing some - string</p>
     <p>სატესტო</p>
     <input placeholder="Some nice placeholder" />
+    <input placeholder='Some nice placeholder' />
 </body>
 </html>

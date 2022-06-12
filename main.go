@@ -34,12 +34,15 @@ func main() {
 
 	// @todo add more denied characters
 	// @todo make it as package with struct and changeable configs
-	// @todo add more check typs (pre-subfix)
+	// @todo add more check types (pre-subfix)
 	deniedCharacters := []string{"%", "#", "_", ">", "{", "(", "}", ")"}
 	deniedCharString := strings.Join(deniedCharacters, "\\")
 
-	prefix := `\>`
-	subfix := `\<`
+	// ("|') OR condition with |
+	prefix := `placeholder=("|')`
+	subfix := `("|')`
+	// prefix := `\>`
+	// subfix := `\<`
 
 	re := regexp.MustCompile(prefix + `[^` + deniedCharString + `].[^` + deniedCharString + `]+` + subfix)
 	fmt.Printf("Pattern: %v\n", re.String()) // print pattern
