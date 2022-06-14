@@ -16,8 +16,9 @@ func main() {
 	fmt.Println(files)
 
 	parse := parsehtml.Parsehtml{}
-	parse.Init(files[0])
-
+	parse.Init("C:\\Users\\XPS\\Desktop\\html-strings-affixer\\testdata\\pages\\test.blade.php")
+	parse.ExtractText()
+	fmt.Println("Parsed")
 	fmt.Println(parse.GetFoundStrings())
 
 	// Regex

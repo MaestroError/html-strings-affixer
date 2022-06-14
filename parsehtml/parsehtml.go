@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -12,6 +13,7 @@ type Parsehtml struct {
 	file              string
 	found_strings     map[string][]map[string]string
 	content           string
+	original_content  string
 	ignore_characters []string
 	prefix            string
 	suffix            string
@@ -21,8 +23,9 @@ type Parsehtml struct {
 
 /*
 * @todo make Get file content funtion and use it in constructor (Init) +
-* @todo Simple string extraction function and Test it
-* @todo line extraction function from found string (consider dublicate strings)
+* @todo Simple string extraction function and Test it +
+* @todo line extraction function from found string (consider dublicate strings) +
+* @todo Comment everything what you done, consider all logical parts !!!
 * @todo craete list of Visible HTML attributes
 * @todo methods for parsing Visible HTML attributes
 * @todo How to catch input type submit's value attribute?
@@ -37,9 +40,6 @@ func (parse *Parsehtml) Init(file string) {
 	parse.SetFile(file)
 	parse.getFileContent()
 	parse.setIgnoreCharacters()
-	parse.SetPrefix("\\>")
-	parse.SetSuffix("\\<")
-	parse.generateRegex()
 }
 
 // setters
@@ -48,12 +48,12 @@ func (parse *Parsehtml) SetFile(file string) {
 }
 
 // type -> string describing type of visible html
-func (parse *Parsehtml) AddNewString(found string, need_to_replace string, found_type string, line string) {
+func (parse *Parsehtml) AddNewString(found string, need_to_replace string, found_type string, lines string) {
 	foundObject := make(map[string]string)
 	foundObject["found"] = found
 	foundObject["need_to_replace"] = need_to_replace
 	foundObject["type"] = found_type
-	foundObject["line"] = line
+	foundObject["lines"] = lines
 	parse.found_strings[parse.file] = append(parse.found_strings[parse.file], foundObject)
 }
 
@@ -73,12 +73,24 @@ func (parse *Parsehtml) SetSuffix(suffix string) {
 	parse.suffix = suffix
 }
 
+func (parse *Parsehtml) ExtractText() {
+	// set affixes for simple strings extraction
+	parse.SetPrefix("\\>")
+	parse.SetSuffix("\\<")
+	parse.generateRegex()
+	parse.parseContent("text")
+}
+
 // privates
 func (parse *Parsehtml) setFoundStrings(found_strings map[string][]map[string]string) {
 	parse.found_strings = found_strings
 }
 
-func (parse *Parsehtml) findLineOfString(str string) int {
+func (parse *Parsehtml) renewContent() {
+	parse.content = parse.original_content
+}
+
+func (parse *Parsehtml) findLineOfString(str string) []string {
 	f, err := os.Open(parse.file)
 	if err != nil {
 		// return 0, err
@@ -89,12 +101,12 @@ func (parse *Parsehtml) findLineOfString(str string) int {
 	// Splits on newlines by default.
 	scanner := bufio.NewScanner(f)
 
+	foundOnLines := []string{}
 	line := 1
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), str) {
-			return line
+			foundOnLines = append(foundOnLines, strconv.Itoa(line))
 		}
-
 		line++
 	}
 
@@ -102,7 +114,7 @@ func (parse *Parsehtml) findLineOfString(str string) int {
 		// Handle the error
 		panic(err)
 	}
-	return line
+	return foundOnLines
 }
 
 func (parse *Parsehtml) getFileContent() {
@@ -112,7 +124,9 @@ func (parse *Parsehtml) getFileContent() {
 	if err != nil {
 		panic(err)
 	}
-	parse.content = string(r)
+	content := string(r)
+	parse.content = content
+	parse.original_content = content
 }
 
 func (parse *Parsehtml) setIgnoreCharacters() {
@@ -134,7 +148,20 @@ func (parse *Parsehtml) parseContent(htmlType string) {
 	for _, element := range submatchall {
 		found := strings.Trim(element, parse.prefix)
 		found = strings.Trim(found, parse.suffix)
-		line := parse.findLineOfString(found)
-		parse.AddNewString(found, element, htmlType, string(line))
+		if !parse.checkDuplicate(found) {
+			lines := parse.findLineOfString(found)
+			parse.AddNewString(found, element, htmlType, strings.Join(lines, ", "))
+		}
 	}
+}
+
+func (parse *Parsehtml) checkDuplicate(found string) bool {
+	result := false
+	for _, fs := range parse.found_strings[parse.file] {
+		if fs["found"] == found {
+			result = true
+			break
+		}
+	}
+	return result
 }

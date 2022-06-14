@@ -9,7 +9,11 @@
 <body>
     <p>Testing string</p>
     <p>Testing some {} () string</p>
+    <p>Testing string</p>
+    <p>Testing 2</p>
     <p>#hastag #</p>
+    <p>Testing string</p>
+    <p>Testing string</p>
     <p>% Percent %</p>
     <p>_underscore _</p>
     <p>Testing some - string</p>
