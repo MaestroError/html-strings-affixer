@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -14,12 +15,13 @@ type Parsehtml struct {
 	ignore_characters []string
 	prefix            string
 	suffix            string
+	regexp            *regexp.Regexp
 	search_regex      string
 }
 
 /*
 * @todo make Get file content funtion and use it in constructor (Init) +
-* @todo Simple string extraction function
+* @todo Simple string extraction function and Test it
 * @todo line extraction function from found string (consider dublicate strings)
 * @todo craete list of Visible HTML attributes
 * @todo methods for parsing Visible HTML attributes
@@ -35,6 +37,9 @@ func (parse *Parsehtml) Init(file string) {
 	parse.SetFile(file)
 	parse.getFileContent()
 	parse.setIgnoreCharacters()
+	parse.SetPrefix("\\>")
+	parse.SetSuffix("\\<")
+	parse.generateRegex()
 }
 
 // setters
@@ -42,11 +47,13 @@ func (parse *Parsehtml) SetFile(file string) {
 	parse.file = file
 }
 
-func (parse *Parsehtml) AddNewString(found string, need_to_replace string) {
+// type -> string describing type of visible html
+func (parse *Parsehtml) AddNewString(found string, need_to_replace string, found_type string, line string) {
 	foundObject := make(map[string]string)
 	foundObject["found"] = found
 	foundObject["need_to_replace"] = need_to_replace
-	foundObject["type"] = need_to_replace
+	foundObject["type"] = found_type
+	foundObject["line"] = line
 	parse.found_strings[parse.file] = append(parse.found_strings[parse.file], foundObject)
 }
 
@@ -71,7 +78,7 @@ func (parse *Parsehtml) setFoundStrings(found_strings map[string][]map[string]st
 	parse.found_strings = found_strings
 }
 
-func (parse *Parsehtml) findLineOfString(str string) (int, error) {
+func (parse *Parsehtml) findLineOfString(str string) int {
 	f, err := os.Open(parse.file)
 	if err != nil {
 		// return 0, err
@@ -85,7 +92,7 @@ func (parse *Parsehtml) findLineOfString(str string) (int, error) {
 	line := 1
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), str) {
-			return line, nil
+			return line
 		}
 
 		line++
@@ -95,7 +102,7 @@ func (parse *Parsehtml) findLineOfString(str string) (int, error) {
 		// Handle the error
 		panic(err)
 	}
-	return line, err
+	return line
 }
 
 func (parse *Parsehtml) getFileContent() {
@@ -113,5 +120,21 @@ func (parse *Parsehtml) setIgnoreCharacters() {
 }
 
 func (parse *Parsehtml) generateRegex() {
+	if parse.prefix != "" && parse.suffix != "" {
+		deniedCharString := strings.Join(parse.ignore_characters, "\\")
+		// [^\s+] -> used to not match whitespace
+		reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `].[^\s+][^` + deniedCharString + `]+` + parse.suffix)
+		parse.search_regex = reg.String()
+		parse.regexp = reg
+	}
+}
 
+func (parse *Parsehtml) parseContent(htmlType string) {
+	submatchall := parse.regexp.FindAllString(parse.content, -1)
+	for _, element := range submatchall {
+		found := strings.Trim(element, parse.prefix)
+		found = strings.Trim(found, parse.suffix)
+		line := parse.findLineOfString(found)
+		parse.AddNewString(found, element, htmlType, string(line))
+	}
 }

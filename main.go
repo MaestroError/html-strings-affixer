@@ -18,15 +18,12 @@ func main() {
 	parse := parsehtml.Parsehtml{}
 	parse.Init(files[0])
 
-	parse.AddNewString("some founded string", "some founded string to replace")
-	parse.AddNewString("some founded 1", "string to replace 1")
-
 	fmt.Println(parse.GetFoundStrings())
 
 	// Regex
 	var r []byte
 	var err1 error
-	r, err1 = ioutil.ReadFile("C:\\Users\\XPS\\Desktop\\html-strings-affixer\\testdata\\pages\\checkout.blade.php")
+	r, err1 = ioutil.ReadFile("C:\\Users\\XPS\\Desktop\\html-strings-affixer\\testdata\\pages\\test.blade.php")
 	if err1 != nil {
 		panic(err1)
 	}
@@ -42,13 +39,14 @@ func main() {
 	// prefix := `placeholder=("|')`
 	// subfix := `("|')`
 	prefix := `\>`
-	subfix := `\<`
+	subfix := `\<\/`
 
 	re := regexp.MustCompile(prefix + `[^` + deniedCharString + `].[^` + deniedCharString + `]+` + subfix)
 	fmt.Printf("Pattern: %v\n", re.String()) // print pattern
 
 	fmt.Println("\nText between parentheses:")
 	submatchall := re.FindAllString(html, -1)
+	fmt.Println(submatchall)
 	for _, element := range submatchall {
 		element = strings.Trim(element, ">")
 		element = strings.Trim(element, "</")
