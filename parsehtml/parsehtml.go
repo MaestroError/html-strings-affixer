@@ -25,7 +25,8 @@ type Parsehtml struct {
 * @todo make Get file content funtion and use it in constructor (Init) +
 * @todo Simple string extraction function and Test it +
 * @todo line extraction function from found string (consider dublicate strings) +
-* @todo Comment everything what you done, consider all logical parts !!!
+* @todo Comment everything what you done, consider all logical parts +
+* ----------------------------------
 * @todo craete list of Visible HTML attributes
 * @todo methods for parsing Visible HTML attributes
 * @todo How to catch input type submit's value attribute?
@@ -47,7 +48,10 @@ func (parse *Parsehtml) SetFile(file string) {
 	parse.file = file
 }
 
-// type -> string describing type of visible html
+// Adds new string in found_strings
+// sets trimmed string as "found" and original string as "need_to_replace"
+// type -> string describing type of visible html, you can specify it while calling parse.parseContent method
+// lines -> lines where found string exists, you can get it with parse.findLineOfString method
 func (parse *Parsehtml) AddNewString(found string, need_to_replace string, found_type string, lines string) {
 	foundObject := make(map[string]string)
 	foundObject["found"] = found
@@ -73,11 +77,14 @@ func (parse *Parsehtml) SetSuffix(suffix string) {
 	parse.suffix = suffix
 }
 
+// Simple strings extraction method - just plain strings in HTML
 func (parse *Parsehtml) ExtractText() {
 	// set affixes for simple strings extraction
 	parse.SetPrefix("\\>")
 	parse.SetSuffix("\\<")
+	// Generates regex based on prefix, suffix and denied characters
 	parse.generateRegex()
+	// Parses content and adds strings in found_strings with specific type
 	parse.parseContent("text")
 }
 
@@ -103,8 +110,10 @@ func (parse *Parsehtml) findLineOfString(str string) []string {
 
 	foundOnLines := []string{}
 	line := 1
+	// check each line for founded string existence
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), str) {
+			// append line as string in foundOnLines array
 			foundOnLines = append(foundOnLines, strconv.Itoa(line))
 		}
 		line++
@@ -117,6 +126,7 @@ func (parse *Parsehtml) findLineOfString(str string) []string {
 	return foundOnLines
 }
 
+// Reads file and sets content (as content and original_content properties)
 func (parse *Parsehtml) getFileContent() {
 	var r []byte
 	var err error
@@ -129,10 +139,14 @@ func (parse *Parsehtml) getFileContent() {
 	parse.original_content = content
 }
 
+// Sets predefined ignore characters
 func (parse *Parsehtml) setIgnoreCharacters() {
 	parse.ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")"}
 }
 
+// Generates regex based on prefix, suffix and denied characters
+// sets search_regex as regular expression string
+// and regexp as regexp object
 func (parse *Parsehtml) generateRegex() {
 	if parse.prefix != "" && parse.suffix != "" {
 		deniedCharString := strings.Join(parse.ignore_characters, "\\")
@@ -143,6 +157,7 @@ func (parse *Parsehtml) generateRegex() {
 	}
 }
 
+// parses content, trims found strings and adds in found_strings if not already exists
 func (parse *Parsehtml) parseContent(htmlType string) {
 	submatchall := parse.regexp.FindAllString(parse.content, -1)
 	for _, element := range submatchall {
@@ -155,6 +170,7 @@ func (parse *Parsehtml) parseContent(htmlType string) {
 	}
 }
 
+// check if string already exists in found strings
 func (parse *Parsehtml) checkDuplicate(found string) bool {
 	result := false
 	for _, fs := range parse.found_strings[parse.file] {
