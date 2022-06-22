@@ -19,7 +19,7 @@
     <p>Testing some - string</p>
     <p>სატესტო</p>
     <input placeholder="Some nice placeholder" />
-    <input placeholder='Some nice placeholder 2' />
+    <input Placeholder='Some nice placeholder 2' />
 
     <img alt="Alternate text for image" />
 

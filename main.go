@@ -20,6 +20,9 @@ func main() {
 	parse.Init("testdata\\pages\\test.blade.php")
 	parse.ExtractText()
 	parse.ExtractPlaceholder()
+	parse.ExtractAlt()
+	parse.ExtractTitle()
+	parse.ExtractHashtag()
 	fmt.Println("Parsed")
 	PrettyPrint(parse.GetFoundStrings())
 

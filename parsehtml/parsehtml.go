@@ -31,9 +31,9 @@ type Parsehtml struct {
 * @todo line extraction function from found string (consider dublicate strings) +
 * @todo Comment everything what you done, consider all logical parts +
 * ----------------------------------
-* @todo create list of Visible HTML attributes
-* @todo methods for parsing Visible HTML attributes
-* @todo How to catch input type submit's value attribute?
+* @todo create list of Visible HTML attributes+
+* @todo methods for parsing Visible HTML attributes+
+* @todo How to catch input type submit's value attribute? + hashtag
 * @todo Parsing class: Remember replaceable strings with pairs, per file ">Some nice string</"
 * @todo Parsing class: Replace Prefix and Suffix
 * @todo Parsing class: Replace function, which uses Prefix-Suffix and replaceable string pairs per file one by one
@@ -92,15 +92,50 @@ func (parse *Parsehtml) ExtractText() {
 	parse.parseContent("text")
 }
 
-// Simple strings extraction method - just plain strings in HTML
+// HTML input's Placeholders attributes extraction method
 func (parse *Parsehtml) ExtractPlaceholder() {
 	// set affixes for simple strings extraction
-	parse.SetPrefix("placeholder=(\"|')")
+	// (?i) = case insensitive
+	parse.SetPrefix("(?i)placeholder=(\"|')")
 	parse.SetSuffix("(\"|')")
 	// Generates regex based on prefix, suffix and denied characters
 	parse.generateRegex()
 	// Parses content and adds strings in found_strings with specific type
 	parse.parseContent("placeholder")
+}
+
+// HTML img's alt attributes extraction method
+func (parse *Parsehtml) ExtractAlt() {
+	// set affixes for simple strings extraction
+	parse.SetPrefix("(?i)alt=(\"|')")
+	parse.SetSuffix("(\"|')")
+	// Generates regex based on prefix, suffix and denied characters
+	parse.generateRegex()
+	// Parses content and adds strings in found_strings with specific type
+	parse.parseContent("alt")
+}
+
+// HTML title attributes extraction method
+func (parse *Parsehtml) ExtractTitle() {
+	// set affixes for simple strings extraction
+	parse.SetPrefix("(?i)title=(\"|')")
+	parse.SetSuffix("(\"|')")
+	// Generates regex based on prefix, suffix and denied characters
+	parse.generateRegex()
+	// Parses content and adds strings in found_strings with specific type
+	parse.parseContent("title")
+}
+
+// Extracts "#text" type (selected) strings
+func (parse *Parsehtml) ExtractHashtag() {
+	// set affixes for simple strings extraction
+	parse.SetPrefix("(\"|'|>)#")
+	parse.SetSuffix("(\"|'|<)")
+	// Generates regex based on prefix, suffix and denied characters
+	parse.generateRegex()
+	// Parses content and adds strings in found_strings with specific type
+	parse.parseContent("hashtag")
+
 }
 
 // privates
@@ -163,7 +198,7 @@ func (parse *Parsehtml) setIgnoreCharacters() {
 // for example: method for "text" is ExtractText
 // Can be used in future versions for settings (Allow/deny string types)
 func (parse *Parsehtml) setExtractions() {
-	parse.extractions = []string{"text", "placeholder", "alt", "title"}
+	parse.extractions = []string{"text", "placeholder", "alt", "title", "hashtag"}
 }
 
 // Generates regex based on prefix, suffix and denied characters
