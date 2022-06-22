@@ -19,6 +19,13 @@
     <p>Testing some - string</p>
     <p>სატესტო</p>
     <input placeholder="Some nice placeholder" />
-    <input placeholder='Some nice placeholder' />
+    <input placeholder='Some nice placeholder 2' />
+
+    <img alt="Alternate text for image" />
+
+    <input type="submit" value="#Send" />
+
+    <p title='John "ShotGun" Nelson'>John with double quotes</p>
+    
 </body>
 </html>

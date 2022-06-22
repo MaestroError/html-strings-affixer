@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"regexp"
@@ -16,10 +17,11 @@ func main() {
 	fmt.Println(files)
 
 	parse := parsehtml.Parsehtml{}
-	parse.Init("C:\\Users\\XPS\\Desktop\\html-strings-affixer\\testdata\\pages\\test.blade.php")
+	parse.Init("testdata\\pages\\test.blade.php")
 	parse.ExtractText()
+	parse.ExtractPlaceholder()
 	fmt.Println("Parsed")
-	fmt.Println(parse.GetFoundStrings())
+	PrettyPrint(parse.GetFoundStrings())
 
 	// Regex
 	var r []byte
@@ -69,4 +71,12 @@ func scanFolder() []string {
 	Scan.SetDeniedFilesAndFolders([]string{})
 
 	return Scan.Run()
+}
+
+func PrettyPrint(v interface{}) (err error) {
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err == nil {
+		fmt.Println(string(b))
+	}
+	return
 }

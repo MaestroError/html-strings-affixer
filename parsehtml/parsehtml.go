@@ -10,15 +10,19 @@ import (
 )
 
 type Parsehtml struct {
-	file              string
-	found_strings     map[string][]map[string]string
-	content           string
-	original_content  string
+	file             string
+	found_strings    map[string][]map[string]string
+	content          string
+	original_content string
+	// options
 	ignore_characters []string
-	prefix            string
-	suffix            string
-	regexp            *regexp.Regexp
-	search_regex      string
+	extractions       []string
+	// Affixes to search string
+	prefix string
+	suffix string
+	// regex
+	regexp       *regexp.Regexp
+	search_regex string
 }
 
 /*
@@ -27,7 +31,7 @@ type Parsehtml struct {
 * @todo line extraction function from found string (consider dublicate strings) +
 * @todo Comment everything what you done, consider all logical parts +
 * ----------------------------------
-* @todo craete list of Visible HTML attributes
+* @todo create list of Visible HTML attributes
 * @todo methods for parsing Visible HTML attributes
 * @todo How to catch input type submit's value attribute?
 * @todo Parsing class: Remember replaceable strings with pairs, per file ">Some nice string</"
@@ -88,6 +92,17 @@ func (parse *Parsehtml) ExtractText() {
 	parse.parseContent("text")
 }
 
+// Simple strings extraction method - just plain strings in HTML
+func (parse *Parsehtml) ExtractPlaceholder() {
+	// set affixes for simple strings extraction
+	parse.SetPrefix("placeholder=(\"|')")
+	parse.SetSuffix("(\"|')")
+	// Generates regex based on prefix, suffix and denied characters
+	parse.generateRegex()
+	// Parses content and adds strings in found_strings with specific type
+	parse.parseContent("placeholder")
+}
+
 // privates
 func (parse *Parsehtml) setFoundStrings(found_strings map[string][]map[string]string) {
 	parse.found_strings = found_strings
@@ -142,6 +157,13 @@ func (parse *Parsehtml) getFileContent() {
 // Sets predefined ignore characters
 func (parse *Parsehtml) setIgnoreCharacters() {
 	parse.ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")"}
+}
+
+// List of available extractions, which starting with Extract
+// for example: method for "text" is ExtractText
+// Can be used in future versions for settings (Allow/deny string types)
+func (parse *Parsehtml) setExtractions() {
+	parse.extractions = []string{"text", "placeholder", "alt", "title"}
 }
 
 // Generates regex based on prefix, suffix and denied characters
