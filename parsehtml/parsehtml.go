@@ -129,7 +129,7 @@ func (parse *Parsehtml) ExtractTitle() {
 // Extracts "#text" type (selected) strings
 func (parse *Parsehtml) ExtractHashtag() {
 	// set affixes for simple strings extraction
-	parse.SetPrefix("(\"|'|>)#")
+	parse.SetPrefix("(\"|'|>)\\s*#")
 	parse.SetSuffix("(\"|'|<)")
 	// Generates regex based on prefix, suffix and denied characters
 	parse.generateRegex()

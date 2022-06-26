@@ -24,6 +24,8 @@
     <img alt="Alternate text for image" />
 
     <input type="submit" value="#Send" />
+    <input type="submit" value=" #submit" />
+    <input type="submit" value=" # Recived" />
 
     <p title='John "ShotGun" Nelson'>John with double quotes</p>
     
