@@ -1,7 +1,6 @@
 package scanning
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -26,16 +25,6 @@ func TestScanningStructWorks(t *testing.T) {
 
 	defer os.RemoveAll(folderName)
 
-}
-
-// @todo write benchmark for scanning 1000 files
-func BenchmarkScanningSpeed(b *testing.B) {
-
-}
-
-func ExampleScanningStructOutput() {
-	fmt.Println("hello")
-	// Output: hello
 }
 
 func createFile(path string) {

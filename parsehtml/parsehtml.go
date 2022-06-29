@@ -26,17 +26,7 @@ type Parsehtml struct {
 }
 
 /*
-* @todo make Get file content funtion and use it in constructor (Init) +
-* @todo Simple string extraction function and Test it +
-* @todo line extraction function from found string (consider dublicate strings) +
-* @todo Comment everything what you done, consider all logical parts +
-* ----------------------------------
-* @todo create list of Visible HTML attributes+
-* @todo methods for parsing Visible HTML attributes+
-* @todo How to catch input type submit's value attribute? + hashtag
-* @todo Parsing class: Remember replaceable strings with pairs, per file ">Some nice string</"
-* @todo Parsing class: Replace Prefix and Suffix
-* @todo Parsing class: Replace function, which uses Prefix-Suffix and replaceable string pairs per file one by one
+* @todo global extract method, with configs and extraction methods check
 * @todo Tests for Parsehtml
  */
 
