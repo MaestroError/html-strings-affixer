@@ -180,6 +180,7 @@ func (parse *Parsehtml) getFileContent() {
 
 // Sets predefined ignore characters
 func (parse *Parsehtml) setIgnoreCharacters() {
+	// @todo add more denied characters
 	parse.ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")"}
 }
 
