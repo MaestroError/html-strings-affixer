@@ -27,7 +27,6 @@ type Parsehtml struct {
 
 /*
 * @todo global extract method, with configs and extraction methods check
-* @todo Tests for Parsehtml
  */
 
 func (parse *Parsehtml) Init(file string) {
