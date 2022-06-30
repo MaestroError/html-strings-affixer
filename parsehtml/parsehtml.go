@@ -33,7 +33,7 @@ func (parse *Parsehtml) Init(file string) {
 	parse.found_strings = make(map[string][]map[string]string)
 	parse.SetFile(file)
 	parse.getFileContent()
-	parse.setIgnoreCharacters()
+	parse.setDefaultIgnoreCharacters()
 }
 
 // setters
@@ -82,6 +82,7 @@ func (parse *Parsehtml) ExtractText() {
 }
 
 // HTML input's Placeholders attributes extraction method
+// XX - Can't use word "placeholder" inside placeholder - XX
 func (parse *Parsehtml) ExtractPlaceholder() {
 	// set affixes for simple strings extraction
 	// (?i) = case insensitive
@@ -179,15 +180,15 @@ func (parse *Parsehtml) getFileContent() {
 }
 
 // Sets predefined ignore characters
-func (parse *Parsehtml) setIgnoreCharacters() {
+func (parse *Parsehtml) setDefaultIgnoreCharacters() {
 	// @todo add more denied characters
-	parse.ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")"}
+	parse.ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")", "^", "$", "*", "="}
 }
 
 // List of available extractions, which starting with Extract
 // for example: method for "text" is ExtractText
 // Can be used in future versions for settings (Allow/deny string types)
-func (parse *Parsehtml) setExtractions() {
+func (parse *Parsehtml) setDefaultExtractions() {
 	parse.extractions = []string{"text", "placeholder", "alt", "title", "hashtag"}
 }
 
@@ -206,10 +207,13 @@ func (parse *Parsehtml) generateRegex() {
 
 // parses content, trims found strings and adds in found_strings if not already exists
 func (parse *Parsehtml) parseContent(htmlType string) {
+	// find all strings based on regex
 	submatchall := parse.regexp.FindAllString(parse.content, -1)
 	for _, element := range submatchall {
+		// remove finding prefix and suffix
 		found := strings.Trim(element, parse.prefix)
 		found = strings.Trim(found, parse.suffix)
+		// add as new string if no duplicates found
 		if !parse.checkDuplicate(found) {
 			lines := parse.findLineOfString(found)
 			parse.AddNewString(found, element, htmlType, strings.Join(lines, ", "))
