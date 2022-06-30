@@ -210,9 +210,11 @@ func (parse *Parsehtml) parseContent(htmlType string) {
 	// find all strings based on regex
 	submatchall := parse.regexp.FindAllString(parse.content, -1)
 	for _, element := range submatchall {
-		// remove finding prefix and suffix
-		found := strings.Trim(element, parse.prefix)
-		found = strings.Trim(found, parse.suffix)
+		// removes (trims) finding prefix and suffix
+		re := regexp.MustCompile(parse.prefix)
+		found := re.ReplaceAllString(element, "")
+		re = regexp.MustCompile(parse.suffix)
+		found = re.ReplaceAllString(found, "")
 		// add as new string if no duplicates found
 		if !parse.checkDuplicate(found) {
 			lines := parse.findLineOfString(found)

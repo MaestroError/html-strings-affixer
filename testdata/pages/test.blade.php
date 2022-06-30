@@ -8,24 +8,29 @@
 </head>
 <body>
     <p>Testing string</p>
-    <p>Testing not found {} () string</p>
     <p>Testing number 1245</p>
-
+    
+    <!-- Some ignoring characters test -->
+    <p>Testing not found {} () string</p>
     <p>#hastag double #</p>
     <p>% Percent %</p>
     <p>_underscore _</p>
     <p>Testing dash - string</p>
     <p>Testing non-lating სატესტო</p>
 
+
     <input placeholder="Enter some text" />
+    <!-- case insensitive and single-quotes -->
     <input Placeholder='Some text 2' />
 
     <img alt="Alt text for image" />
 
+    <!-- Hashtag extraction -->
     <input type="submit" value="#Send" />
     <input type="submit" value=" #submit" />
     <input type="submit" value=" # Recived" />
 
+    <!-- Title extraction -->
     <p title='John "ShotGun" Nelson'>John with double quotes</p>
     
 </body>
