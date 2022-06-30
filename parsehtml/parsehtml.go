@@ -181,7 +181,6 @@ func (parse *Parsehtml) getFileContent() {
 
 // Sets predefined ignore characters
 func (parse *Parsehtml) setDefaultIgnoreCharacters() {
-	// @todo add more denied characters
 	parse.ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")", "^", "$", "*", "="}
 }
 

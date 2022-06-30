@@ -7,12 +7,22 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/MaestroError/html-strings-affixer/app"
 	"github.com/MaestroError/html-strings-affixer/parsehtml"
 	"github.com/MaestroError/html-strings-affixer/scanning"
 )
 
 // "testdata", []string{"index.blade.php", "denyThisFolder"}, []string{".blade.php", ".jsx"}
 func main() {
+
+	// @todo Create config package and Config struct:
+	//			- parse configs from json file
+	//			- parse from CLI
+	//			- make setter and getter methods
+	//			- inject config in other structs
+
+	app.Bootstrap()
+
 	files := scanFolder()
 	fmt.Println(files)
 
