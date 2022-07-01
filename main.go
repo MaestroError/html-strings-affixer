@@ -33,8 +33,8 @@ func main() {
 	parse.ExtractAlt()
 	parse.ExtractTitle()
 	parse.ExtractHashtag()
-	fmt.Println("Parsed")
-	PrettyPrint(parse.GetFoundStrings())
+	// fmt.Println("Parsed:")
+	// PrettyPrint(parse.GetFoundStrings())
 
 }
 
