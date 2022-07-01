@@ -179,18 +179,6 @@ func (parse *Parsehtml) getFileContent() {
 	parse.original_content = content
 }
 
-// Sets predefined ignore characters
-func (parse *Parsehtml) setDefaultIgnoreCharacters() {
-	parse.ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")", "^", "$", "*", "="}
-}
-
-// List of available extractions, which starting with Extract
-// for example: method for "text" is ExtractText
-// Can be used in future versions for settings (Allow/deny string types)
-func (parse *Parsehtml) setDefaultExtractions() {
-	parse.extractions = []string{"text", "placeholder", "alt", "title", "hashtag"}
-}
-
 // Generates regex based on prefix, suffix and denied characters
 // sets search_regex as regular expression string
 // and regexp as regexp object

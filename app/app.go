@@ -10,7 +10,7 @@ var ErrShutdown = fmt.Errorf("application was shutdown gracefully")
 
 func Bootstrap() {
 	// configs and prepare app for work
-	getCommandExample()
+	// getCommandExample()
 }
 
 func Start() {

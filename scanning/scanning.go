@@ -10,7 +10,7 @@ import (
 type Scanning struct {
 	folder                   string
 	allowed_file_types       []string
-	denied_files_and_folders []string
+	ignore_files_and_folders []string
 	found_files              []string
 	found_folders            []string
 }
@@ -35,7 +35,7 @@ func (scan *Scanning) Get(folder string, allowed_file_types []string, deny_files
 /* Setters */
 // publics
 func (scan *Scanning) SetDeniedFilesAndFolders(files []string) {
-	scan.denied_files_and_folders = files
+	scan.ignore_files_and_folders = files
 }
 
 func (scan *Scanning) SetAllowedFiles(files []string) {
@@ -113,9 +113,9 @@ func (scan *Scanning) scan_recursive(with_dirs bool) ([]string, []string) {
 }
 
 func (scan *Scanning) deny_files_and_folders(path string, _continue *bool) {
-	if len(scan.denied_files_and_folders) > 0 {
+	if len(scan.ignore_files_and_folders) > 0 {
 		// Loop : Ignore Files & Folders
-		for _, i := range scan.denied_files_and_folders {
+		for _, i := range scan.ignore_files_and_folders {
 
 			// If ignored path
 			if strings.Index(path, i) != -1 {
