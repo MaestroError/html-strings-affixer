@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/MaestroError/html-strings-affixer/config"
 )
 
 type Parsehtml struct {
@@ -29,11 +31,14 @@ type Parsehtml struct {
 * @todo global extract method, with configs and extraction methods check
  */
 
-func (parse *Parsehtml) Init(file string) {
+func (parse *Parsehtml) Init(file string, c config.Config) {
 	parse.found_strings = make(map[string][]map[string]string)
 	parse.SetFile(file)
 	parse.getFileContent()
-	parse.setDefaultIgnoreCharacters()
+
+	// set options from config
+	parse.setIgnoreCharacters(c.GetIgnoreCharacters())
+	parse.setExtractions(c.GetAllowedMethods())
 }
 
 // setters
@@ -42,13 +47,13 @@ func (parse *Parsehtml) SetFile(file string) {
 }
 
 // Adds new string in found_strings
-// sets trimmed string as "found" and original string as "need_to_replace"
+// sets trimmed string as "found" and original string as "original_string"
 // type -> string describing type of visible html, you can specify it while calling parse.parseContent method
 // lines -> lines where found string exists, you can get it with parse.findLineOfString method
-func (parse *Parsehtml) AddNewString(found string, need_to_replace string, found_type string, lines string) {
+func (parse *Parsehtml) AddNewString(found string, original_string string, found_type string, lines string) {
 	foundObject := make(map[string]string)
 	foundObject["found"] = found
-	foundObject["need_to_replace"] = need_to_replace
+	foundObject["original_string"] = original_string
 	foundObject["type"] = found_type
 	foundObject["lines"] = lines
 	parse.found_strings[parse.file] = append(parse.found_strings[parse.file], foundObject)
@@ -82,7 +87,7 @@ func (parse *Parsehtml) ExtractText() {
 }
 
 // HTML input's Placeholders attributes extraction method
-// XX - Can't use word "placeholder" inside placeholder - XX
+// XX - Can't use word "placeholder" inside placeholder - XX ?? why? it does well
 func (parse *Parsehtml) ExtractPlaceholder() {
 	// set affixes for simple strings extraction
 	// (?i) = case insensitive
@@ -124,6 +129,7 @@ func (parse *Parsehtml) ExtractHashtag() {
 	// Generates regex based on prefix, suffix and denied characters
 	parse.generateRegex()
 	// Parses content and adds strings in found_strings with specific type
+	// @todo add "#" as strip to remove it while replacing
 	parse.parseContent("hashtag")
 
 }
@@ -179,6 +185,14 @@ func (parse *Parsehtml) getFileContent() {
 	parse.original_content = content
 }
 
+func (parse *Parsehtml) setIgnoreCharacters(ignore_characters []string) {
+	parse.ignore_characters = ignore_characters
+}
+
+func (parse *Parsehtml) setExtractions(allowed_parse_methods []string) {
+	parse.extractions = allowed_parse_methods
+}
+
 // Generates regex based on prefix, suffix and denied characters
 // sets search_regex as regular expression string
 // and regexp as regexp object
@@ -213,6 +227,7 @@ func (parse *Parsehtml) parseContent(htmlType string) {
 // check if string already exists in found strings
 func (parse *Parsehtml) checkDuplicate(found string) bool {
 	result := false
+	// @todo check also type of string or "original_string" (maybe some string will need different methods to replace)
 	for _, fs := range parse.found_strings[parse.file] {
 		if fs["found"] == found {
 			result = true

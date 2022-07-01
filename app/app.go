@@ -4,12 +4,20 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	"github.com/MaestroError/html-strings-affixer/config"
 )
 
 var ErrShutdown = fmt.Errorf("application was shutdown gracefully")
 
+var Configuration config.Config
+
 func Bootstrap() {
 	// configs and prepare app for work
+	Configuration.Init()
+	// @todo parse json file method
+	// @todo get command args method (with higher priority the json)
+
 	// getCommandExample()
 }
 

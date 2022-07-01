@@ -22,16 +22,26 @@
     <input placeholder="Enter some text" />
     <!-- case insensitive and single-quotes -->
     <input Placeholder='Some text 2' />
+    <input Placeholder='Placeholder' />
+    <input placeholder="placeholder" />
 
     <img alt="Alt text for image" />
 
     <!-- Hashtag extraction -->
     <input type="submit" value="#Send" />
-    <input type="submit" value=" #submit" />
+    <input type="submit" value=" #value" />
     <input type="submit" value=" # Recived" />
+    <p>#John with double</p>
+    <!-- XX it ignores this string because of duplicate check -->
+    <p>#John with double quotes</p>
 
     <!-- Title extraction -->
     <p title='John "ShotGun" Nelson'>John with double quotes</p>
+
+    <!-- XX It removes quotes in middle of string (Shouldn't) -->
+    <p title='John "ShotGun" Nelson'>John with double quotes</p>
+    <p>#John with "double"</p>
+    <input Placeholder='Some "text" - 2' />
     
 </body>
 </html>

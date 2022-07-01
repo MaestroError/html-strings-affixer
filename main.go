@@ -18,23 +18,27 @@ func main() {
 	// @todo Create config package and Config struct:
 	//			- parse configs from json file
 	//			- parse from CLI
-	//			- make setter and getter methods
-	//			- inject config in other structs
+	//			- make setter and getter methods +
+	//			- inject config in other structs (parsehtml, scanning)
 
 	app.Bootstrap()
+
+	fmt.Println(app.Configuration)
 
 	files := scanFolder()
 	fmt.Println(files)
 
 	parse := parsehtml.Parsehtml{}
-	parse.Init("testdata\\pages\\test.blade.php")
+	parse.Init("testdata\\pages\\test.blade.php", app.Configuration)
 	parse.ExtractText()
 	parse.ExtractPlaceholder()
 	parse.ExtractAlt()
 	parse.ExtractTitle()
 	parse.ExtractHashtag()
-	// fmt.Println("Parsed:")
-	// PrettyPrint(parse.GetFoundStrings())
+	fmt.Println("Parsed:")
+	fmt.Println(parse.GetFoundStrings())
+	fmt.Println("Pretty:")
+	PrettyPrint(parse.GetFoundStrings())
 
 }
 

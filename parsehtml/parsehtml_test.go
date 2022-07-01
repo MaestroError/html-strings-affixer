@@ -2,12 +2,14 @@ package parsehtml
 
 import (
 	"testing"
+
+	"github.com/MaestroError/html-strings-affixer/app"
 )
 
 func TestStringsExtractionWorks(t *testing.T) {
 	parse := Parsehtml{}
 	file := "..\\testdata\\parsehtml\\test_string.blade.php"
-	parse.Init(file)
+	parse.Init(file, app.Configuration)
 	parse.ExtractText()
 	found := parse.GetFoundStrings()
 
@@ -21,7 +23,7 @@ func TestStringsExtractionWorks(t *testing.T) {
 func TestHashtagExtractionWorks(t *testing.T) {
 	parse := Parsehtml{}
 	file := "..\\testdata\\parsehtml\\test_hashtag.blade.php"
-	parse.Init(file)
+	parse.Init(file, app.Configuration)
 	parse.ExtractHashtag()
 	found := parse.GetFoundStrings()
 
