@@ -1,0 +1,18 @@
+{
+    "folder": "testFolder1",
+    "Allowed_file_types": [
+        "blade.php",
+        ".jsx",
+        ".vue"
+    ],
+    "Ignore_files_and_folders": [
+
+    ],
+    "Allowed_parse_methods": [
+        "text",
+        "placeholder",
+        "alt",
+        "title",
+        "hashtag"
+    ]
+}

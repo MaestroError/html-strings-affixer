@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/MaestroError/html-strings-affixer/app"
-	"github.com/MaestroError/html-strings-affixer/parsehtml"
 	"github.com/MaestroError/html-strings-affixer/scanning"
 )
 
@@ -21,24 +20,29 @@ func main() {
 	//			- make setter and getter methods +
 	//			- inject config in other structs (parsehtml, scanning)
 
+	// @todo Create command package to use in app.go for different commands
+	// 			- Create new type command to use in creating commands (structs??)
+	//			- Add commands: replace, check, watch
+	//			- Add argument or separate command for working with only on one file (--file=?)
+
 	app.Bootstrap()
 
-	fmt.Println(app.Configuration)
+	// fmt.Println(app.Configuration)
 
-	files := scanFolder()
-	fmt.Println(files)
+	// files := scanFolder()
+	// fmt.Println(files)
 
-	parse := parsehtml.Parsehtml{}
-	parse.Init("testdata\\pages\\test.blade.php", app.Configuration)
-	parse.ExtractText()
-	parse.ExtractPlaceholder()
-	parse.ExtractAlt()
-	parse.ExtractTitle()
-	parse.ExtractHashtag()
-	fmt.Println("Parsed:")
-	fmt.Println(parse.GetFoundStrings())
-	fmt.Println("Pretty:")
-	PrettyPrint(parse.GetFoundStrings())
+	// parse := parsehtml.Parsehtml{}
+	// parse.Init("testdata\\pages\\test.blade.php", app.Configuration)
+	// parse.ExtractText()
+	// parse.ExtractPlaceholder()
+	// parse.ExtractAlt()
+	// parse.ExtractTitle()
+	// parse.ExtractHashtag()
+	// fmt.Println("Parsed:")
+	// fmt.Println(parse.GetFoundStrings())
+	// fmt.Println("Pretty:")
+	// PrettyPrint(parse.GetFoundStrings())
 
 }
 

@@ -38,6 +38,7 @@ func (parse *Parsehtml) Init(file string, c config.Config) {
 
 	// set options from config
 	parse.setIgnoreCharacters(c.GetIgnoreCharacters())
+	// @todo check if available, while extracting
 	parse.setExtractions(c.GetAllowedMethods())
 }
 

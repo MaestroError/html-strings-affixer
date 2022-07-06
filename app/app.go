@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/MaestroError/html-strings-affixer/config"
 )
@@ -14,11 +15,14 @@ var Configuration config.Config
 
 func Bootstrap() {
 	// configs and prepare app for work
-	Configuration.Init()
-	// @todo parse json file method
-	// @todo get command args method (with higher priority the json)
 
-	// getCommandExample()
+	// Set config default and read json file
+	Configuration.Init()
+
+	// resolve command options and reset configs (command line argument has higher priority)
+	resolveCommands()
+
+	fmt.Println(Configuration)
 }
 
 func Start() {
@@ -27,6 +31,51 @@ func Start() {
 
 func Shutdown() {
 	// Shutdown contexts, listeners, and such
+}
+
+func resolveCommands() {
+
+	// Replace command
+	// Example: replace -folder=testFolder -only="text,hastag" -allowed="blade.php" -prefix="{{__('" -suffix="')}}"
+	replaceCmd := flag.NewFlagSet("replace", flag.ExitOnError)
+	replaceFolder := replaceCmd.String("folder", "", "Folder to scan")
+	replaceAllowed := replaceCmd.String("allowed", "", "allowed file types, separated by commas")
+	replaceMethods := replaceCmd.String("only", "", "Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag")
+	replacePrefix := replaceCmd.String("prefix", "", "New prefix for strings")
+	replaceSuffix := replaceCmd.String("suffix", "", "New suffix for strings")
+
+	// Check command
+	checkCmd := flag.NewFlagSet("check", flag.ExitOnError)
+
+	switch os.Args[1] {
+	case "replace":
+		// Replace command resolve
+		replaceCmd.Parse(os.Args[2:])
+		// set command name
+		Configuration.SetCurrentCommand("replace")
+		if *replaceFolder != "" {
+			Configuration.SetFolderToScan(*replaceFolder)
+		}
+		if *replaceAllowed != "" {
+			Configuration.SetAllowedFileTypes(strings.Split(*replaceAllowed, ","))
+		}
+		if *replaceMethods != "" {
+			Configuration.SetAllowedParseMethods(strings.Split(*replaceMethods, ","))
+		}
+		if *replacePrefix != "" {
+			Configuration.SetPrefixToSet(*replacePrefix)
+		}
+		if *replaceSuffix != "" {
+			Configuration.SetSuffixToSet(*replaceSuffix)
+		}
+	case "check":
+		// Check command resolve
+		checkCmd.Parse(os.Args[2:])
+		Configuration.SetCurrentCommand("check")
+	default:
+		fmt.Println("expected 'replace', 'watch' or 'check' subcommands")
+		os.Exit(1)
+	}
 }
 
 func getCommandExample() {
@@ -51,7 +100,7 @@ func getCommandExample() {
 
 	// creating options with different commands
 	// command 1
-	fooCmd := flag.NewFlagSet("foo", flag.ExitOnError)
+	fooCmd := flag.NewFlagSet("replace", flag.ExitOnError)
 	fooEnable := fooCmd.Bool("enable", false, "enable")
 	fooName := fooCmd.String("name", "", "name")
 	// command 2

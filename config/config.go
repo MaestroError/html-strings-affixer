@@ -1,80 +1,98 @@
 package config
 
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
+)
+
 type Config struct {
 	// Scanning
-	folder_to_scan           string   // both
-	allowed_file_types       []string // both
-	ignore_files_and_folders []string // only json
+	Folder_to_scan           string   `json:"folder"` // both
+	Allowed_file_types       []string // both
+	Ignore_files_and_folders []string // only json
 	// Parse
-	ignore_characters     []string // only json
-	allowed_parse_methods []string // both
+	Ignore_characters     []string // only json
+	Allowed_parse_methods []string // both
 	// Replace
-	prefix_to_set string // both
-	suffix_to_set string // both
+	Prefix_to_set string // both
+	Suffix_to_set string // both
+	// info
+	current_command string
 }
 
 func (c *Config) Init() {
 	c.setDefaults()
+	c.parseJsonFile()
 }
 
 // Setters
 
-func (c *Config) SetFolderToScan(folder_to_scan string) {
-	c.folder_to_scan = folder_to_scan
+func (c *Config) SetFolderToScan(Folder_to_scan string) {
+	c.Folder_to_scan = Folder_to_scan
 }
 
-func (c *Config) SetAllowedFileTypes(allowed_file_types []string) {
-	c.allowed_file_types = allowed_file_types
+func (c *Config) SetAllowedFileTypes(Allowed_file_types []string) {
+	c.Allowed_file_types = Allowed_file_types
 }
 
-func (c *Config) SetIgnoreFileTypes(ignore_files_and_folders []string) {
-	c.ignore_files_and_folders = ignore_files_and_folders
+func (c *Config) SetIgnoreFileTypes(Ignore_files_and_folders []string) {
+	c.Ignore_files_and_folders = Ignore_files_and_folders
 }
 
-func (c *Config) SetIgnoreCharacters(ignore_characters []string) {
-	c.ignore_characters = ignore_characters
+func (c *Config) SetIgnoreCharacters(Ignore_characters []string) {
+	c.Ignore_characters = Ignore_characters
 }
 
-func (c *Config) SetAllowedParseMethods(allowed_parse_methods []string) {
-	c.allowed_parse_methods = allowed_parse_methods
+func (c *Config) SetAllowedParseMethods(Allowed_parse_methods []string) {
+	c.Allowed_parse_methods = Allowed_parse_methods
 }
 
 func (c *Config) SetPrefixToSet(prefix string) {
-	c.prefix_to_set = prefix
+	c.Prefix_to_set = prefix
 }
 
 func (c *Config) SetSuffixToSet(suffix string) {
-	c.suffix_to_set = suffix
+	c.Suffix_to_set = suffix
+}
+
+func (c *Config) SetCurrentCommand(command_name string) {
+	c.current_command = command_name
 }
 
 // Getters
 
 func (c *Config) GetFolder() string {
-	return c.folder_to_scan
+	return c.Folder_to_scan
 }
 
 func (c *Config) GetFileTypes() []string {
-	return c.allowed_file_types
+	return c.Allowed_file_types
 }
 
 func (c *Config) GetIgnoreFiles() []string {
-	return c.ignore_files_and_folders
+	return c.Ignore_files_and_folders
 }
 
 func (c *Config) GetIgnoreCharacters() []string {
-	return c.ignore_characters
+	return c.Ignore_characters
 }
 
 func (c *Config) GetAllowedMethods() []string {
-	return c.allowed_parse_methods
+	return c.Allowed_parse_methods
 }
 
 func (c *Config) GetPrefix() string {
-	return c.prefix_to_set
+	return c.Prefix_to_set
 }
 
 func (c *Config) GetSuffix() string {
-	return c.suffix_to_set
+	return c.Suffix_to_set
+}
+
+func (c *Config) GetCommandName() string {
+	return c.current_command
 }
 
 // Defaults
@@ -90,33 +108,54 @@ func (c *Config) setDefaults() {
 }
 
 func (c *Config) setDefaultFolder() {
-	c.folder_to_scan = "resources/views"
+	if c.Folder_to_scan == "" {
+		c.Folder_to_scan = "resources/views"
+	}
 }
 
 func (c *Config) setDefaultAllowedFileTypes() {
-	c.allowed_file_types = []string{".blade.php", ".jsx", ".vue", ".twig"}
+	c.Allowed_file_types = []string{".blade.php", ".jsx", ".vue", ".twig"}
 }
 
 func (c *Config) setDefaultIgnoreFilesAndFolders() {
-	c.ignore_files_and_folders = []string{}
+	c.Ignore_files_and_folders = []string{}
 }
 
 // Sets predefined ignore characters
 func (c *Config) setDefaultIgnoreCharacters() {
-	c.ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")", "^", "$", "*", "="}
+	c.Ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")", "^", "$", "*", "="}
 }
 
 // List of available extractions, which starting with "Extract" in parsehtml package
 // for example: method for "text" is ExtractText
 // used for settings (Allow/deny string types)
 func (c *Config) setDefaultAllowedParseMethods() {
-	c.allowed_parse_methods = []string{"text", "placeholder", "alt", "title", "hashtag"}
+	c.Allowed_parse_methods = []string{"text", "placeholder", "alt", "title", "hashtag"}
 }
 
 func (c *Config) setDefaultPreffix() {
-	c.prefix_to_set = "{{ __(\""
+	c.Prefix_to_set = "{{ __(\""
 }
 
 func (c *Config) setDefaultSuffix() {
-	c.suffix_to_set = "\") }}"
+	c.Suffix_to_set = "\") }}"
+}
+
+func (c *Config) parseJsonFile() {
+	jsonFile, err := os.Open("affixer-config.json")
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		fmt.Println(err, "| Config file does not used")
+	}
+
+	fmt.Println("Successfully Opened config file")
+	// defer the closing of our jsonFile so that we can parse it later on
+	defer jsonFile.Close()
+
+	// read our opened xmlFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	// we unmarshal our byteArray which contains our
+	// jsonFile's content into 'users' which we defined above
+	json.Unmarshal(byteValue, &c)
 }
