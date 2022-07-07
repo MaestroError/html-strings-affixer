@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/MaestroError/html-strings-affixer/config"
+	"golang.org/x/exp/slices"
 )
 
 type Parsehtml struct {
@@ -28,7 +29,7 @@ type Parsehtml struct {
 }
 
 /*
-* @todo global extract method, with configs and extraction methods check
+*
  */
 
 func (parse *Parsehtml) Init(file string, c config.Config) {
@@ -38,8 +39,33 @@ func (parse *Parsehtml) Init(file string, c config.Config) {
 
 	// set options from config
 	parse.setIgnoreCharacters(c.GetIgnoreCharacters())
-	// @todo check if available, while extracting
 	parse.setExtractions(c.GetAllowedMethods())
+}
+
+func (parse *Parsehtml) ParseFile(file string, c config.Config) *Parsehtml {
+	parse.Init(file, c)
+
+	if slices.Contains(parse.extractions, "text") {
+		parse.ExtractText()
+	}
+
+	if slices.Contains(parse.extractions, "placeholder") {
+		parse.ExtractPlaceholder()
+	}
+
+	if slices.Contains(parse.extractions, "alt") {
+		parse.ExtractAlt()
+	}
+
+	if slices.Contains(parse.extractions, "title") {
+		parse.ExtractTitle()
+	}
+
+	if slices.Contains(parse.extractions, "hastag") {
+		parse.ExtractHashtag()
+	}
+
+	return parse
 }
 
 // setters
@@ -57,7 +83,7 @@ func (parse *Parsehtml) AddNewString(found string, original_string string, found
 	foundObject["original_string"] = original_string
 	foundObject["type"] = found_type
 	foundObject["lines"] = lines
-	parse.found_strings[parse.file] = append(parse.found_strings[parse.file], foundObject)
+	parse.found_strings["data"] = append(parse.found_strings["data"], foundObject)
 }
 
 func (parse *Parsehtml) GetFoundStrings() map[string][]map[string]string {

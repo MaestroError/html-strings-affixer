@@ -12,6 +12,7 @@ type Config struct {
 	Folder_to_scan           string   `json:"folder"` // both
 	Allowed_file_types       []string // both
 	Ignore_files_and_folders []string // only json
+	one_file                 string   // only CLI
 	// Parse
 	Ignore_characters     []string // only json
 	Allowed_parse_methods []string // both
@@ -61,6 +62,10 @@ func (c *Config) SetCurrentCommand(command_name string) {
 	c.current_command = command_name
 }
 
+func (c *Config) SetOneFile(one_file string) {
+	c.one_file = one_file
+}
+
 // Getters
 
 func (c *Config) GetFolder() string {
@@ -93,6 +98,10 @@ func (c *Config) GetSuffix() string {
 
 func (c *Config) GetCommandName() string {
 	return c.current_command
+}
+
+func (c *Config) GetOneFile() string {
+	return c.one_file
 }
 
 // Defaults
@@ -148,7 +157,7 @@ func (c *Config) parseJsonFile() {
 		fmt.Println(err, "| Config file does not used")
 	}
 
-	fmt.Println("Successfully Opened config file")
+	fmt.Println("Config file used successfully")
 	// defer the closing of our jsonFile so that we can parse it later on
 	defer jsonFile.Close()
 
