@@ -29,7 +29,7 @@ func main() {
 	// fmt.Println(files)
 
 	parse := parsehtml.Parsehtml{}
-	data := parse.ParseFile("testdata\\pages\\test.blade.php", app.Configuration)
+	data := parse.ParseFile("testdata\\test.blade.php", app.Configuration)
 	PrettyPrint(data.GetFoundStrings())
 
 }

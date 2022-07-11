@@ -61,7 +61,7 @@ func (parse *Parsehtml) ParseFile(file string, c config.Config) *Parsehtml {
 		parse.ExtractTitle()
 	}
 
-	if slices.Contains(parse.extractions, "hastag") {
+	if slices.Contains(parse.extractions, "hashtag") {
 		parse.ExtractHashtag()
 	}
 
@@ -71,6 +71,10 @@ func (parse *Parsehtml) ParseFile(file string, c config.Config) *Parsehtml {
 // setters
 func (parse *Parsehtml) SetFile(file string) {
 	parse.file = file
+}
+
+func (parse *Parsehtml) getFile() string {
+	return parse.file
 }
 
 // Adds new string in found_strings
@@ -239,24 +243,24 @@ func (parse *Parsehtml) parseContent(htmlType string) {
 	submatchall := parse.regexp.FindAllString(parse.content, -1)
 	for _, element := range submatchall {
 		// removes (trims) finding prefix and suffix
+		// @todo removes double and single quotes here for $found, need to avoid it
 		re := regexp.MustCompile(parse.prefix)
 		found := re.ReplaceAllString(element, "")
 		re = regexp.MustCompile(parse.suffix)
 		found = re.ReplaceAllString(found, "")
 		// add as new string if no duplicates found
-		if !parse.checkDuplicate(found) {
-			lines := parse.findLineOfString(found)
+		if !parse.checkDuplicate(found, htmlType) {
+			lines := parse.findLineOfString(element)
 			parse.AddNewString(found, element, htmlType, strings.Join(lines, ", "))
 		}
 	}
 }
 
 // check if string already exists in found strings
-func (parse *Parsehtml) checkDuplicate(found string) bool {
+func (parse *Parsehtml) checkDuplicate(found string, found_type string) bool {
 	result := false
-	// @todo check also type of string or "original_string" (maybe some string will need different methods to replace)
-	for _, fs := range parse.found_strings[parse.file] {
-		if fs["found"] == found {
+	for _, fs := range parse.found_strings["data"] {
+		if fs["found"] == found && fs["type"] == found_type {
 			result = true
 			break
 		}
