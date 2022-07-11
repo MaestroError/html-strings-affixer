@@ -32,17 +32,18 @@ func Shutdown() {
 }
 
 func resolveCommands() {
-
-	switch os.Args[1] {
-	case "replace":
-		// Replace command
-		resolveReplaceCommand()
-	case "check":
-		// Check command
-		resolveReplaceCommand()
-	default:
-		fmt.Println("Expected 'replace' or 'check' subcommands")
-		os.Exit(1)
+	if len(os.Args) > 1 {
+		switch os.Args[1] {
+		case "replace":
+			// Replace command
+			resolveReplaceCommand()
+		case "check":
+			// Check command
+			resolveReplaceCommand()
+		default:
+			fmt.Println("Expected 'replace' or 'check' subcommands")
+			os.Exit(1)
+		}
 	}
 }
 
