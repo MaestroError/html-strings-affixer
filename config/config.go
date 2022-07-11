@@ -132,7 +132,7 @@ func (c *Config) setDefaultIgnoreFilesAndFolders() {
 
 // Sets predefined ignore characters
 func (c *Config) setDefaultIgnoreCharacters() {
-	c.Ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")", "^", "$", "*", "="}
+	c.Ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")", "^", "$", "*", "=", "'"}
 }
 
 // List of available extractions, which starting with "Extract" in parsehtml package
@@ -143,11 +143,11 @@ func (c *Config) setDefaultAllowedParseMethods() {
 }
 
 func (c *Config) setDefaultPreffix() {
-	c.Prefix_to_set = "{{ __(\""
+	c.Prefix_to_set = "{{ __('"
 }
 
 func (c *Config) setDefaultSuffix() {
-	c.Suffix_to_set = "\") }}"
+	c.Suffix_to_set = "') }}"
 }
 
 func (c *Config) parseJsonFile() {

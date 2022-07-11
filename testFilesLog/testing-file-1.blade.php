@@ -22,12 +22,14 @@
     <input placeholder="{{ __("Enter some text") }}" />
     <!-- case insensitive and single-quotes -->
     <input Placeholder='{{ __("Some text 2") }}' />
+    {{-- XX Replaces first "placeholder" --}}
     <input {{ __("Placeholder") }}='Placeholder' />
     <input {{ __("placeholder") }}="placeholder" />
 
     <img alt="{{ __("Alt text for image") }}" />
 
     <!-- Hashtag extraction -->
+    {{-- XX it are not removing Hashtags --}}
     <input type="submit" value="#{{ __("Send") }}" />
     <input type="submit" value=" #{{ __("value") }}" />
     <input type="submit" value=" #{{ __(" Recived") }}" />

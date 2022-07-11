@@ -118,8 +118,8 @@ func replace(path string, data []map[string]string) {
 
 	fmt.Println(newContents)
 
-	err = ioutil.WriteFile("testing-file.blade.php", []byte(newContents), 0)
-	if err != nil {
-		panic(err)
-	}
+	// err = ioutil.WriteFile("testing-file.blade.php", []byte(newContents), 0)
+	// if err != nil {
+	// 	panic(err)
+	// }
 }
