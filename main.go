@@ -29,8 +29,10 @@ func main() {
 	// fmt.Println(files)
 
 	parse := parsehtml.Parsehtml{}
-	data := parse.ParseFile("testdata\\test.blade.php", app.Configuration)
-	PrettyPrint(data.GetFoundStrings())
+	path := "testdata\\test.blade.php"
+	data := parse.ParseFile(path, app.Configuration).GetFoundStrings()
+	PrettyPrint(data)
+	replace(path, data["data"])
 
 }
 
@@ -88,5 +90,36 @@ func testExtraction() {
 		element = strings.Trim(element, ">")
 		element = strings.Trim(element, "</")
 		fmt.Println(element)
+	}
+}
+
+func replace(path string, data []map[string]string) {
+	read, err := ioutil.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+	//fmt.Println(string(read))
+	fmt.Println(path)
+
+	var newContents string = string(read)
+	for _, element := range data {
+		str := element["original_string"]
+		startIndex := strings.Index(str, element["found"])
+		if startIndex != -1 {
+			str = str[:startIndex] + app.Configuration.Prefix_to_set + str[startIndex:]
+		}
+		endIndex := strings.Index(str, element["found"]) + len(element["found"])
+		if endIndex != -1 {
+			str = str[:endIndex] + app.Configuration.Suffix_to_set + str[endIndex:]
+		}
+
+		newContents = strings.Replace(newContents, element["original_string"], str, -1)
+	}
+
+	fmt.Println(newContents)
+
+	err = ioutil.WriteFile("testing-file.blade.php", []byte(newContents), 0)
+	if err != nil {
+		panic(err)
 	}
 }
