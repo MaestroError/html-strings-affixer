@@ -132,7 +132,8 @@ func (c *Config) setDefaultIgnoreFilesAndFolders() {
 
 // Sets predefined ignore characters
 func (c *Config) setDefaultIgnoreCharacters() {
-	c.Ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")", "^", "$", "*", "=", "'"}
+	// @todo deny single quotes not working
+	c.Ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")", "^", "$", "*", "=", `'`}
 }
 
 // List of available extractions, which starting with "Extract" in parsehtml package
