@@ -123,7 +123,8 @@ func (parse *Parsehtml) ExtractPlaceholder() {
 	// set affixes for simple strings extraction
 	// (?i) = case insensitive
 	parse.SetPrefix("(?i)placeholder=(\"|')")
-	parse.SetSuffix("(\"|')")
+	// removes quotes in middle of string ("found") fixed with: (\s|/|>)
+	parse.SetSuffix(`(\"|')(\s|/|>)`)
 	// Generates regex based on prefix, suffix and denied characters
 	parse.generateRegex()
 	// Parses content and adds strings in found_strings with specific type
@@ -134,7 +135,7 @@ func (parse *Parsehtml) ExtractPlaceholder() {
 func (parse *Parsehtml) ExtractAlt() {
 	// set affixes for simple strings extraction
 	parse.SetPrefix("(?i)alt=(\"|')")
-	parse.SetSuffix("(\"|')")
+	parse.SetSuffix(`(\"|')(\s|/|>)`)
 	// Generates regex based on prefix, suffix and denied characters
 	parse.generateRegex()
 	// Parses content and adds strings in found_strings with specific type
@@ -145,7 +146,7 @@ func (parse *Parsehtml) ExtractAlt() {
 func (parse *Parsehtml) ExtractTitle() {
 	// set affixes for simple strings extraction
 	parse.SetPrefix("(?i)title=(\"|')")
-	parse.SetSuffix("(\"|')")
+	parse.SetSuffix(`(\"|')(\s|/|>)`)
 	// Generates regex based on prefix, suffix and denied characters
 	parse.generateRegex()
 	// Parses content and adds strings in found_strings with specific type

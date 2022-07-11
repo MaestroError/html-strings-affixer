@@ -24,6 +24,7 @@
     <input Placeholder='Some text 2' />
     <input Placeholder='Placeholder' />
     <input placeholder="placeholder" />
+    <input placeholder="Some text with 'quotes'" />
 
     <img alt="Alt text for image" />
 
@@ -31,7 +32,7 @@
     <input type="submit" value="#Send" />
     <input type="submit" value=" #value" />
     <input type="submit" value=" # Recived" />
-    <p>#John with double</p>
+    <p>#John with 'single'</p>
     <!-- XX it ignores this string because of duplicate check - SOLVED! -->
     <p>#John with double quotes</p>
 

@@ -112,7 +112,7 @@ func replace(path string, data []map[string]string) {
 		if endIndex != -1 {
 			str = str[:endIndex] + app.Configuration.Suffix_to_set + str[endIndex:]
 		}
-
+		fmt.Println(element["found"], startIndex, endIndex)
 		newContents = strings.Replace(newContents, element["original_string"], str, -1)
 	}
 
