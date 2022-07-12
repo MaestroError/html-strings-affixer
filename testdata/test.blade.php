@@ -16,7 +16,9 @@
     <p>% Percent %</p>
     <p>_underscore _</p>
     <p>Testing dash - string</p>
-    <p>Testing non-lating სატესტო</p>
+    <p>Testing non-latin სატესტო</p>
+    <p>Testing 'single' quotes</p>
+    <p>Testing single 'quotes'</p>
 
 
     <input placeholder="Enter some text" />
@@ -32,6 +34,7 @@
     <input type="submit" value="#Send" />
     <input type="submit" value=" #value" />
     <input type="submit" value=" # Recived" />
+    <!-- XX Cant find last single quoted word -->
     <p>#John with 'single'</p>
     <!-- XX it ignores this string because of duplicate check - SOLVED! -->
     <p>#John with double quotes</p>

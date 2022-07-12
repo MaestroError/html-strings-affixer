@@ -104,16 +104,21 @@ func replace(path string, data []map[string]string) {
 	var newContents string = string(read)
 	for _, element := range data {
 		str := element["original_string"]
+		// Find prefix index
 		startIndex := strings.Index(str, element["found"])
-		if startIndex != -1 {
+		if startIndex > -1 {
+			// set prefix
 			str = str[:startIndex] + app.Configuration.Prefix_to_set + str[startIndex:]
-		}
-		endIndex := strings.Index(str, element["found"]) + len(element["found"])
-		if endIndex != -1 {
+			// find suffix index from edited string (str)
+			endIndex := strings.Index(str, element["found"]) + len(element["found"])
+			// set suffix
 			str = str[:endIndex] + app.Configuration.Suffix_to_set + str[endIndex:]
+			// replace original with edited string (str)
+			newContents = strings.Replace(newContents, element["original_string"], str, -1)
+			fmt.Println("Replaced: ", element["found"], startIndex, endIndex)
+		} else {
+			fmt.Println("Not replaced: ", element["found"], startIndex)
 		}
-		fmt.Println(element["found"], startIndex, endIndex)
-		newContents = strings.Replace(newContents, element["original_string"], str, -1)
 	}
 
 	fmt.Println(newContents)
