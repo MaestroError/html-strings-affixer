@@ -276,8 +276,22 @@ func (parse *Parsehtml) checkDoubleQuote() {
 	// @todo end this
 }
 
+// finds and replaces only first occurrence using index
 func (parse *Parsehtml) removeParsePrefix(element string) string {
-	// @todo find and replace only first occurrence
+	// find all occurrences
+	re := regexp.MustCompile(parse.prefix)
+	foundSlice := re.FindAllString(element, -1)
+	// find indexes of first occurrence
+	startIndex := strings.Index(element, foundSlice[0])
+	endIndex := startIndex + len(foundSlice[0])
+	// concatenate everything before start index and after end index
+	found := element[:startIndex] + element[endIndex:]
+
+	return found
+}
+
+func (parse *Parsehtml) removeParseSuffix(element string) string {
+	// find and replace only last occurrence
 	re := regexp.MustCompile(parse.prefix)
 	foundSlice := re.FindAllString(element, -1)
 	// @todo find first element, his index, length and replace as in replacer +
