@@ -2,7 +2,6 @@ package parsehtml
 
 import (
 	"bufio"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -247,8 +246,6 @@ func (parse *Parsehtml) parseContent(htmlType string) {
 		// removes (trims) finding prefix and suffix
 		// @todo removes double and single quotes here for $found, need to avoid it
 		re := regexp.MustCompile(parse.prefix)
-		fmt.Println(parse.prefix, " | ")
-		parse.removeParsePrefix(element)
 		found := re.ReplaceAllString(element, "")
 		re = regexp.MustCompile(parse.suffix)
 		found = re.ReplaceAllString(found, "")
@@ -290,17 +287,15 @@ func (parse *Parsehtml) removeParsePrefix(element string) string {
 	return found
 }
 
+// @todo end this function and apply both in parseContent method
 func (parse *Parsehtml) removeParseSuffix(element string) string {
 	// find and replace only last occurrence
+	// @todo same with suffix using: LastIndex
 	re := regexp.MustCompile(parse.prefix)
 	foundSlice := re.FindAllString(element, -1)
-	// @todo find first element, his index, length and replace as in replacer +
-	// @todo same with suffix using: LastIndex
 	startIndex := strings.Index(element, foundSlice[0])
-	fmt.Println(foundSlice[0], "-", element, "--", startIndex)
 	endIndex := startIndex + len(foundSlice[0])
 	found := element[:startIndex] + element[endIndex:]
-	fmt.Println("found = ", found)
 
 	return found
 }
