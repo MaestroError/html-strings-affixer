@@ -120,7 +120,7 @@ func (parse *Parsehtml) ExtractText() {
 // HTML input's Placeholders attributes extraction method
 // XX - Can't use word "placeholder" inside placeholder - XX ?? why? it does well
 func (parse *Parsehtml) ExtractPlaceholder() {
-	// set affixes for simple strings extraction
+	// set affixes for placeholder attributes extraction
 	// (?i) = case insensitive
 	parse.SetPrefix("(?i)placeholder=(\"|')")
 	// removes quotes in middle of string ("found") fixed with: (\s|/|>)
@@ -133,7 +133,7 @@ func (parse *Parsehtml) ExtractPlaceholder() {
 
 // HTML img's alt attributes extraction method
 func (parse *Parsehtml) ExtractAlt() {
-	// set affixes for simple strings extraction
+	// set affixes for alt attributes extraction
 	parse.SetPrefix("(?i)alt=(\"|')")
 	parse.SetSuffix(`(\"|')(\s|/|>)`)
 	// Generates regex based on prefix, suffix and denied characters
@@ -144,7 +144,7 @@ func (parse *Parsehtml) ExtractAlt() {
 
 // HTML title attributes extraction method
 func (parse *Parsehtml) ExtractTitle() {
-	// set affixes for simple strings extraction
+	// set affixes for title attributes extraction
 	parse.SetPrefix("(?i)title=(\"|')")
 	parse.SetSuffix(`(\"|')(\s|/|>)`)
 	// Generates regex based on prefix, suffix and denied characters
@@ -155,7 +155,7 @@ func (parse *Parsehtml) ExtractTitle() {
 
 // Extracts "#text" type (selected) strings
 func (parse *Parsehtml) ExtractHashtag() {
-	// set affixes for simple strings extraction
+	// set affixes for hashtag strings extraction
 	parse.SetPrefix("(\"|'|>)\\s*#")
 	parse.SetSuffix(`(\"|'|<)(\s|/|>)`)
 	// Generates regex based on prefix, suffix and denied characters
@@ -271,32 +271,44 @@ func (parse *Parsehtml) checkDoubleQuote() {
 	// @todo end this
 }
 
-// finds and replaces only first occurrence using index
+// finds and removes parse prefix
 func (parse *Parsehtml) removeParsePrefix(element string) string {
 	// find all occurrences
 	re := regexp.MustCompile(parse.prefix)
 	foundSlice := re.FindAllString(element, -1)
-	// find indexes of first occurrence
-	startIndex := strings.Index(element, foundSlice[0])
-	endIndex := startIndex + len(foundSlice[0])
-	// concatenate everything before start index and after end index
-	found := element[:startIndex] + element[endIndex:]
 
+	found := parse.removeFirstOccurrence(element, foundSlice[0])
 	return found
 }
 
-// finds and replaces only last occurrence using index
+// finds and removes parse prefix
 func (parse *Parsehtml) removeParseSuffix(element string) string {
 	// find all occurrences
 	re := regexp.MustCompile(parse.suffix)
 	foundSlice := re.FindAllString(element, -1)
 	// get needed part of string (the last)
 	needToRemove := foundSlice[len(foundSlice)-1]
-	// find indexes of last occurrence
-	startIndex := strings.LastIndex(element, needToRemove)
-	endIndex := startIndex + len(needToRemove)
-	// concatenate everything before start index and after end index
-	found := element[:startIndex] + element[endIndex:]
 
+	found := parse.removeLastOccurrence(element, needToRemove)
 	return found
+}
+
+// finds and removes only first occurrence using index
+func (parse *Parsehtml) removeFirstOccurrence(element string, substring string) string {
+	// find indexes of first occurrence
+	startIndex := strings.Index(element, substring)
+	endIndex := startIndex + len(substring)
+	// concatenate everything before start index and after end index
+	removed := element[:startIndex] + element[endIndex:]
+	return removed
+}
+
+// finds and removes only last occurrence using index
+func (parse *Parsehtml) removeLastOccurrence(element string, substring string) string {
+	// find indexes of first occurrence
+	startIndex := strings.LastIndex(element, substring)
+	endIndex := startIndex + len(substring)
+	// concatenate everything before start index and after end index
+	removed := element[:startIndex] + element[endIndex:]
+	return removed
 }

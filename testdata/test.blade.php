@@ -26,7 +26,7 @@
     <input Placeholder='Some text 2' />
 
     <!-- XX replaces first placeholder -->
-    <input Placeholder='Placeholder' />
+    <input Placeholder='test Placeholder' />
     <input placeholder="placeholder" />
 
     <input placeholder="Some text with 'quotes'" />
