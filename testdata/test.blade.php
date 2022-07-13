@@ -24,8 +24,11 @@
     <input placeholder="Enter some text" />
     <!-- case insensitive and single-quotes -->
     <input Placeholder='Some text 2' />
+
+    <!-- XX replaces first placeholder -->
     <input Placeholder='Placeholder' />
     <input placeholder="placeholder" />
+
     <input placeholder="Some text with 'quotes'" />
 
     <img alt="Alt text for image" />
@@ -34,7 +37,7 @@
     <input type="submit" value="#Send" />
     <input type="submit" value=" #value" />
     <input type="submit" value=" # Recived" />
-    <!-- XX Cant find last single quoted word -->
+    <!-- XX Cant find last single quoted word - SOLVED! -->
     <p>#John with 'single'</p>
     <!-- XX it ignores this string because of duplicate check - SOLVED! -->
     <p>#John with double quotes</p>
@@ -44,7 +47,10 @@
 
     <!-- XX It removes quotes in middle of string (Shouldn't) - SOLVED! -->
     <p title='John "ShotGun" Nelson'>John with "double" quotes</p>
+
+    <!-- XX Didn't removes hashtag after replace -->
     <p>#John with "double"</p>
+
     <input Placeholder='Some "text" - 2' />
     
 </body>

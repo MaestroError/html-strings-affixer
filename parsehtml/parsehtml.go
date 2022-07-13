@@ -157,7 +157,7 @@ func (parse *Parsehtml) ExtractTitle() {
 func (parse *Parsehtml) ExtractHashtag() {
 	// set affixes for simple strings extraction
 	parse.SetPrefix("(\"|'|>)\\s*#")
-	parse.SetSuffix("(\"|'|<)")
+	parse.SetSuffix(`(\"|'|<)(\s|/|>)`)
 	// Generates regex based on prefix, suffix and denied characters
 	parse.generateRegex()
 	// Parses content and adds strings in found_strings with specific type
@@ -244,7 +244,6 @@ func (parse *Parsehtml) parseContent(htmlType string) {
 	submatchall := parse.regexp.FindAllString(parse.content, -1)
 	for _, element := range submatchall {
 		// removes (trims) finding prefix and suffix
-		// @todo removes double and single quotes here for $found, need to avoid it
 		found := parse.removeParsePrefix(element)
 		found = parse.removeParseSuffix(found)
 
@@ -286,7 +285,6 @@ func (parse *Parsehtml) removeParsePrefix(element string) string {
 	return found
 }
 
-// @todo end this function and apply both in parseContent method
 // finds and replaces only last occurrence using index
 func (parse *Parsehtml) removeParseSuffix(element string) string {
 	// find all occurrences
