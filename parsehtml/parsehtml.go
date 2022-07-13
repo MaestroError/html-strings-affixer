@@ -161,7 +161,6 @@ func (parse *Parsehtml) ExtractHashtag() {
 	// Generates regex based on prefix, suffix and denied characters
 	parse.generateRegex()
 	// Parses content and adds strings in found_strings with specific type
-	// @todo add "#" as strip to remove it while replacing
 	parse.parseContent("hashtag")
 
 }
@@ -265,10 +264,6 @@ func (parse *Parsehtml) checkDuplicate(found string, found_type string) bool {
 		}
 	}
 	return result
-}
-
-func (parse *Parsehtml) checkDoubleQuote() {
-	// @todo end this
 }
 
 // finds and removes parse prefix

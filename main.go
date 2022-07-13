@@ -104,9 +104,24 @@ func replace(path string, data []map[string]string) {
 	var newContents string = string(read)
 	for _, element := range data {
 		str := element["original_string"]
+		approved := true
+
+		if element["type"] == "hashtag" {
+			// @todo parse.removeFirstOccurrence
+			startIndex := strings.Index(str, "#")
+			endIndex := startIndex + len("#")
+			str = str[:startIndex] + str[endIndex:]
+		}
+
+		if element["type"] == "placeholder" {
+			// @todo replace it with regex in parsehtml struct
+			if element["found"] == "placeholder" {
+				approved = false
+			}
+		}
 		// Find prefix index
 		startIndex := strings.Index(str, element["found"])
-		if startIndex > -1 {
+		if startIndex > -1 && approved {
 			// set prefix
 			str = str[:startIndex] + app.Configuration.Prefix_to_set + str[startIndex:]
 			// find suffix index from edited string (str)
@@ -123,8 +138,8 @@ func replace(path string, data []map[string]string) {
 
 	fmt.Println(newContents)
 
-	// err = ioutil.WriteFile("testing-file.blade.php", []byte(newContents), 0)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	err = ioutil.WriteFile("testing-file.blade.php", []byte(newContents), 0)
+	if err != nil {
+		panic(err)
+	}
 }

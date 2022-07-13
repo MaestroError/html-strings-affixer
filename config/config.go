@@ -132,7 +132,6 @@ func (c *Config) setDefaultIgnoreFilesAndFolders() {
 
 // Sets predefined ignore characters
 func (c *Config) setDefaultIgnoreCharacters() {
-	// @todo deny single quotes not working
 	c.Ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")", "^", "$", "*", "=", `'`}
 }
 
