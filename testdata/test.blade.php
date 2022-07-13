@@ -42,7 +42,7 @@
     <!-- Title extraction -->
     <p title='John "ShotGun" Nelson'>John with double quotes</p>
 
-    <!-- XX It removes quotes in middle of string (Shouldn't) -->
+    <!-- XX It removes quotes in middle of string (Shouldn't) - SOLVED! -->
     <p title='John "ShotGun" Nelson'>John with "double" quotes</p>
     <p>#John with "double"</p>
     <input Placeholder='Some "text" - 2' />

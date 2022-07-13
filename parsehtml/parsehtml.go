@@ -245,10 +245,9 @@ func (parse *Parsehtml) parseContent(htmlType string) {
 	for _, element := range submatchall {
 		// removes (trims) finding prefix and suffix
 		// @todo removes double and single quotes here for $found, need to avoid it
-		re := regexp.MustCompile(parse.prefix)
-		found := re.ReplaceAllString(element, "")
-		re = regexp.MustCompile(parse.suffix)
-		found = re.ReplaceAllString(found, "")
+		found := parse.removeParsePrefix(element)
+		found = parse.removeParseSuffix(found)
+
 		// add as new string if no duplicates found
 		if !parse.checkDuplicate(found, htmlType) {
 			lines := parse.findLineOfString(element)
@@ -288,13 +287,17 @@ func (parse *Parsehtml) removeParsePrefix(element string) string {
 }
 
 // @todo end this function and apply both in parseContent method
+// finds and replaces only last occurrence using index
 func (parse *Parsehtml) removeParseSuffix(element string) string {
-	// find and replace only last occurrence
-	// @todo same with suffix using: LastIndex
-	re := regexp.MustCompile(parse.prefix)
+	// find all occurrences
+	re := regexp.MustCompile(parse.suffix)
 	foundSlice := re.FindAllString(element, -1)
-	startIndex := strings.Index(element, foundSlice[0])
-	endIndex := startIndex + len(foundSlice[0])
+	// get needed part of string (the last)
+	needToRemove := foundSlice[len(foundSlice)-1]
+	// find indexes of last occurrence
+	startIndex := strings.LastIndex(element, needToRemove)
+	endIndex := startIndex + len(needToRemove)
+	// concatenate everything before start index and after end index
 	found := element[:startIndex] + element[endIndex:]
 
 	return found
