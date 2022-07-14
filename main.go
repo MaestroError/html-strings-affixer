@@ -15,11 +15,7 @@ import (
 // "testdata", []string{"index.blade.php", "denyThisFolder"}, []string{".blade.php", ".jsx"}
 func main() {
 
-	// @todo Create config package and Config struct:
-	//			- parse configs from json file +
-	//			- parse from CLI +
-	//			- make setter and getter methods +
-	//			- inject config in other structs (parsehtml, scanning)
+	// @todo - inject config in scanning struct and finish replace command
 
 	app.Bootstrap()
 
@@ -93,6 +89,12 @@ func testExtraction() {
 	}
 }
 
+/*
+* @todo Create replacer package and struct with following actions:
+* 		- Replace
+*		- Log (in json file)
+* 		- Print (results in )
+ */
 func replace(path string, data []map[string]string) {
 	read, err := ioutil.ReadFile(path)
 	if err != nil {
