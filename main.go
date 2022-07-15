@@ -110,14 +110,15 @@ func replace(path string, data []map[string]string) {
 
 		if element["type"] == "hashtag" {
 			// @todo parse.removeFirstOccurrence
-			startIndex := strings.Index(str, "#")
-			endIndex := startIndex + len("#")
-			str = str[:startIndex] + str[endIndex:]
+			parse := parsehtml.Parsehtml{}
+			parse.RemoveFirstOccurrence(str, "#")
+			// startIndex := strings.Index(str, "#")
+			// endIndex := startIndex + len("#")
+			// str = str[:startIndex] + str[endIndex:]
 		}
 
 		if element["type"] == "placeholder" {
-			// @todo replace it with regex in parsehtml struct
-			if element["found"] == "placeholder" {
+			if strings.ToLower(element["found"]) == "placeholder" {
 				approved = false
 			}
 		}
@@ -140,8 +141,8 @@ func replace(path string, data []map[string]string) {
 
 	fmt.Println(newContents)
 
-	err = ioutil.WriteFile("testing-file.blade.php", []byte(newContents), 0)
-	if err != nil {
-		panic(err)
-	}
+	// err = ioutil.WriteFile("testing-file.blade.php", []byte(newContents), 0)
+	// if err != nil {
+	// 	panic(err)
+	// }
 }

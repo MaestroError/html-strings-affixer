@@ -165,6 +165,26 @@ func (parse *Parsehtml) ExtractHashtag() {
 
 }
 
+// finds and removes only first occurrence using index
+func (parse *Parsehtml) RemoveFirstOccurrence(element string, substring string) string {
+	// find indexes of first occurrence
+	startIndex := strings.Index(element, substring)
+	endIndex := startIndex + len(substring)
+	// concatenate everything before start index and after end index
+	removed := element[:startIndex] + element[endIndex:]
+	return removed
+}
+
+// finds and removes only last occurrence using index
+func (parse *Parsehtml) RemoveLastOccurrence(element string, substring string) string {
+	// find indexes of first occurrence
+	startIndex := strings.LastIndex(element, substring)
+	endIndex := startIndex + len(substring)
+	// concatenate everything before start index and after end index
+	removed := element[:startIndex] + element[endIndex:]
+	return removed
+}
+
 // privates
 func (parse *Parsehtml) setFoundStrings(found_strings map[string][]map[string]string) {
 	parse.found_strings = found_strings
@@ -272,7 +292,7 @@ func (parse *Parsehtml) removeParsePrefix(element string) string {
 	re := regexp.MustCompile(parse.prefix)
 	foundSlice := re.FindAllString(element, -1)
 
-	found := parse.removeFirstOccurrence(element, foundSlice[0])
+	found := parse.RemoveFirstOccurrence(element, foundSlice[0])
 	return found
 }
 
@@ -284,26 +304,6 @@ func (parse *Parsehtml) removeParseSuffix(element string) string {
 	// get needed part of string (the last)
 	needToRemove := foundSlice[len(foundSlice)-1]
 
-	found := parse.removeLastOccurrence(element, needToRemove)
+	found := parse.RemoveLastOccurrence(element, needToRemove)
 	return found
-}
-
-// finds and removes only first occurrence using index
-func (parse *Parsehtml) removeFirstOccurrence(element string, substring string) string {
-	// find indexes of first occurrence
-	startIndex := strings.Index(element, substring)
-	endIndex := startIndex + len(substring)
-	// concatenate everything before start index and after end index
-	removed := element[:startIndex] + element[endIndex:]
-	return removed
-}
-
-// finds and removes only last occurrence using index
-func (parse *Parsehtml) removeLastOccurrence(element string, substring string) string {
-	// find indexes of first occurrence
-	startIndex := strings.LastIndex(element, substring)
-	endIndex := startIndex + len(substring)
-	// concatenate everything before start index and after end index
-	removed := element[:startIndex] + element[endIndex:]
-	return removed
 }
