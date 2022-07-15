@@ -94,6 +94,10 @@ func (parse *Parsehtml) GetFoundStrings() map[string][]map[string]string {
 	return parse.found_strings
 }
 
+func (parse *Parsehtml) GetOriginalContent() string {
+	return parse.original_content
+}
+
 func (parse *Parsehtml) AddIgnoreCharacter(char string) {
 	parse.ignore_characters = append(parse.ignore_characters, char)
 }
