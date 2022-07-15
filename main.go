@@ -90,10 +90,11 @@ func testExtraction() {
 }
 
 /*
-* @todo Create replacer package and struct with following actions:
-* 		- Replace
-*		- Log (in json file)
-* 		- Print (results in )
+* @todo Create structs with following actions:
+* 		- Affixer
+*			- Logger (in json file)
+*			- Backup (Zips original content of file )
+* 		- Reporter (results in CLI)
  */
 func replace(path string, data []map[string]string) {
 	read, err := ioutil.ReadFile(path)

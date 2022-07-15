@@ -4,6 +4,7 @@ Finds texts in HTML and replaces it with suffixed and prefixed string
 
 ### To Do
 - Make check command to print files and found strings count
+- Make restore command using backup
 - Write documentation in readme file
 - Release #1 - 0.0.1
 - register on packagist (Composer require)
