@@ -54,6 +54,7 @@ func (r *Replacer) Affix(element map[string]string, parser *parsehtml.Parsehtml)
 	original_string := element["original_string"]
 	found := element["found"]
 
+	// Extra manipulation
 	if element["type"] == "hashtag" {
 		str = parser.RemoveFirstOccurrence(str, "#")
 	}

@@ -148,34 +148,44 @@ func scanFolder() []string {
 /*
 * @todo Create structs with following actions:
 * 		- Affixer
-*			- Logger (in json file)
-*			- Backup (Zips original content of file )
+*		- Logger (in json file)
+*		- Backup (Zips original content of file )
 * 		- Reporter (results in CLI)
-* @todo comment it
  */
 func Replace(path string, parser *parsehtml.Parsehtml) {
+	// get replacement data from parsers
 	data := parser.GetFoundStrings()["data"]
 
+	// get file content from parser to not re-read
 	var content string = parser.GetOriginalContent()
 
+	// var for warning messages
+	// var msg []string
+
+	// prepare replacer object for use
 	affixer := replacer.Replacer{}
 	affixer.SetPath(path).SetContent(content)
 	affixer.SetPrefix(Configuration.Prefix_to_set).SetSuffix(Configuration.Suffix_to_set)
 
+	// loop on found strings
 	for _, element := range data {
+		// Extra checks
 		approved := true
-
+		// if placeholder attribute contains only "placeholder"
 		if element["type"] == "placeholder" {
 			if strings.ToLower(element["found"]) == "placeholder" {
 				approved = false
+				// @todo add message here
 			}
 		}
 
+		// affix found string if all checks passed well
 		if approved {
 			affixer.Affix(element, parser)
 		}
 	}
 
+	// write file with same name
 	err := ioutil.WriteFile(path, []byte(affixer.GetContent()), 0)
 	if err != nil {
 		panic(err)
