@@ -77,6 +77,10 @@ func (parse *Parsehtml) getFile() string {
 	return parse.file
 }
 
+func (parse *Parsehtml) getOriginalContent() string {
+	return parse.original_content
+}
+
 // Adds new string in found_strings
 // sets trimmed string as "found" and original string as "original_string"
 // type -> string describing type of visible html, you can specify it while calling parse.parseContent method

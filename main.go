@@ -29,7 +29,7 @@ func main() {
 	path := "testdata\\test.blade.php"
 	data := parse.ParseFile(path, app.Configuration).GetFoundStrings()
 	PrettyPrint(data)
-	replace(path, data["data"])
+	replace(path, &parse)
 
 }
 
@@ -97,17 +97,13 @@ func testExtraction() {
 *			- Backup (Zips original content of file )
 * 		- Reporter (results in CLI)
  */
-func replace(path string, data []map[string]string) {
-	read, err := ioutil.ReadFile(path)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(path)
+func replace(path string, parser *parsehtml.Parsehtml) {
+	data := parser.GetFoundStrings()["data"]
 
-	var newContents string = string(read)
+	var content string = parser.GetOriginalContent()
 
 	affixer := replacer.Replacer{}
-	affixer.SetPath(path).SetContent(newContents)
+	affixer.SetPath(path).SetContent(content)
 	affixer.SetPrefix(app.Configuration.Prefix_to_set).SetSuffix(app.Configuration.Suffix_to_set)
 
 	for _, element := range data {
@@ -115,8 +111,7 @@ func replace(path string, data []map[string]string) {
 		str := element["original_string"]
 
 		if element["type"] == "hashtag" {
-			parse := parsehtml.Parsehtml{}
-			str = parse.RemoveFirstOccurrence(str, "#")
+			str = parser.RemoveFirstOccurrence(str, "#")
 		}
 
 		if element["type"] == "placeholder" {
@@ -126,7 +121,7 @@ func replace(path string, data []map[string]string) {
 		}
 
 		if approved {
-			affixer.Affix(str, element["found"])
+			affixer.Affix(str, element["found"], element)
 		}
 	}
 

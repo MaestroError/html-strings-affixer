@@ -47,7 +47,7 @@ func (r *Replacer) SetBackup(backup backup.Backup) *Replacer {
 	return r
 }
 
-func (r *Replacer) Affix(original_string string, found string) {
+func (r *Replacer) Affix(original_string string, found string, element map[string]string) {
 	str := original_string
 	// Find prefix index
 	startIndex := strings.Index(str, found)
@@ -60,9 +60,9 @@ func (r *Replacer) Affix(original_string string, found string) {
 		str = str[:endIndex] + r.suffix + str[endIndex:]
 		// replace original with edited string (str)
 		r.content = strings.Replace(r.content, original_string, str, -1)
-		fmt.Println("Replaced: ", found, startIndex, endIndex)
+		fmt.Println("Replaced: ", element)
 	} else {
-		fmt.Println("Not replaced: ", found, startIndex)
+		fmt.Println("Not replaced: ", element)
 	}
 }
 

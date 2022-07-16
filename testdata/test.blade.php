@@ -33,7 +33,7 @@
     <input placeholder="Enter some text" />
     <input Placeholder='Some text 2' />
 
-    <!-- XX replaces first placeholder -->
+    <!-- XX replaces first placeholder  - SOLVED! (passing) -->
     <input Placeholder='test Placeholder' />
     <input placeholder="placeholder" />
 
@@ -54,7 +54,7 @@
     <!-- XX It removes quotes in middle of string (Shouldn't) - SOLVED! -->
     <p title='John "ShotGun" Nelson'>John with "double" quotes</p>
 
-    <!-- XX Didn't removes hashtag after replace -->
+    <!-- XX Didn't removes hashtag after replace - SOLVED! -->
     <p>#John with "double"</p>
 
     <input Placeholder='Some "text" - 2' />
