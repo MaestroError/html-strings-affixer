@@ -36,9 +36,9 @@ func Start() {
 	switch command {
 	case "replace":
 		files := scanFolder()
-		for _, file := range files {
+		for _, path := range files {
 			parse := parsehtml.Parsehtml{}
-			path := createTestFile(file)
+			// path = createTestFile(path)
 			parse.ParseFile(path, Configuration)
 			Replace(path, &parse)
 		}

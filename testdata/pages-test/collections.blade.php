@@ -3,10 +3,10 @@
 <div class="ps-categogy ps-categogy--separate">
     <div class="container pb-4">
         <ul class="ps-breadcrumb">
-            <li class="ps-breadcrumb__item"><a href="/">მთავარი</a></li>
-            <li class="ps-breadcrumb__item active" aria-current="page">ყველა კოლექცია</li>
+            <li class="ps-breadcrumb__item"><a href="/">{{ __('მთავარი') }}</a></li>
+            <li class="ps-breadcrumb__item active" aria-current="page">{{ __('ყველა კოლექცია') }}</li>
         </ul>
-        <h1 class="ps-categogy__name">ყველა კოლექცია</h1>
+        <h1 class="ps-categogy__name">{{ __('ყველა კოლექცია') }}</h1>
 
        
     </div>
@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     @empty
-                        <p>კოლექციები ვერ მოიძებნა</p>
+                        <p>{{ __('კოლექციები ვერ მოიძებნა') }}</p>
                     @endforelse
                     
                 </div>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="ps-delivery" data-background="/template/img/promotion/banner-delivery-2.jpg">
                     <div class="ps-delivery__content">
-                        <div class="ps-delivery__text"> <i class="icon-shield-check"></i><span> <strong>100% Secure delivery </strong>without contacting the courier</span></div><a class="ps-delivery__more" href="#">More</a>
+                        <div class="ps-delivery__text"> <i class="icon-shield-check"></i><span> <strong>100% Secure delivery </strong>{{ __('without contacting the courier') }}</span></div><a class="ps-delivery__more" href="#">{{ __('More') }}</a>
                     </div>
                 </div>
             </div>
