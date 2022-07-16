@@ -9,6 +9,7 @@ import (
 
 	"github.com/MaestroError/html-strings-affixer/app"
 	"github.com/MaestroError/html-strings-affixer/parsehtml"
+	"github.com/MaestroError/html-strings-affixer/replacer"
 	"github.com/MaestroError/html-strings-affixer/scanning"
 )
 
@@ -101,21 +102,21 @@ func replace(path string, data []map[string]string) {
 	if err != nil {
 		panic(err)
 	}
-	//fmt.Println(string(read))
 	fmt.Println(path)
 
 	var newContents string = string(read)
+
+	affixer := replacer.Replacer{}
+	affixer.SetPath(path).SetContent(newContents)
+	affixer.SetPrefix(app.Configuration.Prefix_to_set).SetSuffix(app.Configuration.Suffix_to_set)
+
 	for _, element := range data {
-		str := element["original_string"]
 		approved := true
+		str := element["original_string"]
 
 		if element["type"] == "hashtag" {
-			// @todo parse.removeFirstOccurrence
 			parse := parsehtml.Parsehtml{}
-			parse.RemoveFirstOccurrence(str, "#")
-			// startIndex := strings.Index(str, "#")
-			// endIndex := startIndex + len("#")
-			// str = str[:startIndex] + str[endIndex:]
+			str = parse.RemoveFirstOccurrence(str, "#")
 		}
 
 		if element["type"] == "placeholder" {
@@ -123,24 +124,13 @@ func replace(path string, data []map[string]string) {
 				approved = false
 			}
 		}
-		// Find prefix index
-		startIndex := strings.Index(str, element["found"])
-		if startIndex > -1 && approved {
-			// set prefix
-			str = str[:startIndex] + app.Configuration.Prefix_to_set + str[startIndex:]
-			// find suffix index from edited string (str)
-			endIndex := strings.Index(str, element["found"]) + len(element["found"])
-			// set suffix
-			str = str[:endIndex] + app.Configuration.Suffix_to_set + str[endIndex:]
-			// replace original with edited string (str)
-			newContents = strings.Replace(newContents, element["original_string"], str, -1)
-			fmt.Println("Replaced: ", element["found"], startIndex, endIndex)
-		} else {
-			fmt.Println("Not replaced: ", element["found"], startIndex)
+
+		if approved {
+			affixer.Affix(str, element["found"])
 		}
 	}
 
-	fmt.Println(newContents)
+	fmt.Println(affixer.GetContent())
 
 	// err = ioutil.WriteFile("testing-file.blade.php", []byte(newContents), 0)
 	// if err != nil {
