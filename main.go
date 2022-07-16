@@ -9,8 +9,6 @@ import (
 
 	"github.com/MaestroError/html-strings-affixer/app"
 	"github.com/MaestroError/html-strings-affixer/parsehtml"
-	"github.com/MaestroError/html-strings-affixer/replacer"
-	"github.com/MaestroError/html-strings-affixer/scanning"
 )
 
 // "testdata", []string{"index.blade.php", "denyThisFolder"}, []string{".blade.php", ".jsx"}
@@ -20,32 +18,17 @@ func main() {
 
 	app.Bootstrap()
 
-	fmt.Println(app.Configuration)
-
-	// files := scanFolder()
-	// fmt.Println(files)
-
-	parse := parsehtml.Parsehtml{}
-	path := "testdata\\test.blade.php"
-	data := parse.ParseFile(path, app.Configuration).GetFoundStrings()
-	PrettyPrint(data)
-	replace(path, &parse)
+	debug()
 
 }
 
-func scanFolder() []string {
-	Scan := scanning.Scanning{}
+func debug() {
+	parse := parsehtml.Parsehtml{}
+	path := "testdata\\test.blade.php"
+	parse.ParseFile(path, app.Configuration)
+	// PrettyPrint(data)
+	app.Replace(path, &parse)
 
-	// set scaning folder
-	Scan.SetFolder("testdata")
-
-	// set allowed extensions
-	Scan.SetAllowedFiles([]string{".blade.php", ".jsx"})
-
-	// set not allowed files and folder names
-	Scan.SetDeniedFilesAndFolders([]string{})
-
-	return Scan.Run()
 }
 
 func PrettyPrint(v interface{}) (err error) {
@@ -88,47 +71,4 @@ func testExtraction() {
 		element = strings.Trim(element, "</")
 		fmt.Println(element)
 	}
-}
-
-/*
-* @todo Create structs with following actions:
-* 		- Affixer
-*			- Logger (in json file)
-*			- Backup (Zips original content of file )
-* 		- Reporter (results in CLI)
- */
-func replace(path string, parser *parsehtml.Parsehtml) {
-	data := parser.GetFoundStrings()["data"]
-
-	var content string = parser.GetOriginalContent()
-
-	affixer := replacer.Replacer{}
-	affixer.SetPath(path).SetContent(content)
-	affixer.SetPrefix(app.Configuration.Prefix_to_set).SetSuffix(app.Configuration.Suffix_to_set)
-
-	for _, element := range data {
-		approved := true
-		str := element["original_string"]
-
-		if element["type"] == "hashtag" {
-			str = parser.RemoveFirstOccurrence(str, "#")
-		}
-
-		if element["type"] == "placeholder" {
-			if strings.ToLower(element["found"]) == "placeholder" {
-				approved = false
-			}
-		}
-
-		if approved {
-			affixer.Affix(str, element["found"], element)
-		}
-	}
-
-	fmt.Println(affixer.GetContent())
-
-	// err = ioutil.WriteFile("testing-file.blade.php", []byte(newContents), 0)
-	// if err != nil {
-	// 	panic(err)
-	// }
 }
