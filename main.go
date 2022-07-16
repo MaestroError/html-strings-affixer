@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/MaestroError/html-strings-affixer/app"
-	"github.com/MaestroError/html-strings-affixer/parsehtml"
 )
 
 // "testdata", []string{"index.blade.php", "denyThisFolder"}, []string{".blade.php", ".jsx"}
@@ -18,16 +17,12 @@ func main() {
 
 	app.Bootstrap()
 
-	debug()
+	app.Start()
+	// debug()
 
 }
 
 func debug() {
-	parse := parsehtml.Parsehtml{}
-	path := "testdata\\test.blade.php"
-	parse.ParseFile(path, app.Configuration)
-	// PrettyPrint(data)
-	app.Replace(path, &parse)
 
 }
 

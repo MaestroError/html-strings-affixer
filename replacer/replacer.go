@@ -6,6 +6,7 @@ import (
 
 	"github.com/MaestroError/html-strings-affixer/backup"
 	"github.com/MaestroError/html-strings-affixer/logger"
+	"github.com/MaestroError/html-strings-affixer/parsehtml"
 )
 
 type Replacer struct {
@@ -47,8 +48,15 @@ func (r *Replacer) SetBackup(backup backup.Backup) *Replacer {
 	return r
 }
 
-func (r *Replacer) Affix(original_string string, found string, element map[string]string) {
-	str := original_string
+func (r *Replacer) Affix(element map[string]string, parser *parsehtml.Parsehtml) {
+
+	str := element["original_string"]
+	original_string := element["original_string"]
+	found := element["found"]
+
+	if element["type"] == "hashtag" {
+		str = parser.RemoveFirstOccurrence(str, "#")
+	}
 	// Find prefix index
 	startIndex := strings.Index(str, found)
 	if startIndex > -1 {

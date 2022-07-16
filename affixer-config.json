@@ -1,5 +1,5 @@
 {
-    "folder": "testFolder1",
+    "folder": "testdata/pages-test",
     "Allowed_file_types": [
         "blade.php",
         ".jsx",

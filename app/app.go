@@ -3,8 +3,12 @@ package app
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
+	"math/rand"
 	"os"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/MaestroError/html-strings-affixer/config"
 	"github.com/MaestroError/html-strings-affixer/parsehtml"
@@ -31,6 +35,13 @@ func Start() {
 	command := Configuration.GetCommandName()
 	switch command {
 	case "replace":
+		files := scanFolder()
+		for _, file := range files {
+			parse := parsehtml.Parsehtml{}
+			path := createTestFile(file)
+			parse.ParseFile(path, Configuration)
+			Replace(path, &parse)
+		}
 		// Replace command
 	case "check":
 		// Check command\
@@ -140,6 +151,7 @@ func scanFolder() []string {
 *			- Logger (in json file)
 *			- Backup (Zips original content of file )
 * 		- Reporter (results in CLI)
+* @todo comment it
  */
 func Replace(path string, parser *parsehtml.Parsehtml) {
 	data := parser.GetFoundStrings()["data"]
@@ -152,11 +164,6 @@ func Replace(path string, parser *parsehtml.Parsehtml) {
 
 	for _, element := range data {
 		approved := true
-		str := element["original_string"]
-
-		if element["type"] == "hashtag" {
-			str = parser.RemoveFirstOccurrence(str, "#")
-		}
 
 		if element["type"] == "placeholder" {
 			if strings.ToLower(element["found"]) == "placeholder" {
@@ -165,18 +172,63 @@ func Replace(path string, parser *parsehtml.Parsehtml) {
 		}
 
 		if approved {
-			affixer.Affix(str, element["found"], element)
+			affixer.Affix(element, parser)
 		}
 	}
 
-	fmt.Println(affixer.GetContent())
-
-	// err = ioutil.WriteFile("testing-file.blade.php", []byte(newContents), 0)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	err := ioutil.WriteFile(path, []byte(affixer.GetContent()), 0)
+	if err != nil {
+		panic(err)
+	}
 }
 
-func debug() {
+/* Testing */
 
+func debug() {
+	parse := parsehtml.Parsehtml{}
+	path := createTestFile("test.blade.php")
+	parse.ParseFile(path, Configuration)
+	Replace(path, &parse)
+}
+
+func createTestFile(path string) string {
+	var r []byte
+	var err error
+	r, err = ioutil.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+	createDirIfNotExists("testdata\\replaceTests")
+	content := string(r)
+	rand.Seed(time.Now().UnixNano())
+	randomNumber := strconv.Itoa(rand.Intn(100))
+	path = strings.ReplaceAll(path, "\\", "-")
+	path = strings.ReplaceAll(path, "/", "-")
+	newFileName := "testdata\\replaceTests\\" + path + "_" + randomNumber + ".blade.php"
+	err = ioutil.WriteFile(newFileName, []byte(content), 0775)
+	if err != nil {
+		panic(err)
+	}
+	return newFileName
+}
+
+func exists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
+}
+
+func createDirIfNotExists(path string) {
+	exists, err := exists(path)
+	if err != nil {
+		panic(err)
+	}
+	if exists == false {
+		os.Mkdir(path, 0777)
+	}
 }

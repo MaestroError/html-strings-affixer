@@ -1,8 +1,9 @@
 package reporter
 
 type Reporter struct {
-	data    map[string]string
-	warning string
+	data     map[string]string
+	warnings []string
+	detailed bool // if true, printing detailed report (with strings and line)
 }
 
 /*
