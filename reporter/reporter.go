@@ -1,6 +1,7 @@
 package reporter
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/jedib0t/go-pretty/v6/table"
@@ -74,6 +75,8 @@ func (reporter *Reporter) print(color text.Color, message string) {
 
 /* Table */
 
+// @todo make build table function
+
 func (reporter *Reporter) getTable() table.Writer {
 	t := table.NewWriter()
 	t.SetAutoIndex(true)
@@ -101,4 +104,8 @@ func (reporter *Reporter) addRow(location string, count string) {
 
 func (reporter *Reporter) addTotal(total int) {
 	reporter.report_table.AppendFooter(table.Row{"", "", "Total", total})
+}
+
+func (reporter *Reporter) printTable() {
+	fmt.Println(reporter.report_table.Render())
 }

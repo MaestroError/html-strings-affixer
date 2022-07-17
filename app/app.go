@@ -157,6 +157,7 @@ func scanFolder() []string {
 *		- Backup (Zips original content of file )
 * 		- Reporter (results in CLI)
  */
+// @todo implement reporter in replace functio
 func Replace(path string, parser *parsehtml.Parsehtml) {
 	// get replacement data from parsers
 	data := parser.GetFoundStrings()["data"]
