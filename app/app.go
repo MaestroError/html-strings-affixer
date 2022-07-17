@@ -15,6 +15,7 @@ import (
 	"github.com/MaestroError/html-strings-affixer/parsehtml"
 	"github.com/MaestroError/html-strings-affixer/replacer"
 	"github.com/MaestroError/html-strings-affixer/scanning"
+	"github.com/jedib0t/go-pretty/v6/table"
 )
 
 var ErrShutdown = fmt.Errorf("application was shutdown gracefully")
@@ -202,6 +203,22 @@ func Replace(path string, parser *parsehtml.Parsehtml) {
 /* Testing */
 
 func debug() {
+	t := table.NewWriter()
+	t.AppendHeader(table.Row{"#", "Location", "Found", "Replaced"})
+	t.AppendRow(table.Row{1, "testdata/pages/test.blade.php:20", "Stark", 3000})
+	// all rows need not have the same number of columns
+	t.AppendRow(table.Row{20, "Jon", "Snow", 2000, "You know nothing, Jon Snow!"})
+	// t.AppendSeparator()
+	// table.Row is just a shorthand for []interface{}
+	t.AppendRow([]interface{}{300, "Tyrion", "Lannister", 5000})
+	// time to take a peek
+	t.SetCaption("Simple Table with 3 Rows.\n")
+	t.SetStyle(table.StyleRounded)
+	t.SetTitle("Game Of Thrones")
+	fmt.Println(t.Render())
+}
+
+func debugReplace() {
 	parse := parsehtml.Parsehtml{}
 	path := createTestFile("test.blade.php")
 	parse.ParseFile(path, Configuration)

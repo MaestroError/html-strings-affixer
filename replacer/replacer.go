@@ -55,7 +55,7 @@ func (r *Replacer) SetDebug(debug bool) *Replacer {
 }
 
 func (r *Replacer) Affix(element map[string]string, parser *parsehtml.Parsehtml) bool {
-
+	// Set main data
 	str := element["original_string"]
 	original_string := element["original_string"]
 	found := element["found"]
@@ -80,7 +80,7 @@ func (r *Replacer) Affix(element map[string]string, parser *parsehtml.Parsehtml)
 		if r.debug {
 			fmt.Println("Replaced: ", element)
 		}
-
+		// Replacement done successfully
 		return true
 	}
 	
