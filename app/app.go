@@ -62,8 +62,9 @@ func resolveCommands() {
 			resolveReplaceCommand()
 		case "check":
 			// Check command
-			resolveReplaceCommand()
+			resolveCheckCommand()
 		case "debug":
+			Configuration.SetCurrentCommand("debug")
 			debug()
 		default:
 			fmt.Println("Expected 'replace' or 'check' subcommands")
@@ -159,13 +160,11 @@ func Replace(path string, parser *parsehtml.Parsehtml) {
 	// get file content from parser to not re-read
 	var content string = parser.GetOriginalContent()
 
-	// var for warning messages
-	// var msg []string
-
 	// prepare replacer object for use
 	affixer := replacer.Replacer{}
 	affixer.SetPath(path).SetContent(content)
 	affixer.SetPrefix(Configuration.Prefix_to_set).SetSuffix(Configuration.Suffix_to_set)
+	affixer.SetDebug(Configuration.GetCommandName() == "debug")
 
 	// loop on found strings
 	for _, element := range data {
@@ -175,13 +174,18 @@ func Replace(path string, parser *parsehtml.Parsehtml) {
 		if element["type"] == "placeholder" {
 			if strings.ToLower(element["found"]) == "placeholder" {
 				approved = false
-				// @todo add message here
+				// @todo add warning message here in reportert
 			}
 		}
 
+		replaced := false
 		// affix found string if all checks passed well
 		if approved {
-			affixer.Affix(element, parser)
+			replaced = affixer.Affix(element, parser)
+		}
+
+		if !replaced {
+			// @todo add not found warning message here
 		}
 	}
 

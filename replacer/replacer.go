@@ -16,6 +16,7 @@ type Replacer struct {
 	suffix  string
 	logger  logger.Logger
 	backup  backup.Backup
+	debug bool
 }
 
 func (r *Replacer) SetPath(path string) *Replacer {
@@ -48,7 +49,12 @@ func (r *Replacer) SetBackup(backup backup.Backup) *Replacer {
 	return r
 }
 
-func (r *Replacer) Affix(element map[string]string, parser *parsehtml.Parsehtml) {
+func (r *Replacer) SetDebug(debug bool) *Replacer {
+	r.debug = debug
+	return r
+}
+
+func (r *Replacer) Affix(element map[string]string, parser *parsehtml.Parsehtml) bool {
 
 	str := element["original_string"]
 	original_string := element["original_string"]
@@ -69,10 +75,21 @@ func (r *Replacer) Affix(element map[string]string, parser *parsehtml.Parsehtml)
 		str = str[:endIndex] + r.suffix + str[endIndex:]
 		// replace original with edited string (str)
 		r.content = strings.Replace(r.content, original_string, str, -1)
-		fmt.Println("Replaced: ", element)
-	} else {
+
+		// print if debug
+		if r.debug {
+			fmt.Println("Replaced: ", element)
+		}
+
+		return true
+	}
+	
+	// print if debug
+	if r.debug {
 		fmt.Println("Not replaced: ", element)
 	}
+
+	return false
 }
 
 func (r *Replacer) GetContent() string {
