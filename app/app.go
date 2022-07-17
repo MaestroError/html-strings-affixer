@@ -1,6 +1,7 @@
 package app
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -20,9 +21,8 @@ var ErrShutdown = fmt.Errorf("application was shutdown gracefully")
 
 var Configuration config.Config
 
+// configs and prepare app for work
 func Bootstrap() {
-	// configs and prepare app for work
-
 	// Set config default and read json file
 	Configuration.Init()
 
@@ -30,11 +30,12 @@ func Bootstrap() {
 	resolveCommands()
 }
 
+// Application runtime code goes here
 func Start() {
-	// Application runtime code goes here
 	command := Configuration.GetCommandName()
 	switch command {
 	case "replace":
+		// scan folder and get needed files
 		files := scanFolder()
 		for _, path := range files {
 			parse := parsehtml.Parsehtml{}
@@ -46,12 +47,14 @@ func Start() {
 	case "check":
 		// Check command\
 	default:
-		os.Exit(1)
+		fmt.Println("No command found")
+		Shutdown()
 	}
 }
 
 func Shutdown() {
 	// Shutdown contexts, listeners, and such
+	os.Exit(1)
 }
 
 func resolveCommands() {
@@ -68,7 +71,7 @@ func resolveCommands() {
 			debug()
 		default:
 			fmt.Println("Expected 'replace' or 'check' subcommands")
-			os.Exit(1)
+			Shutdown()
 		}
 	}
 }
@@ -174,7 +177,7 @@ func Replace(path string, parser *parsehtml.Parsehtml) {
 		if element["type"] == "placeholder" {
 			if strings.ToLower(element["found"]) == "placeholder" {
 				approved = false
-				// @todo add warning message here in reportert
+				// @todo add warning message here in reporter
 			}
 		}
 
@@ -245,4 +248,13 @@ func createDirIfNotExists(path string) {
 	if exists == false {
 		os.Mkdir(path, 0777)
 	}
+}
+
+
+func PrettyPrint(v interface{}) (err error) {
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err == nil {
+		fmt.Println(string(b))
+	}
+	return
 }

@@ -89,6 +89,7 @@ func (r *Replacer) Affix(element map[string]string, parser *parsehtml.Parsehtml)
 		fmt.Println("Not replaced: ", element)
 	}
 
+	// it means that "found" not found in "str"
 	return false
 }
 
