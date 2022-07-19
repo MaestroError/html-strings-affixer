@@ -58,6 +58,14 @@
     <p>#John with "double"</p>
 
     <input Placeholder='Some "text" - 2' />
+
+    <!-- XX Didn't finds with regex -->
+    <li>Up to 5 users simultaneously</li>
     
+    <!-- XX Didn't finds with regex -->
+    <div class="ps-product__badge">
+        <div class="ps-badge ps-badge--hot">Hot</div>
+    </div>
+
 </body>
 </html>

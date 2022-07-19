@@ -37,15 +37,26 @@ func Start() {
 	command := Configuration.GetCommandName()
 	switch command {
 	case "replace":
+		// Replace command
 		// scan folder and get needed files
 		files := scanFolder()
+		
+		// Prepare reporter
+		reporter := reporter.Reporter{}
+		reporter.PrepareReplaceTable()
+		var totalReplaced int = 0
+
 		for _, path := range files {
 			parse := parsehtml.Parsehtml{}
 			// path = createTestFile(path)
 			parse.ParseFile(path, Configuration)
-			Replace(path, &parse)
+			Replace(path, &parse, &reporter, &totalReplaced)
 		}
-		// Replace command
+
+		// add total count
+		reporter.AddTotal(totalReplaced)
+		// Report
+		reporter.Report()
 	case "check":
 		// Check command\
 	default:
@@ -153,21 +164,23 @@ func scanFolder() []string {
 
 /*
 * @todo Create structs with following actions:
-* 		- Affixer
+* 		- Affixer +
 *		- Logger (in json file)
 *		- Backup (Zips original content of file )
 * 		- Reporter (results in CLI)
+			@todo add detailed report in config and CLI
+			@todo Make detailed report table with path + found
  */
-// @todo implement reporter in replace functio
-func Replace(path string, parser *parsehtml.Parsehtml) {
+func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter, totalReplaced *int) {
 	// get replacement data from parsers
 	data := parser.GetFoundStrings()["data"]
 
 	// get file content from parser to not re-read
 	var content string = parser.GetOriginalContent()
 
-	// Prepare reporter
-	reporter := reporter.Reporter{}
+	// Declare counts
+	var countInFile int = 0
+	var countReplaced int = 0
 
 	// prepare replacer object for use
 	affixer := replacer.Replacer{}
@@ -183,32 +196,35 @@ func Replace(path string, parser *parsehtml.Parsehtml) {
 		if element["type"] == "placeholder" {
 			if strings.ToLower(element["found"]) == "placeholder" {
 				approved = false
-				// @todo add warning message here in reporter
 				msg := "Couldn't affix, use of 'placeholder' in placeholder attribute not allowed: " + path + ":"+ element["lines"]
 				reporter.AddWarning(msg)
 			}
 		}
 
+		countInFile++
 		replaced := false
 		// affix found string if all checks passed well
 		if approved {
 			replaced = affixer.Affix(element, parser)
+			countReplaced++
 		}
 
 		if !replaced && approved {
 			msg := "String '" + element["found"] + "' not found in file " + path + " (Lines: "+ element["lines"] + ") "
 			reporter.AddError(msg)
 		}
+		
 	}
+	
+	*totalReplaced = *totalReplaced + countReplaced
+	replacedString := strconv.Itoa(countReplaced) + "/" + strconv.Itoa(countInFile)
+	reporter.AddRow(path, replacedString)
 
 	// write file with same name
 	err := ioutil.WriteFile(path, []byte(affixer.GetContent()), 0)
 	if err != nil {
 		panic(err)
 	}
-
-	// Report
-	reporter.Report()
 
 }
 
@@ -236,7 +252,14 @@ func debugReplace() {
 	parse := parsehtml.Parsehtml{}
 	path := createTestFile("test.blade.php")
 	parse.ParseFile(path, Configuration)
-	Replace(path, &parse)
+	reporter := reporter.Reporter{}		
+	reporter.PrepareReplaceTable()
+	var totalReplaced int = 0
+	Replace(path, &parse, &reporter, &totalReplaced)
+
+	reporter.AddTotal(totalReplaced)
+	// Report
+	reporter.Report()
 }
 
 func createTestFile(path string) string {

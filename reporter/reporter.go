@@ -2,23 +2,16 @@ package reporter
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
 )
 
 type Reporter struct {
-	data     [][]string
 	warnings []string
 	errors []string
-	detailed bool // if true, printing detailed report (with strings and line)
 	report_table table.Writer
 }
-
-/*
-	@todo make data report (table) and warning report methods
-*/
 
 
 func (reporter *Reporter) AddWarning(message string) {
@@ -29,20 +22,11 @@ func (reporter *Reporter) AddError(message string) {
 	reporter.errors = append(reporter.errors, message)
 }
 
-func (reporter *Reporter) EnableDetailed() {
-	reporter.detailed = true
-}
-
-func (reporter *Reporter) AddCountData(location string, count int) {
-	reporter.data = append(reporter.data, []string{location, strconv.Itoa(count)})
-}
-
-func (reporter *Reporter) AddDetailedData(location string, found string) {
-	reporter.data = append(reporter.data, []string{location, found})
-}
-
 func (reporter *Reporter) Report() {
-	// @todo print table here
+
+	if reporter.report_table != nil {
+		reporter.printTable()
+	}
 
 	if reporter.warnings != nil {
 		reporter.printWarnings()
@@ -75,35 +59,33 @@ func (reporter *Reporter) print(color text.Color, message string) {
 
 /* Table */
 
-// @todo make build table function
-
-func (reporter *Reporter) getTable() table.Writer {
-	t := table.NewWriter()
-	t.SetAutoIndex(true)
-	t.SetStyle(table.StyleLight)
-	return t
-}
-
-func (reporter *Reporter) prepareReplaceTable() {
+func (reporter *Reporter) PrepareReplaceTable() {
 	t := reporter.getTable()
 	t.SetTitle("Affixed strings")
 	t.AppendHeader(table.Row{"Location", "Replaced"})
 	reporter.report_table = t
 }
 
-func (reporter *Reporter) prepareCheckTable() {
+func (reporter *Reporter) PrepareCheckTable() {
 	t := reporter.getTable()
 	t.SetTitle("Found strings")
 	t.AppendHeader(table.Row{"Location", "Found"})
 	reporter.report_table = t
 }
 
-func (reporter *Reporter) addRow(location string, count string) {
+func (reporter *Reporter) AddRow(location string, count string) {
 	reporter.report_table.AppendRow(table.Row{location, count})
 }
 
-func (reporter *Reporter) addTotal(total int) {
-	reporter.report_table.AppendFooter(table.Row{"", "", "Total", total})
+func (reporter *Reporter) AddTotal(total int) {
+	reporter.report_table.AppendFooter(table.Row{"Total:", total})
+}
+
+func (reporter *Reporter) getTable() table.Writer {
+	t := table.NewWriter()
+	t.SetAutoIndex(true)
+	t.SetStyle(table.StyleRounded)
+	return t
 }
 
 func (reporter *Reporter) printTable() {
