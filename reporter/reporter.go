@@ -65,12 +65,12 @@ func (reporter *Reporter) printWarnings() {
 func (reporter *Reporter) printErrors() {
 	var errorColor text.Color = text.FgHiRed
 	for _, msg := range reporter.errors {
-		reporter.print(errorColor, msg)
+		reporter.print(errorColor, "Error: " + msg)
 	}
 }
 
 func (reporter *Reporter) print(color text.Color, message string) {
-	color.Sprint(message)
+	fmt.Println(color.Sprint(message))
 }
 
 /* Table */

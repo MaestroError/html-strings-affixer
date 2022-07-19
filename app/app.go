@@ -184,6 +184,8 @@ func Replace(path string, parser *parsehtml.Parsehtml) {
 			if strings.ToLower(element["found"]) == "placeholder" {
 				approved = false
 				// @todo add warning message here in reporter
+				msg := "Couldn't affix, use of 'placeholder' in placeholder attribute not allowed: " + path + ":"+ element["lines"]
+				reporter.AddWarning(msg)
 			}
 		}
 
@@ -193,9 +195,9 @@ func Replace(path string, parser *parsehtml.Parsehtml) {
 			replaced = affixer.Affix(element, parser)
 		}
 
-		if !replaced {
-			msg := "String '" + element["found"] + "' not found in file " + path
-			reporter.AddWarning(msg)
+		if !replaced && approved {
+			msg := "String '" + element["found"] + "' not found in file " + path + " (Lines: "+ element["lines"] + ") "
+			reporter.AddError(msg)
 		}
 	}
 
@@ -204,6 +206,10 @@ func Replace(path string, parser *parsehtml.Parsehtml) {
 	if err != nil {
 		panic(err)
 	}
+
+	// Report
+	reporter.Report()
+
 }
 
 /* Testing */
@@ -222,6 +228,8 @@ func debug() {
 	t.SetStyle(table.StyleRounded)
 	t.SetTitle("Game Of Thrones")
 	fmt.Println(t.Render())
+
+	debugReplace()
 }
 
 func debugReplace() {
