@@ -14,6 +14,7 @@ import (
 	"github.com/MaestroError/html-strings-affixer/config"
 	"github.com/MaestroError/html-strings-affixer/parsehtml"
 	"github.com/MaestroError/html-strings-affixer/replacer"
+	"github.com/MaestroError/html-strings-affixer/reporter"
 	"github.com/MaestroError/html-strings-affixer/scanning"
 	"github.com/jedib0t/go-pretty/v6/table"
 )
@@ -165,6 +166,9 @@ func Replace(path string, parser *parsehtml.Parsehtml) {
 	// get file content from parser to not re-read
 	var content string = parser.GetOriginalContent()
 
+	// Prepare reporter
+	reporter := reporter.Reporter{}
+
 	// prepare replacer object for use
 	affixer := replacer.Replacer{}
 	affixer.SetPath(path).SetContent(content)
@@ -190,7 +194,8 @@ func Replace(path string, parser *parsehtml.Parsehtml) {
 		}
 
 		if !replaced {
-			// @todo add not found warning message here
+			msg := "String '" + element["found"] + "' not found in file " + path
+			reporter.AddWarning(msg)
 		}
 	}
 

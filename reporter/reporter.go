@@ -58,7 +58,7 @@ func (reporter *Reporter) Report() {
 func (reporter *Reporter) printWarnings() {
 	var warnColor text.Color = text.FgHiYellow
 	for _, warning := range reporter.warnings {
-		reporter.print(warnColor, warning)
+		reporter.print(warnColor, "Warning: " + warning)
 	}
 }
 
