@@ -21,6 +21,8 @@ type Config struct {
 	Suffix_to_set string // both
 	// info
 	current_command string
+	// Report
+	Detailed_report bool // both
 }
 
 func (c *Config) Init() {
@@ -64,6 +66,10 @@ func (c *Config) SetCurrentCommand(command_name string) {
 
 func (c *Config) SetOneFile(one_file string) {
 	c.one_file = one_file
+}
+
+func (c *Config) SetDetailedReport(detailed bool) {
+	c.Detailed_report = detailed
 }
 
 // Getters
@@ -114,6 +120,7 @@ func (c *Config) setDefaults() {
 	c.setDefaultAllowedParseMethods()
 	c.setDefaultPreffix()
 	c.setDefaultSuffix()
+	c.setDefaultDetailed()
 }
 
 func (c *Config) setDefaultFolder() {
@@ -148,6 +155,10 @@ func (c *Config) setDefaultPreffix() {
 
 func (c *Config) setDefaultSuffix() {
 	c.Suffix_to_set = "') }}"
+}
+
+func (c *Config) setDefaultDetailed() {
+	c.Detailed_report = false
 }
 
 func (c *Config) parseJsonFile() {

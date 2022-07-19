@@ -97,6 +97,7 @@ func resolveReplaceCommand() {
 	replaceMethods := replaceCmd.String("only", "", "Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag")
 	replacePrefix := replaceCmd.String("prefix", "", "New prefix for strings")
 	replaceSuffix := replaceCmd.String("suffix", "", "New suffix for strings")
+	replaceDetailed := replaceCmd.Bool("detailed", true, "If true, detailed report printed")
 	oneFile := replaceCmd.String("file", "", "Use this argument to run command only on one file")
 	// Parse arguments
 	replaceCmd.Parse(os.Args[2:])
@@ -120,6 +121,9 @@ func resolveReplaceCommand() {
 	}
 	if *oneFile != "" {
 		Configuration.SetOneFile(*oneFile)
+	}
+	if *replaceDetailed {
+		Configuration.SetDetailedReport(*replaceDetailed)
 	}
 }
 
@@ -167,9 +171,7 @@ func scanFolder() []string {
 * 		- Affixer +
 *		- Logger (in json file)
 *		- Backup (Zips original content of file )
-* 		- Reporter (results in CLI)
-			@todo add detailed report in config and CLI
-			@todo Make detailed report table with path + found
+* 		- Reporter (results in CLI) +
  */
 func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter, totalReplaced *int) {
 	// get replacement data from parsers
@@ -213,12 +215,21 @@ func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Report
 			msg := "String '" + element["found"] + "' not found in file " + path + " (Lines: "+ element["lines"] + ") "
 			reporter.AddError(msg)
 		}
+
+		if Configuration.Detailed_report {
+			reporter.AddRow(path + ":" + element["lines"], element["found"])
+		}
 		
 	}
 	
 	*totalReplaced = *totalReplaced + countReplaced
 	replacedString := strconv.Itoa(countReplaced) + "/" + strconv.Itoa(countInFile)
-	reporter.AddRow(path, replacedString)
+
+	if !Configuration.Detailed_report {
+		reporter.AddRow(path, replacedString)
+	}
+	
+	
 
 	// write file with same name
 	err := ioutil.WriteFile(path, []byte(affixer.GetContent()), 0)
