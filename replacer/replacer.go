@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/MaestroError/html-strings-affixer/backup"
-	"github.com/MaestroError/html-strings-affixer/logger"
 	"github.com/MaestroError/html-strings-affixer/parsehtml"
 )
 
@@ -14,7 +13,6 @@ type Replacer struct {
 	content string
 	prefix  string
 	suffix  string
-	logger  logger.Logger
 	backup  backup.Backup
 	debug bool
 }
@@ -36,11 +34,6 @@ func (r *Replacer) SetPrefix(prefix string) *Replacer {
 
 func (r *Replacer) SetSuffix(suffix string) *Replacer {
 	r.suffix = suffix
-	return r
-}
-
-func (r *Replacer) SetLogger(logger logger.Logger) *Replacer {
-	r.logger = logger
 	return r
 }
 

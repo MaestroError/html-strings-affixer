@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/MaestroError/html-strings-affixer/config"
+	"github.com/MaestroError/html-strings-affixer/logger"
 	"github.com/MaestroError/html-strings-affixer/parsehtml"
 	"github.com/MaestroError/html-strings-affixer/replacer"
 	"github.com/MaestroError/html-strings-affixer/reporter"
@@ -22,11 +23,14 @@ import (
 var ErrShutdown = fmt.Errorf("application was shutdown gracefully")
 
 var Configuration config.Config
+var Logger logger.Logger
 
 // configs and prepare app for work
 func Bootstrap() {
 	// Set config default and read json file
 	Configuration.Init()
+	Logger.Init(Configuration)
+
 
 	// resolve command options and reset configs (command line argument has higher priority)
 	resolveCommands()
@@ -57,6 +61,9 @@ func Start() {
 		reporter.AddTotal(totalReplaced)
 		// Report
 		reporter.Report()
+		// Log
+		Logger.Log()
+
 	case "check":
 		// Check command\
 	default:
@@ -219,7 +226,18 @@ func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Report
 		if Configuration.Detailed_report {
 			reporter.AddRow(path + ":" + element["lines"], element["found"])
 		}
+
+		// @todo log folder is empty here
+		if Logger.GetLogFolder() != "" {
+			Logger.AddNewItem(path, element)
+		}
+			
 		
+	}
+	
+	if Logger.GetLogFolder() == "" {
+		// @todo add msg (before table, gray) property and related methods in reporter, use here message 
+		reporter.AddWarning("Logger disabled")
 	}
 	
 	*totalReplaced = *totalReplaced + countReplaced
