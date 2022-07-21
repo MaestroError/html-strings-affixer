@@ -51,7 +51,9 @@ func (r *Replacer) Affix(element map[string]string, parser *parsehtml.Parsehtml)
 	// Set main data
 	str := element["original_string"]
 	original_string := element["original_string"]
-	found := element["found"]
+	// @todo Create it controllable with config trimSpaces=true (both json & cli)
+	// Trim whitespace from sides
+	found := strings.TrimSpace(element["found"])
 
 	// Extra manipulation
 	if element["type"] == "hashtag" {

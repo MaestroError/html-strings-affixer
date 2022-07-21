@@ -119,7 +119,8 @@ func (parse *Parsehtml) SetSuffix(suffix string) {
 func (parse *Parsehtml) ExtractText() {
 	// set affixes for simple strings extraction
 	parse.SetPrefix("\\>")
-	parse.SetSuffix("\\<")
+	// Updated suffix from "\\<" to "\\<\\/(.*)\\>" because of THIRD VERSION OF REGEX
+	parse.SetSuffix("\\<\\/(.*)\\>")
 	// Generates regex based on prefix, suffix and denied characters
 	parse.generateRegex()
 	// Parses content and adds strings in found_strings with specific type
@@ -262,8 +263,10 @@ func (parse *Parsehtml) generateRegex() {
 		// [^\s+] -> used to not match whitespace
 		// FIRST VERSION OF REGEX
 		// reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `].[^\s][^` + deniedCharString + `]+` + parse.suffix)
-		// SECOND VERSION OF REGEX
-		reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `\s]+[^` + deniedCharString + `]+`+`[^` + deniedCharString + `\s]` + parse.suffix)
+		// SECOND VERSION OF REGEX (!Not founds strings starting and ending with spaces!)
+		// reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `\s]+[^` + deniedCharString + `]+`+`[^` + deniedCharString + `\s]` + parse.suffix)
+		// THIRD VERSION OF REGEX (!Gives too much empty string!)
+		reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `]+[^` + deniedCharString + `]+`+`[^` + deniedCharString + `]` + parse.suffix)
 		parse.search_regex = reg.String()
 		parse.regexp = reg
 		fmt.Println(parse.search_regex + "\n")
@@ -319,4 +322,15 @@ func (parse *Parsehtml) removeParseSuffix(element string) string {
 
 	found := parse.RemoveLastOccurrence(element, needToRemove)
 	return found
+}
+
+// Check if string is empty like >      < (Used with THIRD VERSION OF REGEX Before text suffix update)
+func (parse *Parsehtml) checkStringIsEmpty(element string) bool {
+	reg := regexp.MustCompile(`\>+[^A-Za-z0-9]+\<`)
+	find := reg.FindStringSubmatch(element)
+	if find == nil {
+		return true
+	} else {
+		return false
+	}
 }
