@@ -44,7 +44,7 @@
     <!-- Hashtag extraction -->
     <input type="submit" value="{{ __('Send') }}" />
     <input type="submit" value=" {{ __('value') }}" />
-    <input type="submit" value=" {{ __(' Recived') }}" />
+    <input type="submit" value=" # Recived" />
     <!-- XX it ignores this string because of duplicate check - SOLVED! -->
     <p>{{ __('John with double quotes') }}</p>
 
@@ -59,13 +59,17 @@
 
     <input Placeholder='{{ __('Some "text" - 2') }}' />
 
-    <!-- XX Didn't finds with regex -->
-    <li>Up to 5 users simultaneously</li>
+    <!-- XX Didn't finds with regex - SOLVED! (new regex) -->
+    <li>{{ __('Up to 5 users simultaneously') }}</li>
     
-    <!-- XX Didn't finds with regex -->
+    <!-- XX Didn't finds with regex - SOLVED! (new regex) -->
     <div class="ps-product__badge">
-        <div class="ps-badge ps-badge--hot">Hot</div>
+        <div class="ps-badge ps-badge--hot">{{ __('Hot') }}</div>
     </div>
+
+    <!-- XX Didn't finds with regex if starting or ending with space -->
+    <li> Up to 5 users simultaneously </li>
+
 
 </body>
 </html>

@@ -227,7 +227,6 @@ func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Report
 			reporter.AddRow(path + ":" + element["lines"], element["found"])
 		}
 
-		// @todo log folder is empty here
 		if Logger.GetLogFolder() != "" {
 			Logger.AddNewItem(path, element)
 		}
@@ -248,7 +247,6 @@ func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Report
 	}
 	
 	
-
 	// write file with same name
 	err := ioutil.WriteFile(path, []byte(affixer.GetContent()), 0)
 	if err != nil {
@@ -289,6 +287,8 @@ func debugReplace() {
 	reporter.AddTotal(totalReplaced)
 	// Report
 	reporter.Report()
+	// Log
+	PrettyPrint(Logger.GetLogData())
 }
 
 func createTestFile(path string) string {

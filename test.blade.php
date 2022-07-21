@@ -59,13 +59,17 @@
 
     <input Placeholder='Some "text" - 2' />
 
-    <!-- XX Didn't finds with regex -->
+    <!-- XX Didn't finds with regex - SOLVED! (new regex) -->
     <li>Up to 5 users simultaneously</li>
     
-    <!-- XX Didn't finds with regex -->
+    <!-- XX Didn't finds with regex - SOLVED! (new regex) -->
     <div class="ps-product__badge">
         <div class="ps-badge ps-badge--hot">Hot</div>
     </div>
+
+    <!-- XX Didn't finds with regex if starting or ending with space -->
+    <li> Up to 5 users simultaneously </li>
+
 
 </body>
 </html>

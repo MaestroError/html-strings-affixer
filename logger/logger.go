@@ -11,13 +11,13 @@ type Logger struct {
 	log_folder string
 }
 
-func (l Logger) Init(c config.Config) {
+func (l *Logger) Init(c config.Config) {
 	l.log_folder = c.Log_folder
 	l.data = make(map[string][]map[string]string)
 }
 
 func (l *Logger) Log() bool {
-	fmt.Println(l)
+	fmt.Println("!!!!!", l.data)
 	return true
 }
 
@@ -27,4 +27,8 @@ func (l *Logger) AddNewItem(path string, element map[string]string) {
 
 func (l *Logger) GetLogFolder() string {
 	return l.log_folder
+}
+
+func (l *Logger) GetLogData() map[string][]map[string]string {
+	return l.data
 }

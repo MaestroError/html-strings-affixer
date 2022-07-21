@@ -2,6 +2,7 @@ package parsehtml
 
 import (
 	"bufio"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -259,9 +260,13 @@ func (parse *Parsehtml) generateRegex() {
 	if parse.prefix != "" && parse.suffix != "" {
 		deniedCharString := strings.Join(parse.ignore_characters, "\\")
 		// [^\s+] -> used to not match whitespace
-		reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `].[^\s+][^` + deniedCharString + `]+` + parse.suffix)
+		// FIRST VERSION OF REGEX
+		// reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `].[^\s][^` + deniedCharString + `]+` + parse.suffix)
+		// SECOND VERSION OF REGEX
+		reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `\s]+[^` + deniedCharString + `]+`+`[^` + deniedCharString + `\s]` + parse.suffix)
 		parse.search_regex = reg.String()
 		parse.regexp = reg
+		fmt.Println(parse.search_regex + "\n")
 	}
 }
 
