@@ -1,7 +1,11 @@
 package reporter
 
 import (
+	"bufio"
 	"fmt"
+	"log"
+	"os"
+	"strings"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
@@ -34,6 +38,35 @@ func (reporter *Reporter) Report() {
 
 	if reporter.errors != nil {
 		reporter.printErrors()
+	}
+}
+
+
+func (reporter *Reporter) AskForConfirmation(s string, def string) bool {
+	reader := bufio.NewReader(os.Stdin)
+
+	for {
+		var warnColor text.Color = text.FgYellow
+		msg := s + "y/n ["+def+"]: "
+		reporter.print(warnColor, "Confirm: " + msg)
+		
+
+		response, err := reader.ReadString('\n')
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		response = strings.ToLower(strings.TrimSpace(response))
+
+		if response == "" {
+			response = def
+		}
+
+		if response == "y" || response == "yes" {
+			return true
+		} else if response == "n" || response == "no" {
+			return false
+		}
 	}
 }
 

@@ -56,9 +56,11 @@ func Start() {
 		
 		// Check git status (Warn if need to commit)
 		if !checkGitStatus() {
-			replaceAllowed = false
-			// @todo add -force parameter in replace command and replace error with warning if -force is true
-			reporter.AddError("You have uncommitted changes, please commit/stash them or run command again with -force parameter (git status)")
+			if !reporter.AskForConfirmation("You have uncommitted changes. Recommended to commit or stash them first. Continue anyway?", "yes") {
+				replaceAllowed = false
+			}
+			// @todo add msg (before table, gray) property and related methods in reporter, use here message instead of warning
+			reporter.AddWarning("You have uncommitted changes, you can use -force parameter in cli or set 'force' to true in config file to avoid confirmation)")
 		}
 
 		if replaceAllowed {
@@ -237,7 +239,11 @@ func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Report
 		}
 
 		if Configuration.Detailed_report {
-			reporter.AddRow(path + ":" + element["lines"], element["found"])
+			filePath := path
+			if element["lines"] != "" {
+				filePath = path + ":" + element["lines"]
+			}
+			reporter.AddRow(filePath, strings.TrimSpace(element["found"]))
 		}
 
 		if Logger.GetLogFolder() != "" {

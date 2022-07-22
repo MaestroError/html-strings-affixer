@@ -212,6 +212,9 @@ func (parse *Parsehtml) findLineOfString(str string) []string {
 	}
 	defer f.Close()
 
+	// Can find multiline strings, but causes lots of line duplicates
+	// str = strings.TrimSpace(str)
+
 	// Splits on newlines by default.
 	scanner := bufio.NewScanner(f)
 
@@ -284,7 +287,7 @@ func (parse *Parsehtml) parseContent(htmlType string) {
 
 		// add as new string if no duplicates found
 		if !parse.checkDuplicate(found, htmlType) {
-			lines := parse.findLineOfString(element)
+			lines := parse.findLineOfString(found)
 			parse.AddNewString(found, element, htmlType, strings.Join(lines, ", "))
 		}
 	}
