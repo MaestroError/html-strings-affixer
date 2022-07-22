@@ -17,7 +17,7 @@ func (l *Logger) Init(c config.Config) {
 }
 
 func (l *Logger) Log() bool {
-	fmt.Println("!!!!!", l.data)
+	fmt.Println("Logger", l.data)
 	return true
 }
 

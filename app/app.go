@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -44,21 +45,33 @@ func Start() {
 		// Replace command
 		// scan folder and get needed files
 		files := scanFolder()
+
+		// Controls replace execution
+		replaceAllowed := true
 		
 		// Prepare reporter
 		reporter := reporter.Reporter{}
 		reporter.PrepareReplaceTable()
 		var totalReplaced int = 0
-
-		for _, path := range files {
-			parse := parsehtml.Parsehtml{}
-			// path = createTestFile(path)
-			parse.ParseFile(path, Configuration)
-			Replace(path, &parse, &reporter, &totalReplaced)
+		
+		// Check git status (Warn if need to commit)
+		if !checkGitStatus() {
+			replaceAllowed = false
+			// @todo add -force parameter in replace command and replace error with warning if -force is true
+			reporter.AddError("You have uncommitted changes, please commit/stash them or run command again with -force parameter (git status)")
 		}
 
-		// add total count
-		reporter.AddTotal(totalReplaced)
+		if replaceAllowed {
+			for _, path := range files {
+				parse := parsehtml.Parsehtml{}
+				// path = createTestFile(path)
+				parse.ParseFile(path, Configuration)
+				Replace(path, &parse, &reporter, &totalReplaced)
+			}
+			// add total count
+			reporter.AddTotal(totalReplaced)
+		}
+
 		// Report
 		reporter.Report()
 		// Log
@@ -253,6 +266,20 @@ func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Report
 		panic(err)
 	}
 
+}
+
+// nothing to commit, working tree clean
+func checkGitStatus() bool {
+	out, err := exec.Command("git", "status").Output()
+	if err != nil {
+		panic(err)
+	}
+	asString := string(out)
+	if strings.Contains(asString, "nothing to commit, working tree clean") {
+		return true
+	} else {
+		return false
+	}
 }
 
 /* Testing */
