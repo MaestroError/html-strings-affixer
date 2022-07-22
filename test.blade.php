@@ -70,7 +70,7 @@
     <!-- XX Didn't finds with regex if starting or ending with space - SOLVED! (With 3rd version of regex) -->
     <li> Up to 5 users simultaneously </li>
 
-    <!-- No extra empty strings and mutching linebreaks with new text type suffix -->
+    <!-- No extra empty strings and mutching linebreaks with new text type suffix +TrimSpaces -->
     <li>
         Up to 5 users simultaneously
     </li>
