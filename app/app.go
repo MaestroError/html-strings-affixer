@@ -55,6 +55,7 @@ func Start() {
 		var totalReplaced int = 0
 		
 		// Check git status (Warn if need to commit)
+		// @todo avoid git status check with force config, add it in both, cli and json
 		if !checkGitStatus() {
 			if !reporter.AskForConfirmation("You have uncommitted changes. Recommended to commit or stash them first. Continue anyway?", "yes") {
 				replaceAllowed = false
@@ -192,7 +193,6 @@ func scanFolder() []string {
 * @todo Create structs with following actions:
 * 		- Affixer +
 *		- Logger (in json file)
-*		- Backup (Zips original content of file )
 * 		- Reporter (results in CLI) +
  */
 func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter, totalReplaced *int) {
