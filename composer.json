@@ -1,0 +1,16 @@
+{
+    "name": "maestroerror/html-strings-affixer",
+    "description": "Finds texts in HTML and replaces it with suffixed and prefixed string",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "maestroerror",
+            "email": "revaz.gh@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "bin": [
+		"bin/hsa"
+	]
+}

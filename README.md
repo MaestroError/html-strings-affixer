@@ -2,7 +2,7 @@
 Finds texts in HTML and replaces it with suffixed and prefixed string.    
 Originally developed to replace strings with localization function in blade file:      
 `<p>Some nice string</p>` -> `<p>{{ __('Some nice string') }}</p>`     
-but can be used in any file which contains html (".jsx", ".vue", ".twig") with same purpose. Of course, prefix and suffix are customizable
+But can be used in any file which contains html (".jsx", ".vue", ".twig") with same purpose. Of course, prefix and suffix are customizable
 
 # Installation
 
@@ -18,7 +18,7 @@ Available commands:
 - check - Checks folder and gives report with files and count of found strings
 - clear-log - If you use log_folder config, logs are generated. this command clear all log files    
 
-Use `hsa [command] --help` to now more about command. 
+Use `hsa [command] --help` to read more about command. 
 
 
 ### To Do
