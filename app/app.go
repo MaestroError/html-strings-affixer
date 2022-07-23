@@ -69,11 +69,15 @@ func resolveCommands() {
 		case "check":
 			// Check command
 			resolveCheckCommand()
+		case "clear-log":
+			// run clear-log command
+			runClearLogCommand()
+			Shutdown()
 		case "debug":
 			Configuration.SetCurrentCommand("debug")
 			debug()
 		default:
-			fmt.Println("Expected 'replace' or 'check' subcommands")
+			fmt.Println("Expected 'replace', 'clear-log' or 'check' subcommands")
 			Shutdown()
 		}
 	}
@@ -194,7 +198,13 @@ func resolveCheckCommand() {
 
 func runCheckCommand() {
 	// scan folder and get needed files
-	files := scanFolder()
+	var files []string
+	oneFile := Configuration.GetOneFile()
+	if oneFile != "" {
+		files = []string{oneFile}
+	} else {
+		files = scanFolder()
+	}
 	
 	// Prepare reporter
 	reporter := reporter.Reporter{}
@@ -209,6 +219,21 @@ func runCheckCommand() {
 	}
 
 	// Report
+	reporter.Report()
+}
+
+func runClearLogCommand() {
+	reporter := reporter.Reporter{}
+	if reporter.AskForConfirmation("Are you sure to clear all logs?", "no") {
+		if Configuration.Log_folder != "" {
+			if Logger.ClearLogs() {
+				// @todo add success message function for reporter
+				reporter.PrintMsg("All logs removed successfully!")
+			} else {
+				reporter.AddError("Logs didn't remove")
+			}
+		}
+	}
 	reporter.Report()
 }
 

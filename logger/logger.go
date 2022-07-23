@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -18,7 +19,11 @@ type Logger struct {
 
 func (l *Logger) Init(c config.Config) {
 	l.log_folder = c.Log_folder
-	l.folder_to_scan = c.Folder_to_scan
+	// slash to dash
+	scanFolder := strings.ReplaceAll(c.Folder_to_scan, "\\", "-")
+	scanFolder = strings.ReplaceAll(c.Folder_to_scan, "/", "-")
+	l.folder_to_scan = scanFolder
+
 	l.data = make(map[string][]map[string]string)
 }
 
@@ -43,18 +48,24 @@ func (l *Logger) GetLogData() map[string][]map[string]string {
 	return l.data
 }
 
+func (l *Logger) ClearLogs() bool {
+	err := os.RemoveAll(filepath.Join(l.log_folder, l.folder_to_scan))
+	if err != nil {
+		panic(err)
+	} else {
+		return true
+	}
+}
+
 func (l *Logger) saveFile() {
 	jsonString, err := json.Marshal(l.data)
 	if err != nil {
 		panic(err)
 	}
-	
-	scanFolder := strings.ReplaceAll(l.folder_to_scan, "\\", "-")
-	scanFolder = strings.ReplaceAll(l.folder_to_scan, "/", "-")
 
-	path := l.log_folder + "/" + scanFolder
+	path := filepath.Join(l.log_folder, l.folder_to_scan)
 	l.createDirIfNotExists(path)
-	path = path + "/" + time.Now().Format("20060102150405") + ".json"
+	path = filepath.Join(path, time.Now().Format("20060102150405"), ".json")
 	// write file
 	fileErr := ioutil.WriteFile(path, []byte(jsonString), 0)
 	if fileErr != nil {
