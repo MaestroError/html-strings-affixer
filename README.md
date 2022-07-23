@@ -25,8 +25,12 @@ Use `hsa [command] --help` to read more about command.
 - Make check command to print files and found strings count +
 - Create clear-log command and print logs size as message in bootstrap +
 - Write documentation in readme file
-- Release #1 - 0.0.1
-- register on packagist (Composer require)
+- Release #1 - 0.0.1 +
+- register on packagist (Composer require) +
+-------
+- Test linux binary on ubuntu
+- Simplify building windows and linux binaries
+-------
 - Add warning characters and separate them from ignoring characters
 - Print warning characters strings as warnings (not replaced) with file and line on replace command
 - Add --expand option for detailed info in check command
