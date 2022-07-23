@@ -51,7 +51,7 @@ func (r *Replacer) Affix(element map[string]string, parser *parsehtml.Parsehtml)
 	// Set main data
 	str := element["original_string"]
 	original_string := element["original_string"]
-	// @todo Create it controllable with config trimSpaces=true (both json & cli)
+	// @todo Create it controllable with config trimSpaces=true (both json & cli) ???
 	// Trim whitespace from sides
 	found := strings.TrimSpace(element["found"])
 

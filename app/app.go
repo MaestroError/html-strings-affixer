@@ -237,7 +237,7 @@ func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Report
 			reporter.AddError(msg)
 		}
 
-		if Configuration.Detailed_report {
+		if Configuration.Detailed_report && replaced {
 			filePath := path
 			if element["lines"] != "" {
 				filePath = path + ":" + element["lines"]

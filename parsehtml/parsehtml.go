@@ -2,7 +2,6 @@ package parsehtml
 
 import (
 	"bufio"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -269,10 +268,12 @@ func (parse *Parsehtml) generateRegex() {
 		// SECOND VERSION OF REGEX (!Not founds strings starting and ending with spaces!)
 		// reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `\s]+[^` + deniedCharString + `]+`+`[^` + deniedCharString + `\s]` + parse.suffix)
 		// THIRD VERSION OF REGEX (!Gives too much empty string!)
-		reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `]+[^` + deniedCharString + `]+`+`[^` + deniedCharString + `]` + parse.suffix)
+		// reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `]+[^` + deniedCharString + `]+`+`[^` + deniedCharString + `]` + parse.suffix)
+		// VERSION 4 OF REGEX (! Didn't finds with regex shorter then 4 !)
+		reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `]+[A-Za-z0-9][^` + deniedCharString + `]+`+`[^` + deniedCharString + `]` + parse.suffix)
 		parse.search_regex = reg.String()
 		parse.regexp = reg
-		fmt.Println(parse.search_regex + "\n")
+		// fmt.Println(parse.search_regex + "\n")
 	}
 }
 
