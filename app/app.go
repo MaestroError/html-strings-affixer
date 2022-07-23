@@ -18,7 +18,6 @@ import (
 	"github.com/MaestroError/html-strings-affixer/replacer"
 	"github.com/MaestroError/html-strings-affixer/reporter"
 	"github.com/MaestroError/html-strings-affixer/scanning"
-	"github.com/jedib0t/go-pretty/v6/table"
 )
 
 var ErrShutdown = fmt.Errorf("application was shutdown gracefully")
@@ -36,7 +35,7 @@ func Bootstrap() {
 		Logger.Init(Configuration)
 	}
 
-	// resolve command options and reset configs (command line argument has higher priority)
+	// resolve command options and reset configs (so command line argument has higher priority)
 	resolveCommands()
 }
 
@@ -46,47 +45,10 @@ func Start() {
 	switch command {
 	case "replace":
 		// Replace command
-		// scan folder and get needed files
-		files := scanFolder()
-
-		// Controls replace execution
-		replaceAllowed := true
-		
-		// Prepare reporter
-		reporter := reporter.Reporter{}
-		reporter.PrepareReplaceTable()
-		var totalReplaced int = 0
-		
-		// Check git status (Warn if need to commit)
-		if !checkGitStatus() {
-			if !Configuration.Force {
-				if !reporter.AskForConfirmation("You have uncommitted changes. Recommended to commit or stash them first. Continue anyway?", "yes") {
-					replaceAllowed = false
-				}
-				reporter.PrintMsg("You have uncommitted changes, you can use -force parameter in cli or set 'force' to true in config file to avoid confirmation)")
-			} else {
-				reporter.PrintMsg("You have uncommitted changes")
-			}
-		}
-
-		if replaceAllowed {
-			for _, path := range files {
-				parse := parsehtml.Parsehtml{}
-				// path = createTestFile(path)
-				parse.ParseFile(path, Configuration)
-				Replace(path, &parse, &reporter, &totalReplaced)
-			}
-			// add total count
-			reporter.AddTotal(totalReplaced)
-		}
-
-		// Report
-		reporter.Report()
-		// Log
-		Logger.Log()
-
+		runReplaceCommand()
 	case "check":
 		// Check command\
+		runCheckCommand()
 	default:
 		fmt.Println("No command found")
 		Shutdown()
@@ -118,9 +80,13 @@ func resolveCommands() {
 	}
 }
 
+/* Commands */
+
 func resolveReplaceCommand() {
 	// Example: replace -folder=testFolder -only="text,hastag" -allowed="blade.php" -prefix="{{__('" -suffix="')}}"
+	// Create flag set
 	Cmd := flag.NewFlagSet("", flag.ExitOnError)
+	// set flags (options)
 	Folder := Cmd.String("folder", "", "Folder to scan")
 	Allowed := Cmd.String("allowed", "", "allowed file types, separated by commas")
 	Methods := Cmd.String("only", "", "Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag")
@@ -160,8 +126,55 @@ func resolveReplaceCommand() {
 	}
 }
 
+func runReplaceCommand() {
+	// scan folder and get needed files
+	files := scanFolder()
+
+	// Controls replace execution
+	replaceAllowed := true
+	
+	// Prepare reporter
+	reporter := reporter.Reporter{}
+	reporter.PrepareReplaceTable()
+	var totalReplaced int = 0
+	
+	// Check git status (Warn if need to commit)
+	if !checkGitStatus() {
+		if !Configuration.Force {
+			if !reporter.AskForConfirmation("You have uncommitted changes. Recommended to commit or stash them first. Continue anyway?", "yes") {
+				replaceAllowed = false
+			}
+			reporter.PrintMsg("You have uncommitted changes, you can use -force parameter in cli or set 'force' to true in config file to avoid confirmation)")
+		} else {
+			reporter.PrintMsg("You have uncommitted changes")
+		}
+	}
+
+	if replaceAllowed {
+		for _, path := range files {
+			parse := parsehtml.Parsehtml{}
+			// path = createTestFile(path)
+			parse.ParseFile(path, Configuration)
+			affix(path, &parse, &reporter, &totalReplaced)
+		}
+		// add total count
+		reporter.AddTotal(totalReplaced)
+	}
+
+	// Report
+	reporter.Report()
+	// Log
+	Logger.Log()
+}
+
+func runCheckCommand() {
+
+}
+
 func resolveCheckCommand() {
+	// Create flag set
 	checkCmd := flag.NewFlagSet("check", flag.ExitOnError)
+	// set flags (options)
 	folder := checkCmd.String("folder", "", "Folder to scan")
 	allowed := checkCmd.String("allowed", "", "allowed file types, separated by commas")
 	methods := checkCmd.String("only", "", "Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag")
@@ -184,6 +197,8 @@ func resolveCheckCommand() {
 	}
 }
 
+/* Actions */
+
 func scanFolder() []string {
 	Scan := scanning.Scanning{}
 
@@ -199,14 +214,14 @@ func scanFolder() []string {
 	return Scan.Run()
 }
 
-func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter, totalReplaced *int) {
+func affix(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter, totalReplaced *int) {
 	// get replacement data from parsers
 	data := parser.GetFoundStrings()["data"]
 
 	// get file content from parser to not re-read
 	var content string = parser.GetOriginalContent()
 
-	// Declare counts
+	// Declare counts (found in file and replaced with success)
 	var countInFile int = 0
 	var countReplaced int = 0
 
@@ -218,7 +233,7 @@ func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Report
 
 	// loop on found strings
 	for _, element := range data {
-		// Extra checks
+		// EXTRA CHECKS
 		approved := true
 		// if placeholder attribute contains only "placeholder"
 		if element["type"] == "placeholder" {
@@ -231,17 +246,20 @@ func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Report
 
 		countInFile++
 		replaced := false
+
 		// affix found string if all checks passed well
 		if approved {
 			replaced = affixer.Affix(element, parser)
 			countReplaced++
 		}
 
+		// Add error message if string is approved but not replaced
 		if !replaced && approved {
 			msg := "String '" + element["found"] + "' not found in file " + path + " (Lines: "+ element["lines"] + ") "
 			reporter.AddError(msg)
 		}
 
+		// Add string data in detailed report if replaced with success and detailed report requested
 		if Configuration.Detailed_report && replaced {
 			filePath := path
 			if element["lines"] != "" {
@@ -250,24 +268,26 @@ func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Report
 			reporter.AddRow(filePath, strings.TrimSpace(element["found"]))
 		}
 
+		// add file data in logger if log folder is set
 		if Logger.GetLogFolder() != "" {
 			Logger.AddNewItem(path, element)
 		}
-			
-		
 	}
 	
+	// Msg for developer about disabled logger in this run
 	if Logger.GetLogFolder() == "" {
-		reporter.PrintMsg("Logger disabled")
+		reporter.PrintMsg("Logger disabled (You will not able to check/undo this changes")
 	}
 	
+	// Set total for report
 	*totalReplaced = *totalReplaced + countReplaced
+	// Make report string r/f format
 	replacedString := strconv.Itoa(countReplaced) + "/" + strconv.Itoa(countInFile)
 
+	// add count if detailed report not requested
 	if !Configuration.Detailed_report {
 		reporter.AddRow(path, replacedString)
 	}
-	
 	
 	// write file with same name
 	err := ioutil.WriteFile(path, []byte(affixer.GetContent()), 0)
@@ -276,6 +296,8 @@ func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Report
 	}
 
 }
+
+/* Helpers */
 
 // nothing to commit, working tree clean
 func checkGitStatus() bool {
@@ -292,33 +314,10 @@ func checkGitStatus() bool {
 }
 
 
-func createDirIfNotExists(path string) {
-	exists, err := exists(path)
-	if err != nil {
-		panic(err)
-	}
-	if exists == false {
-		os.Mkdir(path, 0777)
-	}
-}
 
-/* Testing */
+/* Debug */
 
 func debug() {
-	t := table.NewWriter()
-	t.AppendHeader(table.Row{"#", "Location", "Found", "Replaced"})
-	t.AppendRow(table.Row{1, "testdata/pages/test.blade.php:20", "Stark", 3000})
-	// all rows need not have the same number of columns
-	t.AppendRow(table.Row{20, "Jon", "Snow", 2000, "You know nothing, Jon Snow!"})
-	// t.AppendSeparator()
-	// table.Row is just a shorthand for []interface{}
-	t.AppendRow([]interface{}{300, "Tyrion", "Lannister", 5000})
-	// time to take a peek
-	t.SetCaption("Simple Table with 3 Rows.\n")
-	t.SetStyle(table.StyleRounded)
-	t.SetTitle("Game Of Thrones")
-	fmt.Println(t.Render())
-
 	debugReplace()
 }
 
@@ -329,7 +328,7 @@ func debugReplace() {
 	reporter := reporter.Reporter{}		
 	reporter.PrepareReplaceTable()
 	var totalReplaced int = 0
-	Replace(path, &parse, &reporter, &totalReplaced)
+	affix(path, &parse, &reporter, &totalReplaced)
 
 	reporter.AddTotal(totalReplaced)
 	// Report
@@ -370,6 +369,16 @@ func exists(path string) (bool, error) {
 	return false, err
 }
 
+
+func createDirIfNotExists(path string) {
+	exists, err := exists(path)
+	if err != nil {
+		panic(err)
+	}
+	if exists == false {
+		os.Mkdir(path, 0777)
+	}
+}
 
 func PrettyPrint(v interface{}) (err error) {
 	b, err := json.MarshalIndent(v, "", "  ")

@@ -20,5 +20,5 @@ Finds texts in HTML and replaces it with suffixed and prefixed string
 
 ### Upcoming
 - Refactor app with Cobra package
-- Make cache file to undo last changes (for dry run)
+- Use log files to undo last changes in folder_to_scan from log_folder (for dry run)
 - add command: "watch" (for live updates) and "undo" (Undo last changes)
