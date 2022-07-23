@@ -61,7 +61,6 @@ func Shutdown() {
 }
 
 func resolveCommands() {
-	fmt.Println(os.Args[0])
 	if len(os.Args) > 1 {
 		switch os.Args[1] {
 		case "replace":
@@ -167,10 +166,6 @@ func runReplaceCommand() {
 	Logger.Log()
 }
 
-func runCheckCommand() {
-
-}
-
 func resolveCheckCommand() {
 	// Create flag set
 	checkCmd := flag.NewFlagSet("check", flag.ExitOnError)
@@ -195,6 +190,26 @@ func resolveCheckCommand() {
 	if *oneFile != "" {
 		Configuration.SetOneFile(*oneFile)
 	}
+}
+
+func runCheckCommand() {
+	// scan folder and get needed files
+	files := scanFolder()
+	
+	// Prepare reporter
+	reporter := reporter.Reporter{}
+	reporter.PrepareCheckTable()
+
+	for _, path := range files {
+		parse := parsehtml.Parsehtml{}
+		// path = createTestFile(path)
+		parse.ParseFile(path, Configuration)
+		data := parse.GetFoundStrings()["data"]
+		reporter.AddRow(path, strconv.Itoa(len(data)))
+	}
+
+	// Report
+	reporter.Report()
 }
 
 /* Actions */
