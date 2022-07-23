@@ -64,7 +64,7 @@
     
     <!-- XX Didn't finds with regex - SOLVED! (new regex) -->
     <div class="ps-product__badge">
-        <div class="ps-badge ps-badge--hot">{{ __('Hot') }}</div') }}{{ __('>
+        <div class="ps-badge ps-badge--hot">{{ __('Hot') }}</div>
     </div>
 
     <!-- XX Didn't finds with regex if starting or ending with space - SOLVED! (With 3rd version of regex) -->
@@ -73,7 +73,7 @@
     <!-- No extra empty strings and mutching linebreaks with new text type suffix +TrimSpaces -->
     <li>
         {{ __('Up to 5 users simultaneously') }}
-    </li') }}{{ __('>
+    </li>
 
 
 </body>

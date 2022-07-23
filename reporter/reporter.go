@@ -47,7 +47,7 @@ func (reporter *Reporter) AskForConfirmation(s string, def string) bool {
 
 	for {
 		var warnColor text.Color = text.FgYellow
-		msg := s + "y/n ["+def+"]: "
+		msg := s + " y/n ["+def+"]: "
 		reporter.print(warnColor, "Confirm: " + msg)
 		
 
@@ -68,6 +68,11 @@ func (reporter *Reporter) AskForConfirmation(s string, def string) bool {
 			return false
 		}
 	}
+}
+
+func (reporter *Reporter) PrintMsg(msg string) {
+	var msgColor text.Color = text.FgBlue
+	reporter.print(msgColor, "- " + msg)
 }
 
 /* Strings */

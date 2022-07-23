@@ -2,6 +2,7 @@ package parsehtml
 
 import (
 	"bufio"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -271,7 +272,7 @@ func (parse *Parsehtml) generateRegex() {
 		reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `]+[^` + deniedCharString + `]+`+`[^` + deniedCharString + `]` + parse.suffix)
 		parse.search_regex = reg.String()
 		parse.regexp = reg
-		// fmt.Println(parse.search_regex + "\n")
+		fmt.Println(parse.search_regex + "\n")
 	}
 }
 

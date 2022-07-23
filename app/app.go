@@ -60,8 +60,7 @@ func Start() {
 			if !reporter.AskForConfirmation("You have uncommitted changes. Recommended to commit or stash them first. Continue anyway?", "yes") {
 				replaceAllowed = false
 			}
-			// @todo add msg (before table, gray) property and related methods in reporter, use here message instead of warning
-			reporter.AddWarning("You have uncommitted changes, you can use -force parameter in cli or set 'force' to true in config file to avoid confirmation)")
+			reporter.PrintMsg("You have uncommitted changes, you can use -force parameter in cli or set 'force' to true in config file to avoid confirmation)")
 		}
 
 		if replaceAllowed {
@@ -254,8 +253,7 @@ func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Report
 	}
 	
 	if Logger.GetLogFolder() == "" {
-		// @todo add msg (before table, gray) property and related methods in reporter, use here message 
-		reporter.AddWarning("Logger disabled")
+		reporter.PrintMsg("Logger disabled")
 	}
 	
 	*totalReplaced = *totalReplaced + countReplaced
