@@ -4,7 +4,6 @@
 *.dll
 *.so
 *.dylib
-!bin/hsa.exe
 
 # Test binary, built with `go test -c`
 *.test
@@ -20,3 +19,5 @@ testdata
 hsa/log
 
 /vendor/
+
+!bin/hsa.exe
