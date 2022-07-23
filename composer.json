@@ -11,6 +11,6 @@
     "minimum-stability": "dev",
     "require": {},
     "bin": [
-		"bin/hsa"
+		"bin/composer-adapter/hsa"
 	]
 }
