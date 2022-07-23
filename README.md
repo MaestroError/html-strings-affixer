@@ -1,5 +1,21 @@
 # html-strings-affixer
-Finds texts in HTML and replaces it with suffixed and prefixed string
+Finds texts in HTML and replaces it with suffixed and prefixed string.    
+Originally developed to replace strings with localization function in blade file (`<p>Some nice string</p>` -> `<p>{{ __('Some nice string') }}</p>`), but can be used in any file which contains html (".jsx", ".vue", ".twig") with same purpose. Of course, prefix and suffix are customizable
+
+# Installation
+
+### From source
+If you have [golang](https://go.dev/doc/install) installed, you can clone this repo and run `go install` or `go build` for binary file
+
+# Config file
+You need to create "affixer-config.json" file in directory, from where you will run html-strings-affixer. You can find an example in root folder of this repository.
+
+# Commands
+Available commands:
+- [replace] - Main command, which makes replacement of strings
+- [check] - Checks folder and gives report with files and count of found strings
+- [clear-log] - If you use log_folder config, logs are generated. this command clear all log files
+Use `hsa [command] --help` to now more about command. 
 
 
 ### To Do

@@ -415,7 +415,7 @@ func createDirIfNotExists(path string) {
 	if err != nil {
 		panic(err)
 	}
-	if exists == false {
+	if !exists {
 		os.Mkdir(path, 0777)
 	}
 }
