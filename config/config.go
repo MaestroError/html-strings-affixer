@@ -187,9 +187,10 @@ func (c *Config) parseJsonFile() {
 	// if we os.Open returns an error then handle it
 	if err != nil {
 		fmt.Println(err, "| Config file does not used")
+	} else {
+		fmt.Println("Config file used successfully")
 	}
 
-	fmt.Println("Config file used successfully")
 	// defer the closing of our jsonFile so that we can parse it later on
 	defer jsonFile.Close()
 
