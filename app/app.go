@@ -199,12 +199,6 @@ func scanFolder() []string {
 	return Scan.Run()
 }
 
-/*
-* @todo Create structs with following actions:
-* 		- Affixer +
-*		- Logger (in json file)
-* 		- Reporter (results in CLI) +
- */
 func Replace(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter, totalReplaced *int) {
 	// get replacement data from parsers
 	data := parser.GetFoundStrings()["data"]
