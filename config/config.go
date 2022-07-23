@@ -19,12 +19,13 @@ type Config struct {
 	// Replace
 	Prefix_to_set string // both
 	Suffix_to_set string // both
-	// info
-	current_command string
+	Force bool // both
 	// Report
 	Detailed_report bool // both
 	// Log
-	Log_folder string // @todo both
+	Log_folder string // only JSON
+	// info
+	current_command string
 }
 
 func (c *Config) Init() {
@@ -72,6 +73,10 @@ func (c *Config) SetOneFile(one_file string) {
 
 func (c *Config) SetDetailedReport(detailed bool) {
 	c.Detailed_report = detailed
+}
+
+func (c *Config) SetForce(force bool) {
+	c.Force = force
 }
 
 func (c *Config) SetLogFolder(folder string) {
@@ -127,6 +132,7 @@ func (c *Config) setDefaults() {
 	c.setDefaultPreffix()
 	c.setDefaultSuffix()
 	c.setDefaultDetailed()
+	c.setDefaultForce()
 	c.setDefaultLogFolder()
 }
 
@@ -168,8 +174,12 @@ func (c *Config) setDefaultDetailed() {
 	c.Detailed_report = false
 }
 
+func (c *Config) setDefaultForce() {
+	c.Force = false
+}
+
 func (c *Config) setDefaultLogFolder() {
-	c.Log_folder = "log"
+	c.Log_folder = ""
 }
 
 func (c *Config) parseJsonFile() {

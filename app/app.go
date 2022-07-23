@@ -30,8 +30,11 @@ var Logger logger.Logger
 func Bootstrap() {
 	// Set config default and read json file
 	Configuration.Init()
-	Logger.Init(Configuration)
 
+	// Init logger
+	if Configuration.Log_folder != "" {
+		Logger.Init(Configuration)
+	}
 
 	// resolve command options and reset configs (command line argument has higher priority)
 	resolveCommands()
@@ -55,12 +58,15 @@ func Start() {
 		var totalReplaced int = 0
 		
 		// Check git status (Warn if need to commit)
-		// @todo avoid git status check with force config, add it in both, cli and json
 		if !checkGitStatus() {
-			if !reporter.AskForConfirmation("You have uncommitted changes. Recommended to commit or stash them first. Continue anyway?", "yes") {
-				replaceAllowed = false
+			if !Configuration.Force {
+				if !reporter.AskForConfirmation("You have uncommitted changes. Recommended to commit or stash them first. Continue anyway?", "yes") {
+					replaceAllowed = false
+				}
+				reporter.PrintMsg("You have uncommitted changes, you can use -force parameter in cli or set 'force' to true in config file to avoid confirmation)")
+			} else {
+				reporter.PrintMsg("You have uncommitted changes")
 			}
-			reporter.PrintMsg("You have uncommitted changes, you can use -force parameter in cli or set 'force' to true in config file to avoid confirmation)")
 		}
 
 		if replaceAllowed {
@@ -93,6 +99,7 @@ func Shutdown() {
 }
 
 func resolveCommands() {
+	fmt.Println(os.Args[0])
 	if len(os.Args) > 1 {
 		switch os.Args[1] {
 		case "replace":
@@ -113,39 +120,43 @@ func resolveCommands() {
 
 func resolveReplaceCommand() {
 	// Example: replace -folder=testFolder -only="text,hastag" -allowed="blade.php" -prefix="{{__('" -suffix="')}}"
-	replaceCmd := flag.NewFlagSet("replace", flag.ExitOnError)
-	replaceFolder := replaceCmd.String("folder", "", "Folder to scan")
-	replaceAllowed := replaceCmd.String("allowed", "", "allowed file types, separated by commas")
-	replaceMethods := replaceCmd.String("only", "", "Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag")
-	replacePrefix := replaceCmd.String("prefix", "", "New prefix for strings")
-	replaceSuffix := replaceCmd.String("suffix", "", "New suffix for strings")
-	replaceDetailed := replaceCmd.Bool("detailed", true, "If true, detailed report printed")
-	oneFile := replaceCmd.String("file", "", "Use this argument to run command only on one file")
+	Cmd := flag.NewFlagSet("", flag.ExitOnError)
+	Folder := Cmd.String("folder", "", "Folder to scan")
+	Allowed := Cmd.String("allowed", "", "allowed file types, separated by commas")
+	Methods := Cmd.String("only", "", "Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag")
+	Prefix := Cmd.String("prefix", "", "New prefix for strings")
+	Suffix := Cmd.String("suffix", "", "New suffix for strings")
+	Detailed := Cmd.Bool("detailed", false, "If true, detailed report printed")
+	Force := Cmd.Bool("force", false, "If true, git status check is ignored")
+	oneFile := Cmd.String("file", "", "Use this argument to run command only on one file")
 	// Parse arguments
-	replaceCmd.Parse(os.Args[2:])
+	Cmd.Parse(os.Args[2:])
 	// set command name
 	Configuration.SetCurrentCommand("replace")
 	// Set configs
-	if *replaceFolder != "" {
-		Configuration.SetFolderToScan(*replaceFolder)
+	if *Folder != "" {
+		Configuration.SetFolderToScan(*Folder)
 	}
-	if *replaceAllowed != "" {
-		Configuration.SetAllowedFileTypes(strings.Split(*replaceAllowed, ","))
+	if *Allowed != "" {
+		Configuration.SetAllowedFileTypes(strings.Split(*Allowed, ","))
 	}
-	if *replaceMethods != "" {
-		Configuration.SetAllowedParseMethods(strings.Split(*replaceMethods, ","))
+	if *Methods != "" {
+		Configuration.SetAllowedParseMethods(strings.Split(*Methods, ","))
 	}
-	if *replacePrefix != "" {
-		Configuration.SetPrefixToSet(*replacePrefix)
+	if *Prefix != "" {
+		Configuration.SetPrefixToSet(*Prefix)
 	}
-	if *replaceSuffix != "" {
-		Configuration.SetSuffixToSet(*replaceSuffix)
+	if *Suffix != "" {
+		Configuration.SetSuffixToSet(*Suffix)
 	}
 	if *oneFile != "" {
 		Configuration.SetOneFile(*oneFile)
 	}
-	if *replaceDetailed {
-		Configuration.SetDetailedReport(*replaceDetailed)
+	if *Detailed {
+		Configuration.SetDetailedReport(*Detailed)
+	}
+	if *Force {
+		Configuration.SetForce(*Force)
 	}
 }
 
@@ -286,6 +297,17 @@ func checkGitStatus() bool {
 	}
 }
 
+
+func createDirIfNotExists(path string) {
+	exists, err := exists(path)
+	if err != nil {
+		panic(err)
+	}
+	if exists == false {
+		os.Mkdir(path, 0777)
+	}
+}
+
 /* Testing */
 
 func debug() {
@@ -352,16 +374,6 @@ func exists(path string) (bool, error) {
 		return false, nil
 	}
 	return false, err
-}
-
-func createDirIfNotExists(path string) {
-	exists, err := exists(path)
-	if err != nil {
-		panic(err)
-	}
-	if exists == false {
-		os.Mkdir(path, 0777)
-	}
 }
 
 

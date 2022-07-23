@@ -15,5 +15,7 @@
         "title",
         "hashtag"
     ],
-    "Detailed_report": false
+    "Detailed_report": false,
+    "force": false,
+    "log_folder": "hsa/log"
 }
