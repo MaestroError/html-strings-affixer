@@ -21,4 +21,3 @@ hsa/log
 /vendor/
 
 !bin/hsa.exe
-!bin/Whsa.exe

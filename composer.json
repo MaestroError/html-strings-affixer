@@ -12,8 +12,6 @@
     "require": {},
     "bin": [
 		"bin/composer-adapter/hsawin",
-        "bin/hsa",
-        "bin/hsa.exe",
-        "bin/Whsa.exe"
+        "bin/hsa"
 	]
 }
