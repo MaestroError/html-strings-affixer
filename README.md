@@ -28,7 +28,9 @@ Use `hsa [command] --help` to read more about command.
 - Release #1 - 0.0.1 +
 - register on packagist (Composer require) +
 -------
-- Test linux binary on ubuntu
+- Test linux binary on ubuntu +
+- Make windows installer
+- Add linux install instructions in documentation
 - Simplify building windows and linux binaries
 -------
 - Add warning characters and separate them from ignoring characters
