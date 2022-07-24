@@ -13,6 +13,7 @@
     "bin": [
 		"bin/composer-adapter/hsawin",
         "bin/hsa",
-        "bin/hsa.exe"
+        "bin/hsa.exe",
+        "bin/Whsa.exe"
 	]
 }
