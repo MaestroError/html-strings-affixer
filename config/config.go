@@ -183,7 +183,7 @@ func (c *Config) setDefaultLogFolder() {
 }
 
 func (c *Config) parseJsonFile() {
-	jsonFile, err := os.Open("affixer-config.json")
+	jsonFile, err := os.Open("affixer.json")
 	// if we os.Open returns an error then handle it
 	if err != nil {
 		fmt.Println(err, "| Config file does not used")

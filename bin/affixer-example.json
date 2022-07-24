@@ -1,0 +1,21 @@
+{
+    "folder": "testdata/pages-test",
+    "Allowed_file_types": [
+        "blade.php",
+        ".jsx",
+        ".vue"
+    ],
+    "Ignore_files_and_folders": [
+
+    ],
+    "Allowed_parse_methods": [
+        "text",
+        "placeholder",
+        "alt",
+        "title",
+        "hashtag"
+    ],
+    "Detailed_report": false,
+    "force": false,
+    "log_folder": "hsa/log"
+}
