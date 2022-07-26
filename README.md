@@ -1,13 +1,13 @@
 # html-strings-affixer
-Finds texts in HTML and replaces it with suffixed and prefixed string.    
-Originally developed to replace strings with localization function in blade file:      
+Finds texts in HTML and replaces it with suffixed and prefixed string. Originally developed to replace strings with localization function in blade file:      
 `<p>Some nice string</p>` -> `<p>{{ __('Some nice string') }}</p>`     
 But can be used in any file which contains html (".jsx", ".vue", ".twig") with same purpose. Of course, prefix and suffix are customizable
 
 # Installation
 
 ### Composer
-It is already available in composer now, you can require it: `composer require maestroerror/html-strings-affixer --dev`.
+It is already available in composer now, you can require it:       
+`composer require maestroerror/html-strings-affixer --dev`.
 After installation it is accessible by `./vendor/bin/hsa` and `./vendor/bin/hsawin` for Windows
 
 ### Linux/Unix
@@ -21,7 +21,9 @@ You can move it in directory where you need to use and just execute with `./hsa 
 Find your bin folder (`/usr/bin`, `/usr/sbin` or `~/bin`), or make it with `cd ~/ && mkdir bin` and Symlink (`ln -s $~/path/to/directory/hsa ~/bin/hsa`) or move/copy binary file in `~/bin/hsa` directory. After it you can use app in cli with "hsa" command. Try: `hsa check`
 
 ### Windows
-
+Download binary [file](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsa.exe) or [Zip](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsawin.zip). Get "hsa.exe" file in needed directory and run with ".\hsa.exe"
+##### OR
+Download .msi [installer](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsaInstaller.msi) and follow installation process
 
 
 ### From source
@@ -53,7 +55,8 @@ Use `hsa [command] --help` to read more about command.
 - Find out where to share go projects
 - Standardize Json configs
 - Update example config file with all needed configs
-- Next Release
+- Generate files for bin folder
+- Next Release (Don't forget to add in release: hsa, hsa.exe, hsawin.zip and hsaInstaller.msi)
 -------
 - Add warning characters and separate them from ignoring characters
 - Print warning characters strings as warnings (not replaced) with file and line on replace command
