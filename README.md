@@ -16,11 +16,12 @@ Download binary [file](https://github.com/MaestroError/html-strings-affixer/rele
 ##### Step 2: Make it executable
 Run in directory with downloaded file `chmod a+x ./hsa` (Use sudo if permission is required)
 ##### Step 3: Execution
-You can move it in folder, where you need to use and just execute with `./hsa [command] [-args]` or Make it available viw command line.
-##### Step 4: Command line  
-Find you bin folder, or make it with `cd ~/ && mkdir bin` and Symlink (`ln -s $~/path/to/script/hsa ~/bin/hsa`) or move/copy binary file in `~/bin/hsa` directory. After it you can run app in cli with "hsa" command to ensure it works: `hsa check`
+You can move it in directory where you need to use and just execute with `./hsa [command] [-args]` or Make it available viw command line.
+##### Step 4: Command line (optional)
+Find your bin folder (`/usr/bin`, `/usr/sbin` or `~/bin`), or make it with `cd ~/ && mkdir bin` and Symlink (`ln -s $~/path/to/directory/hsa ~/bin/hsa`) or move/copy binary file in `~/bin/hsa` directory. After it you can use app in cli with "hsa" command. Try: `hsa check`
 
-```
+### Windows
+
 
 
 ### From source
@@ -46,18 +47,20 @@ Use `hsa [command] --help` to read more about command.
 - register on packagist (Composer require) +
 -------
 - Test linux binary on ubuntu +
-- Add composer install instructions in docs
-- Add linux install instructions in documentation
+- Add composer install instructions in docs +
+- Add linux install instructions in documentation +
 - Make windows installer
-- Simplify building windows and linux binaries
 - Find out where to share go projects
+- Standardize Json configs
+- Update example config file with all needed configs
+- Next Release
 -------
 - Add warning characters and separate them from ignoring characters
 - Print warning characters strings as warnings (not replaced) with file and line on replace command
 - Add --expand option for detailed info in check command
 - Add --report option for detailed report (JSON) in check command
 - Write benchmarks for app
-- Release #2 - 0.0.2
+- Next Release
 - .deb installable package (apt-get)
 - exe/msi installer
 
