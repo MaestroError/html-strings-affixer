@@ -6,6 +6,23 @@ But can be used in any file which contains html (".jsx", ".vue", ".twig") with s
 
 # Installation
 
+### Composer
+It is already available in composer now, you can require it: `composer require maestroerror/html-strings-affixer --dev`.
+After installation it is accessible by `./vendor/bin/hsa` and `./vendor/bin/hsawin` for Windows
+
+### Linux/Unix
+##### Step 1: Download
+Download binary [file](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsa) with `wget https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsa`
+##### Step 2: Make it executable
+Run in directory with downloaded file `chmod a+x ./hsa` (Use sudo if permission is required)
+##### Step 3: Execution
+You can move it in folder, where you need to use and just execute with `./hsa [command] [-args]` or Make it available viw command line.
+##### Step 4: Command line  
+Find you bin folder, or make it with `cd ~/ && mkdir bin` and Symlink (`ln -s $~/path/to/script/hsa ~/bin/hsa`) or move/copy binary file in `~/bin/hsa` directory. After it you can run app in cli with "hsa" command to ensure it works: `hsa check`
+
+```
+
+
 ### From source
 If you have [golang](https://go.dev/doc/install) installed, you can clone this repo and run `go install` or `go build` for binary file
 
@@ -29,9 +46,11 @@ Use `hsa [command] --help` to read more about command.
 - register on packagist (Composer require) +
 -------
 - Test linux binary on ubuntu +
-- Make windows installer
+- Add composer install instructions in docs
 - Add linux install instructions in documentation
+- Make windows installer
 - Simplify building windows and linux binaries
+- Find out where to share go projects
 -------
 - Add warning characters and separate them from ignoring characters
 - Print warning characters strings as warnings (not replaced) with file and line on replace command
