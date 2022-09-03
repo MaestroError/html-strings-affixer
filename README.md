@@ -3,6 +3,16 @@ Finds texts in HTML and replaces it with suffixed and prefixed string. Originall
 `<p>Some nice string</p>` -> `<p>{{ __('Some nice string') }}</p>`     
 But can be used in any file which contains html (".jsx", ".vue", ".twig") with same purpose. Of course, prefix and suffix are customizable
 
+# Navigation
+- [Installation](#installation)
+    - [Composer](#composer)
+    - [Linux/Unix](#linuxunix)
+    - [Windows](#windows)
+    - [From source](#from-source)
+- [Features](#features)
+- [Config file](#config-file)
+- [Commands](#commands)
+
 # Installation
 ### Composer
 It is already available in composer now, you can require it: `composer require maestroerror/html-strings-affixer --dev`.     
@@ -52,14 +62,14 @@ Use `hsa [command] --help` to read more about command.
 - Add composer install instructions in docs +
 - Add linux install instructions in documentation +
 - Make windows exe/msi installer ?
-- Standardize Json configs
-- Update example config file with all needed configs
-- Generate files for bin folder
-- Next Release (Don't forget to add in release: hsa, hsa.exe, hsawin.zip and hsaInstaller.msi)
--------
+- Standardize Json configs +
+- Update example config file with all needed configs +
 - Add warning characters and separate them from ignoring characters
 - Consider similar cases `Veelgestelde vragen over {{$serviceName}}`
 - Print warning characters strings as warnings (not replaced) with file and line on replace command
+- Generate files for bin folder
+- Next Release (Don't forget to add in release: hsa, hsa.exe, hsawin.zip and hsaInstaller.msi)
+-------
 - Add --expand option for detailed info in check command
 - Add --report option for detailed report (JSON) in check command
 - Next Release
