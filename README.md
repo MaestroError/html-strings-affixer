@@ -15,7 +15,8 @@ But can be used in any file which contains html (".jsx", ".vue", ".twig") with s
 
 # Installation
 ### Composer
-It is already available in composer now, you can require it: `composer require maestroerror/html-strings-affixer --dev`.     
+It is already available in composer now, you can require it:       
+`composer require maestroerror/html-strings-affixer --dev`.     
 After installation it is accessible by `./vendor/bin/hsa` and `./vendor/bin/hsawin` for Windows
 
 ### Linux/Unix
@@ -70,7 +71,7 @@ Available commands:
 - check - Checks folder and gives report with files and count of found strings
 - clear-log - If you use log_folder config, logs are generated. this command clear all log files    
 
-Use `hsa [command] --help` to read more about command. 
+Some configs you can pass as arguments, use `hsa [command] --help` to read more about command. 
 
 
 ### To Do
