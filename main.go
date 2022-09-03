@@ -47,7 +47,6 @@ func createConfigFileIfRequested() {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Println(exampleFile)
 
 		// check if example config file exists
 		if exampleExists {

@@ -1,21 +1,25 @@
 {
-    "folder": "testdata/pages-test",
-    "Allowed_file_types": [
+    "folder": "resources/views",
+    "file_types": [
         "blade.php",
         ".jsx",
         ".vue"
     ],
-    "Ignore_files_and_folders": [
-
+    "ignore_names": [
+        "someFolderNameToIgnore",
+        "images"
     ],
-    "Allowed_parse_methods": [
+    "ignore": ["%", "#", "_", ">", "{", "(", "}", ")", "^", "$", "*", "=", "'"],
+    "methods": [
         "text",
         "placeholder",
         "alt",
         "title",
         "hashtag"
     ],
-    "Detailed_report": false,
+    "prefix": "{{ __('",
+    "suffix": "') }}",
+    "detailed": false,
     "force": false,
     "log_folder": "hsa/log"
 }

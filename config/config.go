@@ -9,21 +9,21 @@ import (
 
 type Config struct {
 	// Scanning
-	Folder_to_scan           string   `json:"folder"` // both
-	Allowed_file_types       []string // both
-	Ignore_files_and_folders []string // only json
-	one_file                 string   // only CLI
+	Folder_to_scan           string   `json:"folder"` // both | just folder to scan
+	Allowed_file_types       []string `json:"file_types"` // both | parses file only with given extensions
+	Ignore_files_and_folders []string `json:"ignore_names"` // only json | ignores files and folders with given names
+	one_file                 string   // only CLI | full path to file, if set, all actions will be performed on one given file 
 	// Parse
-	Ignore_characters     []string // only json
-	Allowed_parse_methods []string // both
+	Ignore_characters     []string `json:"ignore"` // only json | ignores strings which contains given character
+	Allowed_parse_methods []string `json:"methods"` // both | Uses only given parse methods. Available: text, placeholder, alt, title, hashtag
 	// Replace
-	Prefix_to_set string // both
-	Suffix_to_set string // both
-	Force bool // both
+	Prefix_to_set string `json:"prefix"` // both | Prefix to set
+	Suffix_to_set string `json:"suffix"` // both | Suffix to set
+	Force bool `json:"force"` // both | If true, git status check is ignored
 	// Report
-	Detailed_report bool // both
+	Detailed_report bool `json:"detailed"` // both | if true, detailed report will be displayed
 	// Log
-	Log_folder string // only JSON
+	Log_folder string `json:"log_folder"` // only JSON | folder to store logs
 	// info
 	current_command string
 }
@@ -197,7 +197,6 @@ func (c *Config) parseJsonFile() {
 	// read our opened xmlFile as a byte array.
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-	// we unmarshal our byteArray which contains our
-	// jsonFile's content into 'users' which we defined above
+	// we unmarshal our byteArray
 	json.Unmarshal(byteValue, &c)
 }

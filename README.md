@@ -51,23 +51,31 @@ Use `hsa [command] --help` to read more about command.
 - Test linux binary on ubuntu +
 - Add composer install instructions in docs +
 - Add linux install instructions in documentation +
-- Make windows exe/msi installer
-- Find out where to share go projects
+- Make windows exe/msi installer ?
 - Standardize Json configs
 - Update example config file with all needed configs
 - Generate files for bin folder
 - Next Release (Don't forget to add in release: hsa, hsa.exe, hsawin.zip and hsaInstaller.msi)
 -------
 - Add warning characters and separate them from ignoring characters
+- Consider similar cases `Veelgestelde vragen over {{$serviceName}}`
 - Print warning characters strings as warnings (not replaced) with file and line on replace command
 - Add --expand option for detailed info in check command
 - Add --report option for detailed report (JSON) in check command
+- Next Release
+-------
 - Next Release
 
 
 ### Upcoming
 - Write benchmarks for app
-- Make app available by npm
+- Make app available by npm ([article](https://blog.bywachira.com/post/create-cli-with-golang-and-publish-on-npm)) 
+- Install and configure goreleaser
 - Refactor app with Cobra package
 - Use log files to undo last changes in folder_to_scan from log_folder (for dry run)
 - add command: "watch" (for live updates) and "undo" (Undo last changes)
+
+#### Resources
+- [goreleaser](https://goreleaser.com/) +
+- [go-npm](https://github.com/sanathkr/go-npm)
+- [Developing and publishing modules](https://go.dev/doc/modules/developing)
