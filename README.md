@@ -39,8 +39,30 @@ Download binary [file](https://github.com/MaestroError/html-strings-affixer/rele
 If you have [golang](https://go.dev/doc/install) installed, you can clone this repo and run `go install` or `go build` for binary file
 
 # Config file
-You need to create "affixer.json" file in directory, from where you will run html-strings-affixer. You can find an example in bin folder of this repository (bin/affixer-example.json).      
-*Alternativly you can run app without config file in your working directory and it will offer you to create one from example*
+You need to create "affixer.json" file in directory, from where you will run html-strings-affixer. You can find an [example](https://github.com/MaestroError/html-strings-affixer/blob/maestro/bin/affixer-example.json) in bin folder of this repository (bin/affixer-example.json).      
+*Alternativly you can run app without config file in your working directory and it will offer you to create one from example*       
+### JSON object and descriptions
+```
+    // Scanning
+    (string) "folder" - just folder to scan
+    (array) "file_types" - Parses file only with given extensions
+    (array) "ignore_names" - ignores files and folders with given names
+    
+    // Parse
+    (array) "ignore" - ignores strings which contains given character
+    (array) "methods" - Uses only given parse methods. Available: text, placeholder, alt, title, hashtag
+
+    // Replace
+    (string) "prefix" - Prefix to set
+    (string) "suffix" - Suffix to set
+    (bool) "force" - If true, git status check is ignored
+
+    // Report
+    (bool) "detailed" - if true, detailed report will be displayed
+
+    // Log
+    (string) "log_folder" - folder to store logs
+```
 
 # Commands
 Available commands:
