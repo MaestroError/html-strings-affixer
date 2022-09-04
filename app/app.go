@@ -131,6 +131,7 @@ func resolveReplaceCommand() {
 
 func runReplaceCommand() {
 	// scan folder and get needed files
+	// @todo check for onefile and use it here
 	files := scanFolder()
 
 	// Controls replace execution
@@ -283,6 +284,8 @@ func affix(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter
 				reporter.AddWarning(msg)
 			}
 		}
+
+		// @todo check for Warning characters (Warning_characters)
 
 		countInFile++
 		replaced := false

@@ -65,7 +65,7 @@ func (l *Logger) saveFile() {
 
 	path := filepath.Join(l.log_folder, l.folder_to_scan)
 	l.createDirIfNotExists(path)
-	path = filepath.Join(path, time.Now().Format("20060102150405"), ".json")
+	path = filepath.Join(path, time.Now().Format("20060102150405")+ ".json")
 	// write file
 	fileErr := ioutil.WriteFile(path, []byte(jsonString), 0)
 	if fileErr != nil {

@@ -75,6 +75,11 @@
     <li>
         Up to 5 users simultaneously
     </li>
+    
+    <!-- @todo Replaces full without checking warning characters -->
+    <p>Veelgestelde vragen over {{$serviceName}}</p>
+    <!-- @todo Not replaces  -->
+    <p>Veelgestelde vragen over <span>{{$serviceName}}</span></p>
 
 
 </body>

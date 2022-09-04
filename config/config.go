@@ -14,7 +14,8 @@ type Config struct {
 	Ignore_files_and_folders []string `json:"ignore_names"` // only json | ignores files and folders with given names
 	one_file                 string   // only CLI | full path to file, if set, all actions will be performed on one given file 
 	// Parse
-	Ignore_characters     []string `json:"ignore"` // only json | ignores strings which contains given character
+	Ignore_characters     []string `json:"ignore"` // only json | ignores strings which contains given characters
+	Warning_characters     []string `json:"warnings"` // only json | Warns about strings which contains given characters (not replaces)
 	Allowed_parse_methods []string `json:"methods"` // both | Uses only given parse methods. Available: text, placeholder, alt, title, hashtag
 	// Replace
 	Prefix_to_set string `json:"prefix"` // both | Prefix to set
@@ -49,6 +50,10 @@ func (c *Config) SetIgnoreFileTypes(Ignore_files_and_folders []string) {
 
 func (c *Config) SetIgnoreCharacters(Ignore_characters []string) {
 	c.Ignore_characters = Ignore_characters
+}
+
+func (c *Config) SetWarningCharacters(Warning_characters []string) {
+	c.Warning_characters = Warning_characters
 }
 
 func (c *Config) SetAllowedParseMethods(Allowed_parse_methods []string) {
@@ -101,6 +106,10 @@ func (c *Config) GetIgnoreCharacters() []string {
 	return c.Ignore_characters
 }
 
+func (c *Config) GetWarningCharacters() []string {
+	return c.Warning_characters
+}
+
 func (c *Config) GetAllowedMethods() []string {
 	return c.Allowed_parse_methods
 }
@@ -128,6 +137,7 @@ func (c *Config) setDefaults() {
 	c.setDefaultAllowedFileTypes()
 	c.setDefaultIgnoreFilesAndFolders()
 	c.setDefaultIgnoreCharacters()
+	c.setDefaultWarningCharacters()
 	c.setDefaultAllowedParseMethods()
 	c.setDefaultPreffix()
 	c.setDefaultSuffix()
@@ -152,7 +162,12 @@ func (c *Config) setDefaultIgnoreFilesAndFolders() {
 
 // Sets predefined ignore characters
 func (c *Config) setDefaultIgnoreCharacters() {
-	c.Ignore_characters = []string{"%", "#", "_", ">", "{", "(", "}", ")", "^", "$", "*", "=", `'`}
+	c.Ignore_characters = []string{"#", "_", ">", "^", "*", "="}
+}
+
+// Sets predefined warning characters
+func (c *Config) setDefaultWarningCharacters() {
+	c.Warning_characters = []string{"%", "{", "(", "}", ")", "$", `'`}
 }
 
 // List of available extractions, which starting with "Extract" in parsehtml package
