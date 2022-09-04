@@ -79,8 +79,17 @@
     
     <p>Veelgestelde vragen over {{$serviceName}}</p>
 
-    <!-- @todo Not founds/replaces first part of string  -->
-    <p>Veelgestelde vragen over <span>{{$serviceName}}</span></p>
+    <!-- @todo XX Not founds/replaces first part of string  -->
+    <p> Veelgestelde vragen over 
+        <span>{{$serviceName}}</span>
+    </p>
+
+    <!-- @todo XX Not founds/replaces first part of string  -->
+    <div> Veelgestelde vragen over 
+        <span>{{$serviceName}}</span>
+        <p>Testing</p>
+        controllable
+    </div>
 
 </body>
 </html>

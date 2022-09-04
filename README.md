@@ -87,8 +87,9 @@ Some configs you can pass as arguments, use `hsa [command] --help` to read more 
 - Make windows exe/msi installer ?
 - Standardize Json configs +
 - Update example config file with all needed configs +
-- Add warning characters and separate them from ignoring characters
+- Add warning characters and separate them from ignoring characters +
 - Consider similar cases `Veelgestelde vragen over {{$serviceName}}`
+    - add OT-OT(Opening Tag) and CT-CT(Closing Tag) extractions in "text" group
 - Print warning characters strings as warnings (not replaced) with file and line on replace command
 - Generate files for bin folder
 - Next Release (Don't forget to add in release: hsa, hsa.exe, hsawin.zip and hsaInstaller.msi)

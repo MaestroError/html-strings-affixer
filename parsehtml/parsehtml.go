@@ -2,6 +2,7 @@ package parsehtml
 
 import (
 	"bufio"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -114,6 +115,8 @@ func (parse *Parsehtml) SetSuffix(suffix string) {
 	parse.suffix = suffix
 }
 
+// @todo add opening tag <-> opening tag "(\<[^\/](.{0,10})\>)" text extraction 
+// @todo add closing tag <-> closing tag "(\<\/(.{0,10})\>)" text extraction 
 // Simple strings extraction method - just plain strings in HTML
 func (parse *Parsehtml) ExtractText() {
 	// set affixes for simple strings extraction
@@ -273,7 +276,7 @@ func (parse *Parsehtml) generateRegex() {
 		reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `]+[A-Za-z0-9][^` + deniedCharString + `]+`+`[^` + deniedCharString + `]` + parse.suffix)
 		parse.search_regex = reg.String()
 		parse.regexp = reg
-		// fmt.Println(parse.search_regex + "\n")
+		fmt.Println(parse.search_regex + "\n")
 	}
 }
 
