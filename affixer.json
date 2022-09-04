@@ -3,7 +3,8 @@
     "file_types": [
         "blade.php",
         ".jsx",
-        ".vue"
+        ".vue",
+        ".php"
     ],
     "ignore_names": [
 

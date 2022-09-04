@@ -13,10 +13,11 @@
     <p>Testing number 1245</p>
     
     <!-- Some ignoring characters test -->
-    <p>Testing not found {} () string</p>
     <p>#hastag double #</p>
-    <p>% Percent %</p>
     <p>_underscore _</p>
+    <!-- Some warning characters test -->
+    <p>Testing not found {} () string</p>
+    <p>% Percent %</p>
     <p>Testing 'single' quotes</p>
     <p>Testing single 'quotes'</p>
     <input placeholder="Some text with 'quotes'" />
@@ -76,11 +77,10 @@
         Up to 5 users simultaneously
     </li>
     
-    <!-- @todo Replaces full without checking warning characters -->
     <p>Veelgestelde vragen over {{$serviceName}}</p>
-    <!-- @todo Not replaces  -->
-    <p>Veelgestelde vragen over <span>{{$serviceName}}</span></p>
 
+    <!-- @todo Not founds/replaces first part of string  -->
+    <p>Veelgestelde vragen over <span>{{$serviceName}}</span></p>
 
 </body>
 </html>

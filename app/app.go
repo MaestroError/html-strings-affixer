@@ -285,7 +285,22 @@ func affix(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter
 			}
 		}
 
-		// @todo check for Warning characters (Warning_characters)
+		// Check for warning characters existence
+		warnings := Configuration.GetWarningCharacters()
+		var foundChars []string
+		for _, char := range warnings {
+			if strings.Contains(element["found"], char) {
+				foundChars = append(foundChars, char)
+			}
+		}
+
+		// @todo make this warnings printed as table
+		// Add warning messages if warning characters found
+		if len(foundChars) > 0 {
+			approved = false
+			msg := "Couldn't affix, found warning characters: '" + element["found"] + "' -> " + path + ":"+ element["lines"]
+			reporter.AddWarning(msg)
+		}
 
 		countInFile++
 		replaced := false
