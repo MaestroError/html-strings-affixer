@@ -85,10 +85,11 @@
     </p>
 
     <!-- @todo XX Not founds/replaces first part of string  -->
-    <div> Veelgestelde vragen over 
+    <div> OT-OT
         <span>{{$serviceName}}</span>
+        CT-OT
         <p>Testing</p>
-        controllable
+        CT-CT
     </div>
 
 </body>

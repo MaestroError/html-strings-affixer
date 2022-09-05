@@ -48,6 +48,9 @@ func (parse *Parsehtml) ParseFile(file string, c config.Config) *Parsehtml {
 
 	if slices.Contains(parse.extractions, "text") {
 		parse.ExtractText()
+		parse.ExtractTextOO()
+		parse.ExtractTextCC()
+		parse.ExtractTextCO()
 	}
 
 	if slices.Contains(parse.extractions, "placeholder") {
@@ -115,14 +118,45 @@ func (parse *Parsehtml) SetSuffix(suffix string) {
 	parse.suffix = suffix
 }
 
-// @todo add opening tag <-> opening tag "(\<[^\/](.{0,10})\>)" text extraction 
-// @todo add closing tag <-> closing tag "(\<\/(.{0,10})\>)" text extraction 
 // Simple strings extraction method - just plain strings in HTML
 func (parse *Parsehtml) ExtractText() {
 	// set affixes for simple strings extraction
 	parse.SetPrefix("\\>")
 	// Updated suffix from "\\<" to "\\<\\/(.*)\\>" because of THIRD VERSION OF REGEX
 	parse.SetSuffix("\\<\\/(.*)\\>")
+	// Generates regex based on prefix, suffix and denied characters
+	parse.generateRegex()
+	// Parses content and adds strings in found_strings with specific type
+	parse.parseContent("text")
+}
+
+// opening tag <-> opening tag "(\<[^\/](.{0,10})\>)" text extraction 
+func (parse *Parsehtml) ExtractTextOO() {
+	// set affixes for simple strings extraction
+	parse.SetPrefix(`(\<[^\/](.{0,10})\>)`)
+	parse.SetSuffix(`(\<[^\/](.{0,10})\>)`)
+	// Generates regex based on prefix, suffix and denied characters
+	parse.generateRegex()
+	// Parses content and adds strings in found_strings with specific type
+	parse.parseContent("text")
+}
+
+// closing tag <-> closing tag "(\<\/(.{0,10})\>)" text extraction 
+func (parse *Parsehtml) ExtractTextCC() {
+	// set affixes for simple strings extraction
+	parse.SetPrefix(`(\<\/(.{0,10})\>)`)
+	parse.SetSuffix(`(\<\/(.{0,10})\>)`)
+	// Generates regex based on prefix, suffix and denied characters
+	parse.generateRegex()
+	// Parses content and adds strings in found_strings with specific type
+	parse.parseContent("text")
+}
+
+// closing tag <-> opening tag text extraction 
+func (parse *Parsehtml) ExtractTextCO() {
+	// set affixes for simple strings extraction
+	parse.SetPrefix(`(\<\/(.{0,10})\>)`)
+	parse.SetSuffix(`(\<[^\/](.{0,10})\>)`)
 	// Generates regex based on prefix, suffix and denied characters
 	parse.generateRegex()
 	// Parses content and adds strings in found_strings with specific type
