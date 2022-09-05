@@ -97,6 +97,9 @@ Some configs you can pass as arguments, use `hsa [command] --help` to read more 
 - Generate files for bin folder
 - Next Release (Don't forget to add in release: hsa, hsa.exe, hsawin.zip and hsaInstaller.msi)
 -------
+- Add success message function in reporter
+- Make warnings table in reporter
+- Make TrimSpaces controllable as configuration from JSON and CLI
 - Add --expand option for detailed info in check command
 - Add --report option for detailed report (JSON) in check command
 - Next Release
