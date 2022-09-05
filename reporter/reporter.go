@@ -100,14 +100,14 @@ func (reporter *Reporter) print(color text.Color, message string) {
 func (reporter *Reporter) PrepareReplaceTable() {
 	t := reporter.getTable()
 	t.SetTitle("Affixed strings")
-	t.AppendHeader(table.Row{"Location", "Replaced"})
+	t.AppendHeader(table.Row{"Location", "Replaced/Found"})
 	reporter.report_table = t
 }
 
 func (reporter *Reporter) PrepareCheckTable() {
 	t := reporter.getTable()
 	t.SetTitle("Found strings")
-	t.AppendHeader(table.Row{"Location", "Found"})
+	t.AppendHeader(table.Row{"Location", "Warns/Found"})
 	reporter.report_table = t
 }
 

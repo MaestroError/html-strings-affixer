@@ -221,7 +221,27 @@ func runCheckCommand() {
 		// path = createTestFile(path)
 		parse.ParseFile(path, Configuration)
 		data := parse.GetFoundStrings()["data"]
-		reporter.AddRow(path, strconv.Itoa(len(data)))
+
+		var countWarnings int
+		for _, element := range data {
+			// Get warning characters if exists
+			foundChars := checkForWarningChars(element["found"])
+
+			if element["type"] == "placeholder" {
+				if !checkForPlaceholder(element, path, &reporter) {
+					countWarnings++
+				}
+			}
+
+			// Add warning messages if warning characters found
+			if len(foundChars) > 0 {
+				countWarnings++
+				msg := "Couldn't affix, found warning characters: '" + element["found"] + "' -> " + path + ":"+ element["lines"]
+				reporter.AddWarning(msg)
+			}
+		}
+
+		reporter.AddRow(path, strconv.Itoa(countWarnings) + "/" + strconv.Itoa(len(data)))
 	}
 
 	// Report
@@ -283,21 +303,11 @@ func affix(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter
 		approved := true
 		// if placeholder attribute contains only "placeholder"
 		if element["type"] == "placeholder" {
-			if strings.ToLower(element["found"]) == "placeholder" {
-				approved = false
-				msg := "Couldn't affix, use of 'placeholder' in placeholder attribute not allowed: " + path + ":"+ element["lines"]
-				reporter.AddWarning(msg)
-			}
+			approved = checkForPlaceholder(element, path, reporter)
 		}
 
-		// Check for warning characters existence
-		warnings := Configuration.GetWarningCharacters()
-		var foundChars []string
-		for _, char := range warnings {
-			if strings.Contains(element["found"], char) {
-				foundChars = append(foundChars, char)
-			}
-		}
+		// Get warning characters if exists
+		foundChars := checkForWarningChars(element["found"])
 
 		// @todo make this warnings printed as table
 		// Add warning messages if warning characters found
@@ -376,7 +386,27 @@ func checkGitStatus() bool {
 	}
 }
 
+func checkForWarningChars(found string) []string {
+	// Check for warning characters existence
+	warnings := Configuration.GetWarningCharacters()
+	var foundChars []string
+	for _, char := range warnings {
+		if strings.Contains(found, char) {
+			foundChars = append(foundChars, char)
+		}
+	}
+	return foundChars
+}
 
+func checkForPlaceholder(element map[string]string, path string, reporter *reporter.Reporter) bool {
+	// if placeholder attribute contains only "placeholder"
+	if strings.ToLower(element["found"]) == "placeholder" {
+		msg := "Couldn't affix, use of 'placeholder' in placeholder attribute not allowed: " + path + ":"+ element["lines"]
+		reporter.AddWarning(msg)
+		return false
+	}
+	return true
+}
 
 /* Debug */
 
