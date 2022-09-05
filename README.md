@@ -13,6 +13,8 @@ But can be used in any file which contains html (".jsx", ".vue", ".twig") with s
 - [Config file](#config-file)
     - [JSON object and descriptions](#json-object-and-descriptions)
 - [Commands](#commands)
+    - [Replace command arguments](#replace-command-arguments)
+    - [Check command arguments](#check-command-arguments)
 
 # Installation
 ### Composer
@@ -70,28 +72,25 @@ You need to create "affixer.json" file in directory, from where you will run htm
 Available commands:
 - replace - Main command, which makes replacement of strings
 - check - Checks folder and gives report with files and count of found strings
-- clear-log - If you use log_folder config, logs are generated. this command clear all log files    
+- clear-log - If you use log_folder config, logs are generated. this command clear all log files (Has no arguments)    
 
 Some configs you can pass as arguments, use `hsa [command] --help` to read more about command.     
 
-### Replace command
--allowed string       
-        allowed file types, separated by commas
-  -detailed      
-        If true, detailed report printed
-  -file string      
-        Use this argument to run command only on one file
-  -folder string      
-        Folder to scan
-  -force      
-        If true, git status check is ignored
-  -only string      
-        Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag
-  -prefix string      
-        New prefix for strings
-  -suffix string      
-        New suffix for strings
+### Replace command arguments
+- -allowed="(string)" - allowed file types, separated by commas
+- -detailed - If passed, detailed report printed
+- -file="(string)" - Use this argument to run command only on one file
+- -folder="(string)" - Folder to scan
+- -force - If passed, git status check is ignored
+- -only="(string)" - Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag
+- -prefix="(string)" - New prefix for strings
+- -suffix="(string)" - New suffix for strings
 
+### Check command arguments
+- -allowed="(string)" - allowed file types, separated by commas
+- -file="(string)" - Use this argument to run command only on one file
+- -folder="(string)" - Folder to scan
+- -only="(string)" - Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag
 
 ### To Do
 - Make check command to print files and found strings count +
