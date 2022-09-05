@@ -39,6 +39,7 @@ func (reporter *Reporter) Report() {
 	if reporter.errors != nil {
 		reporter.printErrors()
 	}
+
 }
 
 

@@ -72,7 +72,25 @@ Available commands:
 - check - Checks folder and gives report with files and count of found strings
 - clear-log - If you use log_folder config, logs are generated. this command clear all log files    
 
-Some configs you can pass as arguments, use `hsa [command] --help` to read more about command. 
+Some configs you can pass as arguments, use `hsa [command] --help` to read more about command.     
+
+### Replace command
+-allowed string       
+        allowed file types, separated by commas
+  -detailed      
+        If true, detailed report printed
+  -file string      
+        Use this argument to run command only on one file
+  -folder string      
+        Folder to scan
+  -force      
+        If true, git status check is ignored
+  -only string      
+        Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag
+  -prefix string      
+        New prefix for strings
+  -suffix string      
+        New suffix for strings
 
 
 ### To Do

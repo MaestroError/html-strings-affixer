@@ -174,6 +174,8 @@ func runReplaceCommand() {
 	reporter.Report()
 	// Log
 	Logger.Log()
+
+	Shutdown()
 }
 
 func resolveCheckCommand() {
@@ -246,6 +248,7 @@ func runCheckCommand() {
 
 	// Report
 	reporter.Report()
+	Shutdown()
 }
 
 func runClearLogCommand() {
@@ -261,6 +264,7 @@ func runClearLogCommand() {
 		}
 	}
 	reporter.Report()
+	Shutdown()
 }
 
 /* Actions */
@@ -428,6 +432,7 @@ func debugReplace() {
 	reporter.Report()
 	// Log
 	PrettyPrint(Logger.GetLogData())
+	Shutdown()
 }
 
 func createTestFile(path string) string {
