@@ -131,9 +131,14 @@ func resolveReplaceCommand() {
 
 func runReplaceCommand() {
 	// scan folder and get needed files
-	// @todo check for onefile and use it here
-	files := scanFolder()
-
+	var files []string
+	oneFile := Configuration.GetOneFile()
+	if oneFile != "" {
+		files = []string{oneFile}
+	} else {
+		files = scanFolder()
+	}
+	
 	// Controls replace execution
 	replaceAllowed := true
 	

@@ -79,13 +79,14 @@
     
     <p>Veelgestelde vragen over {{$serviceName}}</p>
 
-    <!-- @todo XX Not founds/replaces first part of string  -->
+    <!-- XX Not founds/replaces first part of string - SOLVED! (new extraction functions)  -->
     <p> Veelgestelde vragen over 
         <span>{{$serviceName}}</span>
     </p>
 
-    <!-- @todo XX Not founds/replaces first part of string  -->
-    <div> OT-OT
+    <!-- XX Not founds/replaces first part of string - SOLVED! (new extraction functions) -->
+    <div>
+        OT-OT
         <span>{{$serviceName}}</span>
         CT-OT
         <p>Testing</p>
