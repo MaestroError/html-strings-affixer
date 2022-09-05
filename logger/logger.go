@@ -21,7 +21,7 @@ func (l *Logger) Init(c config.Config) {
 	l.log_folder = c.Log_folder
 	// slash to dash
 	scanFolder := strings.ReplaceAll(c.Folder_to_scan, "\\", "--")
-	scanFolder = strings.ReplaceAll(c.Folder_to_scan, "/", "--")
+	scanFolder = strings.ReplaceAll(scanFolder, "/", "--")
 	l.folder_to_scan = scanFolder
 
 	l.data = make(map[string][]map[string]string)
@@ -79,7 +79,7 @@ func (l *Logger) createDirIfNotExists(path string) {
 	if err != nil {
 		panic(err)
 	}
-	if exists == false {
+	if !exists {
 		err := os.MkdirAll(path, os.ModePerm)
 		if err != nil {
 			panic(err)
