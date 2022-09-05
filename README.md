@@ -11,6 +11,7 @@ But can be used in any file which contains html (".jsx", ".vue", ".twig") with s
     - [From source](#from-source)
 - [Features](#features)
 - [Config file](#config-file)
+    - [JSON object and descriptions](#json-object-and-descriptions)
 - [Commands](#commands)
 
 # Installation

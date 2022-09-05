@@ -20,8 +20,8 @@ type Logger struct {
 func (l *Logger) Init(c config.Config) {
 	l.log_folder = c.Log_folder
 	// slash to dash
-	scanFolder := strings.ReplaceAll(c.Folder_to_scan, "\\", "-")
-	scanFolder = strings.ReplaceAll(c.Folder_to_scan, "/", "-")
+	scanFolder := strings.ReplaceAll(c.Folder_to_scan, "\\", "--")
+	scanFolder = strings.ReplaceAll(c.Folder_to_scan, "/", "--")
 	l.folder_to_scan = scanFolder
 
 	l.data = make(map[string][]map[string]string)
