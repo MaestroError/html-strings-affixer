@@ -36,7 +36,7 @@ You can move it in directory where you need to use and just execute with `./hsa 
 Find your bin folder (`/usr/bin`, `/usr/sbin` or `~/bin`), or make it with `cd ~/ && mkdir bin` and Symlink (`ln -s $~/path/to/directory/hsa ~/bin/hsa`) or move/copy binary file in **bin** directory. After it you can use app in cli with "hsa" command. Try: `hsa check`
 
 ### Windows
-Download binary [file](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsa.exe) or [Zip](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsawin.zip). Get "hsa.exe" file in needed directory and run with ".\hsa.exe" **OR** Download .msi [installer](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsaInstaller.msi) and follow installation process
+Download binary [file](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsa.exe) or [Zip](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsawin.zip). Get "hsa.exe" file in needed directory and run with ".\hsa.exe"
 
 
 ### From source
@@ -107,6 +107,7 @@ Some configs you can pass as arguments, use `hsa [command] --help` to read more 
 - -only="(string)" - Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag
 
          
+----------------------------------------------------------------
 ----------------------------------------------------------------
                      
 
