@@ -45,6 +45,7 @@ If you have [golang](https://go.dev/doc/install) installed, you can clone this r
 # Features
 - Finds your HTML visible strings and replaces with affixed one
 - Prefix and Suffix are customizable
+    - By default set as "{{ __('" and "') }}"
 - If string contains one of the warning characters, it not replaces, but prints out location:
     - So it will not replace string with variable like "Price: {{$price}}", if you have '{' in warning character, it will give you exact location(file:line) to make it translatable manually
 - If string contains one of the ignoring characters, it just ignores string
@@ -66,7 +67,7 @@ You need to create "affixer.json" file in directory, from where you will run htm
     
     // Parse
     (array) "ignore" - ignores strings which contains given character
-	(array) "warnings" - Warns about strings which contains given characters (not replaces)
+    (array) "warnings" - Warns about strings which contains given characters (not replaces)
     (array) "methods" - Uses only given parse methods. Available: text, placeholder, alt, title, hashtag
 
     // Replace
