@@ -130,7 +130,7 @@ Some configs you can pass as arguments, use `hsa [command] --help` to read more 
     - add CT-OT +
 - Print warning characters strings as warnings (not replaced) with file and line on replace command +
 - Add warnings count in check command +
-- Update documentation
+- Update documentation +
 - Generate files for bin folder
 - Next Release (Don't forget to add in release: hsa, hsa.exe, hsawin.zip and hsaInstaller.msi)
 -------
