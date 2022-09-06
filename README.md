@@ -1,5 +1,5 @@
 # html-strings-affixer
-Finds texts in HTML and replaces it with suffixed and prefixed string. Originally developed to replace strings with localization function in blade file:      
+CLI tool that finds texts in HTML and replaces it with suffixed and prefixed string. Originally developed to replace strings with localization function in blade file:      
 `<p>Some nice string</p>` -> `<p>{{ __('Some nice string') }}</p>`     
 But can be used in any file which contains html (".jsx", ".vue", ".twig") with same purpose. Of course, prefix and suffix are customizable
 
@@ -42,6 +42,18 @@ Download binary [file](https://github.com/MaestroError/html-strings-affixer/rele
 ### From source
 If you have [golang](https://go.dev/doc/install) installed, you can clone this repo and run `go install` or `go build` for binary file
 
+# Features
+- Finds your HTML visible strings and replaces with affixed one
+- Prefix and Suffix are customizable
+- If string contains one of the warning characters, it not replaces, but prints out location:
+    - So it will not replace string with variable like "Price: {{$price}}", if you have '{' in warning character, it will give you exact location(file:line) to make it translatable manually
+- If string contains one of the ignoring characters, it just ignores string
+    - For example, if your string is math expression like 4 * 20 = 80 and you have "*" in ignoring characters, it will just ignore it
+- This characters are set by default as:
+    - ignore: "#", "_", ">", "^", "*", "="
+    - warnings: "%", "{", "(", "}", ")", "$", "'"
+- Ignore characters and warning characters are customizable from JSON config file ("ignore" and "warnings")
+
 # Config file
 You need to create "affixer.json" file in directory, from where you will run html-strings-affixer. You can find an [example](https://github.com/MaestroError/html-strings-affixer/blob/maestro/bin/affixer-example.json) in bin folder of this repository (bin/affixer-example.json).      
 *Alternativly you can run app without config file in your working directory and it will offer you to create one from example*       
@@ -54,6 +66,7 @@ You need to create "affixer.json" file in directory, from where you will run htm
     
     // Parse
     (array) "ignore" - ignores strings which contains given character
+	(array) "warnings" - Warns about strings which contains given characters (not replaces)
     (array) "methods" - Uses only given parse methods. Available: text, placeholder, alt, title, hashtag
 
     // Replace
@@ -70,13 +83,13 @@ You need to create "affixer.json" file in directory, from where you will run htm
 
 # Commands
 Available commands:
-- replace - Main command, which makes replacement of strings
-- check - Checks folder and gives report with files and count of found strings
-- clear-log - If you use log_folder config, logs are generated. this command clear all log files (Has no arguments)    
+- **replace** - Main command, which makes replacement of strings
+- **check** - Checks folder and gives report with files and count of found strings
+- **clear-log** - If you use log_folder config, logs are generated. this command clear all log files (Has no arguments)    
 
 Some configs you can pass as arguments, use `hsa [command] --help` to read more about command.     
 
-### Replace command arguments
+### *Replace* command arguments
 - -allowed="(string)" - allowed file types, separated by commas
 - -detailed - If passed, detailed report printed
 - -file="(string)" - Use this argument to run command only on one file
@@ -86,11 +99,15 @@ Some configs you can pass as arguments, use `hsa [command] --help` to read more 
 - -prefix="(string)" - New prefix for strings
 - -suffix="(string)" - New suffix for strings
 
-### Check command arguments
+### *Check* command arguments
 - -allowed="(string)" - allowed file types, separated by commas
 - -file="(string)" - Use this argument to run command only on one file
 - -folder="(string)" - Folder to scan
 - -only="(string)" - Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag
+
+         
+----------------------------------------------------------------
+                     
 
 ### To Do
 - Make check command to print files and found strings count +
