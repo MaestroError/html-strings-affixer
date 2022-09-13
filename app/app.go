@@ -57,6 +57,7 @@ func Start() {
 
 func Shutdown() {
 	// Shutdown contexts, listeners, and such
+	fmt.Println("Created by MaestroError")
 	os.Exit(1)
 }
 

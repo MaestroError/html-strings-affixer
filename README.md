@@ -15,6 +15,7 @@ But can be used in any file which contains html (".jsx", ".vue", ".twig") with s
 - [Commands](#commands)
     - [Replace command arguments](#replace-command-arguments)
     - [Check command arguments](#check-command-arguments)
+- [Usage](#usage)
 
 # Installation
 ### Composer
@@ -132,7 +133,7 @@ Some configs you can pass as arguments, use `hsa [command] --help` to read more 
 - Add warnings count in check command +
 - Update documentation +
 - Generate files for bin folder +
-- Next Release (Don't forget to add in release: hsa, hsa.exe, hsawin.zip and hsaInstaller.msi)
+- Next Release (Don't forget to add in release: hsa, hsa.exe, hsawin.zip and hsaInstaller.msi) +
 -------
 - Add success message function in reporter
 - Make warnings table in reporter
