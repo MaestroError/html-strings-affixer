@@ -13,8 +13,8 @@ But can be used in any file which contains html (".jsx", ".vue", ".twig") with s
 - [Config file](#config-file)
     - [JSON object and descriptions](#json-object-and-descriptions)
 - [Commands](#commands)
-    - [Replace command arguments](#replace-command-arguments)
-    - [Check command arguments](#check-command-arguments)
+    - [Replace command options](#replace-command-options)
+    - [Check command options](#check-command-options)
 - [Usage](#usage)
 
 # Installation
@@ -91,7 +91,7 @@ Available commands:
 
 Some configs you can pass as arguments, use `hsa [command] --help` to read more about command.     
 
-### *Replace* command arguments
+### *Replace* command options
 - -allowed="(string)" - allowed file types, separated by commas
 - -detailed - If passed, detailed report printed
 - -file="(string)" - Use this argument to run command only on one file
@@ -101,12 +101,43 @@ Some configs you can pass as arguments, use `hsa [command] --help` to read more 
 - -prefix="(string)" - New prefix for strings
 - -suffix="(string)" - New suffix for strings
 
-### *Check* command arguments
+### *Check* command options
 - -allowed="(string)" - allowed file types, separated by commas
 - -file="(string)" - Use this argument to run command only on one file
 - -folder="(string)" - Folder to scan
 - -only="(string)" - Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag
 
+# Usage
+It is recommended to use tool with [config file](#config-file), where you can specify all needed info and use all features, that tool is providing. If you already have configured file you can easily run:
+```
+~$ ./vendor/bin/hsa check
+# AND/OR
+~$ ./vendor/bin/hsa replace
+```
+In this usage guide, we will cover some CLI use cases, but you can use them **alongside** with config file, because options provided from command line has **higher priority**. They re-write all passed options while specific run, but all **other configs** provided by JSON file stays same.
+
+#### Just Affix it!
+For example, you can: Easily affix all html strings with @lang directive in templates folder. To do so, run:
+```
+./vendor/bin/hsa replace -folder="resources/views" -allowed=".blade.php" -prefix="@lang('" -suffix="')"
+```
+in another words:
+```
+hsa replace -folder="[Path/To/Your/Folder]" -allowed="[Allowed, File, Extensions]" -prefix="[StringToPrepend]" -suffix="[StringToAppend]"
+```
+              
+#### Force replace
+If you use git and have uncommitted changes, it is recommended to first commit or stash them and after run replace command, so hsa will ask you about it on every run. If you already tested the tool and you know what are you doing, you can use *-force* parameter to skip that prompt.
+```
+./vendor/bin/hsa replace -folder="views" -force
+```
+*Note: For now, HSA has not UNDO command, so be careful while running replace*
+
+#### Work with one file
+Sometimes you will need to perform some commands only on single file, to reduce memory usage, get smaller printed information and/or avoid unwanted changes. For that purpose you can use option *-file*:
+```
+./vendor/bin/hsa replace -file="resources/view/contact.blade.php"
+```
          
 ----------------------------------------------------------------
 ----------------------------------------------------------------
@@ -115,7 +146,7 @@ Some configs you can pass as arguments, use `hsa [command] --help` to read more 
 ### To Do
 - Make check command to print files and found strings count +
 - Create clear-log command and print logs size as message in bootstrap +
-- Write documentation in readme file
+- Write documentation in readme file +
 - Release #1 - 0.0.1 +
 - register on packagist (Composer require) +
 -------
@@ -135,6 +166,12 @@ Some configs you can pass as arguments, use `hsa [command] --help` to read more 
 - Generate files for bin folder +
 - Next Release (Don't forget to add in release: hsa, hsa.exe, hsawin.zip and hsaInstaller.msi) +
 -------
+- Use error handling instead some of default configs, when one is not specified (From CLI or Config file) 
+    - Folder | File
+    - allowed
+    - prefix (for replace command)
+    - suffix (for replace command)
+- Fix error while using HSA out of git repo
 - Add success message function in reporter
 - Make warnings table in reporter
 - Make TrimSpaces controllable as configuration from JSON and CLI

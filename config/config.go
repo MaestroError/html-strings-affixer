@@ -162,7 +162,7 @@ func (c *Config) setDefaultIgnoreFilesAndFolders() {
 
 // Sets predefined ignore characters
 func (c *Config) setDefaultIgnoreCharacters() {
-	c.Ignore_characters = []string{"#", "_", ">", "^", "*", "="}
+	c.Ignore_characters = []string{"#", "_", ">", "^", "*", "=", "@"}
 }
 
 // Sets predefined warning characters

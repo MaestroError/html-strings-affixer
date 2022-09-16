@@ -381,6 +381,7 @@ func affix(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter
 func checkGitStatus() bool {
 	out, err := exec.Command("git", "status").Output()
 	if err != nil {
+		// @todo causes error if git command not works, replace with message or false
 		panic(err)
 	}
 	asString := string(out)
