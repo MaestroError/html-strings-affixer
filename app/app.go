@@ -23,6 +23,7 @@ import (
 var ErrShutdown = fmt.Errorf("application was shutdown gracefully")
 
 var Configuration config.Config
+var Reporter reporter.Reporter
 var Logger logger.Logger
 
 // configs and prepare app for work
@@ -42,6 +43,7 @@ func Bootstrap() {
 // Application runtime code goes here
 func Start() {
 	command := Configuration.GetCommandName()
+	
 	switch command {
 	case "replace":
 		// Replace command
@@ -57,6 +59,7 @@ func Start() {
 
 func Shutdown() {
 	// Shutdown contexts, listeners, and such
+	Reporter.Report()
 	fmt.Println("Created by MaestroError")
 	os.Exit(1)
 }
@@ -144,19 +147,18 @@ func runReplaceCommand() {
 	replaceAllowed := true
 	
 	// Prepare reporter
-	reporter := reporter.Reporter{}
-	reporter.PrepareReplaceTable()
+	Reporter.PrepareReplaceTable()
 	var totalReplaced int = 0
 	
 	// Check git status (Warn if need to commit)
 	if !checkGitStatus() {
 		if !Configuration.Force {
-			if !reporter.AskForConfirmation("You have uncommitted changes. Recommended to commit or stash them first. Continue anyway?", "yes") {
+			if !Reporter.AskForConfirmation("You have uncommitted changes. Recommended to commit or stash them first. Continue anyway?", "yes") {
 				replaceAllowed = false
 			}
-			reporter.PrintMsg("You have uncommitted changes, you can use -force parameter in cli or set 'force' to true in config file to avoid confirmation)")
+			Reporter.PrintMsg("You have uncommitted changes, you can use -force parameter in cli or set 'force' to true in config file to avoid confirmation)")
 		} else {
-			reporter.PrintMsg("You have uncommitted changes")
+			Reporter.PrintMsg("You have uncommitted changes")
 		}
 	}
 
@@ -165,14 +167,12 @@ func runReplaceCommand() {
 			parse := parsehtml.Parsehtml{}
 			// path = createTestFile(path)
 			parse.ParseFile(path, Configuration)
-			affix(path, &parse, &reporter, &totalReplaced)
+			affix(path, &parse, &totalReplaced)
 		}
 		// add total count
-		reporter.AddTotal(totalReplaced)
+		Reporter.AddTotal(totalReplaced)
 	}
 
-	// Report
-	reporter.Report()
 	// Log
 	Logger.Log()
 
@@ -216,8 +216,7 @@ func runCheckCommand() {
 	}
 	
 	// Prepare reporter
-	reporter := reporter.Reporter{}
-	reporter.PrepareCheckTable()
+	Reporter.PrepareCheckTable()
 
 	for _, path := range files {
 		parse := parsehtml.Parsehtml{}
@@ -231,7 +230,7 @@ func runCheckCommand() {
 			foundChars := checkForWarningChars(element["found"])
 
 			if element["type"] == "placeholder" {
-				if !checkForPlaceholder(element, path, &reporter) {
+				if !checkForPlaceholder(element, path) {
 					countWarnings++
 				}
 			}
@@ -240,31 +239,28 @@ func runCheckCommand() {
 			if len(foundChars) > 0 {
 				countWarnings++
 				msg := "Couldn't affix, found warning characters: '" + element["found"] + "' -> " + path + ":"+ element["lines"]
-				reporter.AddWarning(msg)
+				Reporter.AddWarning(msg)
 			}
 		}
 
-		reporter.AddRow(path, strconv.Itoa(countWarnings) + "/" + strconv.Itoa(len(data)))
+		Reporter.AddRow(path, strconv.Itoa(countWarnings) + "/" + strconv.Itoa(len(data)))
 	}
 
-	// Report
-	reporter.Report()
+	// Report & Shutdown
 	Shutdown()
 }
 
 func runClearLogCommand() {
-	reporter := reporter.Reporter{}
-	if reporter.AskForConfirmation("Are you sure to clear all logs?", "no") {
+	if Reporter.AskForConfirmation("Are you sure to clear all logs?", "no") {
 		if Configuration.Log_folder != "" {
 			if Logger.ClearLogs() {
 				// @todo add success message function in reporter
-				reporter.PrintMsg("All logs removed successfully!")
+				Reporter.PrintMsg("All logs removed successfully!")
 			} else {
-				reporter.AddError("Logs didn't remove")
+				Reporter.AddError("Logs didn't remove")
 			}
 		}
 	}
-	reporter.Report()
 	Shutdown()
 }
 
@@ -285,7 +281,7 @@ func scanFolder() []string {
 	return Scan.Run()
 }
 
-func affix(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter, totalReplaced *int) {
+func affix(path string, parser *parsehtml.Parsehtml, totalReplaced *int) {
 	// get replacement data from parsers
 	data := parser.GetFoundStrings()["data"]
 
@@ -308,7 +304,7 @@ func affix(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter
 		approved := true
 		// if placeholder attribute contains only "placeholder"
 		if element["type"] == "placeholder" {
-			approved = checkForPlaceholder(element, path, reporter)
+			approved = checkForPlaceholder(element, path)
 		}
 
 		// Get warning characters if exists
@@ -319,7 +315,7 @@ func affix(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter
 		if len(foundChars) > 0 {
 			approved = false
 			msg := "Couldn't affix, found warning characters: '" + element["found"] + "' -> " + path + ":"+ element["lines"]
-			reporter.AddWarning(msg)
+			Reporter.AddWarning(msg)
 		}
 
 		countInFile++
@@ -334,7 +330,7 @@ func affix(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter
 		// Add error message if string is approved but not replaced
 		if !replaced && approved {
 			msg := "String '" + element["found"] + "' not found in file " + path + " (Lines: "+ element["lines"] + ") "
-			reporter.AddError(msg)
+			Reporter.AddError(msg)
 		}
 
 		// Add string data in detailed report if replaced with success and detailed report requested
@@ -343,7 +339,7 @@ func affix(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter
 			if element["lines"] != "" {
 				filePath = path + ":" + element["lines"]
 			}
-			reporter.AddRow(filePath, strings.TrimSpace(element["found"]))
+			Reporter.AddRow(filePath, strings.TrimSpace(element["found"]))
 		}
 
 		// add file data in logger if log folder is set
@@ -354,7 +350,7 @@ func affix(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter
 	
 	// Msg for developer about disabled logger in this run
 	if Logger.GetLogFolder() == "" {
-		reporter.PrintMsg("Logger disabled (You will not able to check/undo this changes")
+		Reporter.PrintMsg("Logger disabled (You will not able to check/undo this changes")
 	}
 	
 	// Set total for report
@@ -364,7 +360,7 @@ func affix(path string, parser *parsehtml.Parsehtml, reporter *reporter.Reporter
 
 	// add count if detailed report not requested
 	if !Configuration.Detailed_report {
-		reporter.AddRow(path, replacedString)
+		Reporter.AddRow(path, replacedString)
 	}
 	
 	// write file with same name
@@ -404,14 +400,55 @@ func checkForWarningChars(found string) []string {
 	return foundChars
 }
 
-func checkForPlaceholder(element map[string]string, path string, reporter *reporter.Reporter) bool {
+func checkForPlaceholder(element map[string]string, path string) bool {
 	// if placeholder attribute contains only "placeholder"
 	if strings.ToLower(element["found"]) == "placeholder" {
 		msg := "Couldn't affix, use of 'placeholder' in placeholder attribute not allowed: " + path + ":"+ element["lines"]
-		reporter.AddWarning(msg)
+		Reporter.AddWarning(msg)
 		return false
 	}
 	return true
+}
+
+func checkConfigsAnyCommand() {
+	// Check configs
+	shutdown := false
+	if Configuration.GetFolder() == "" {
+		Reporter.AddError("'folder' is required config")
+		shutdown = true
+	}
+	if len(Configuration.GetFileTypes()) <= 0 {
+		Reporter.AddError("'file_types' is required config")
+		shutdown = true
+	}
+	if shutdown {
+		msgUseConfigSuggestion()
+		Shutdown()
+	}
+}
+
+func checkConfigsReplaceCommand() {
+	shutdown := false
+	if Configuration.GetPrefix() == "" {
+		Reporter.AddError("'prefix' is required config")
+		shutdown = true
+	}
+	if Configuration.GetSuffix() == "" {
+		Reporter.AddError("'suffix' is required config")
+		shutdown = true
+	}
+	if shutdown {
+		msgUseConfigSuggestion()
+		Shutdown()
+	}
+}
+
+func msgUseConfigSuggestion() {
+	Reporter.PrintMsg(
+		"Some configs aren't set correctly or not set at all. If you prefer to use config file, check this out:\n",
+		"https://github.com/MaestroError/html-strings-affixer#config-file \n",
+		"Or if you prefer CLI, use arguments: \n",
+		"https://github.com/MaestroError/html-strings-affixer#replace-command-options \n")
 }
 
 /* Debug */
@@ -424,14 +461,11 @@ func debugReplace() {
 	parse := parsehtml.Parsehtml{}
 	path := createTestFile("test.blade.php")
 	parse.ParseFile(path, Configuration)
-	reporter := reporter.Reporter{}		
-	reporter.PrepareReplaceTable()
+	Reporter.PrepareReplaceTable()
 	var totalReplaced int = 0
-	affix(path, &parse, &reporter, &totalReplaced)
+	affix(path, &parse, &totalReplaced)
 
-	reporter.AddTotal(totalReplaced)
-	// Report
-	reporter.Report()
+	Reporter.AddTotal(totalReplaced)
 	// Log
 	PrettyPrint(Logger.GetLogData())
 	Shutdown()

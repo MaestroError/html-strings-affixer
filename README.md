@@ -62,8 +62,8 @@ You need to create "affixer.json" file in directory, from where you will run htm
 ### JSON object and descriptions
 ```
     // Scanning
-    (string) "folder" - just folder to scan
-    (array) "file_types" - Parses file only with given extensions
+    *(string) "folder" - just folder to scan
+    *(array) "file_types" - Parses file only with given extensions
     (array) "ignore_names" - ignores files and folders with given names
     
     // Parse
@@ -72,8 +72,8 @@ You need to create "affixer.json" file in directory, from where you will run htm
     (array) "methods" - Uses only given parse methods. Available: text, placeholder, alt, title, hashtag
 
     // Replace
-    (string) "prefix" - Prefix to set
-    (string) "suffix" - Suffix to set
+    *(string) "prefix" - Prefix to set
+    *(string) "suffix" - Suffix to set
     (bool) "force" - If true, git status check is ignored
 
     // Report
@@ -92,19 +92,19 @@ Available commands:
 Some configs you can pass as arguments, use `hsa [command] --help` to read more about command.     
 
 ### *Replace* command options
-- -allowed="(string)" - allowed file types, separated by commas
+- -allowed="(string)" - allowed file types, separated by commas (**Required** for security reasons)
 - -detailed - If passed, detailed report printed
 - -file="(string)" - Use this argument to run command only on one file
-- -folder="(string)" - Folder to scan
+- -folder="(string)" - Folder to scan (**Required**)
 - -force - If passed, git status check is ignored
 - -only="(string)" - Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag
-- -prefix="(string)" - New prefix for strings
-- -suffix="(string)" - New suffix for strings
+- -prefix="(string)" - New prefix for strings (**Required**)
+- -suffix="(string)" - New suffix for strings (**Required**)
 
 ### *Check* command options
-- -allowed="(string)" - allowed file types, separated by commas
+- -allowed="(string)" - allowed file types, separated by commas (**Required**)
 - -file="(string)" - Use this argument to run command only on one file
-- -folder="(string)" - Folder to scan
+- -folder="(string)" - Folder to scan (**Required**)
 - -only="(string)" - Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag
 
 # Usage
@@ -167,16 +167,17 @@ Sometimes you will need to perform some commands only on single file, to reduce 
 - Next Release (Don't forget to add in release: hsa, hsa.exe, hsawin.zip and hsaInstaller.msi) +
 -------
 - Use error handling instead some of default configs, when one is not specified (From CLI or Config file) 
-    - Folder | File
+    - Folder | File (not use default folder and check it before running commands)
     - allowed
     - prefix (for replace command)
     - suffix (for replace command)
 - Fix error while using HSA out of git repo
 - Add success message function in reporter
 - Make warnings table in reporter
-- Make TrimSpaces controllable as configuration from JSON and CLI
+- Make TrimSpaces controllable as configuration from JSON
 - Add --expand option for detailed info in check command
 - Add --report option for detailed report (JSON) in check command
+- Test for latest changes
 - Next Release
 -------
 - Next Release

@@ -71,9 +71,11 @@ func (reporter *Reporter) AskForConfirmation(s string, def string) bool {
 	}
 }
 
-func (reporter *Reporter) PrintMsg(msg string) {
+func (reporter *Reporter) PrintMsg(msg ...string) {
 	var msgColor text.Color = text.FgBlue
-	reporter.print(msgColor, "- " + msg)
+	for _, m := range msg {
+		reporter.print(msgColor, "- " + m)
+	}
 }
 
 /* Strings */

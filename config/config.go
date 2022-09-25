@@ -133,14 +133,15 @@ func (c *Config) GetOneFile() string {
 // Defaults
 
 func (c *Config) setDefaults() {
-	c.setDefaultFolder()
-	c.setDefaultAllowedFileTypes()
+	// @todo check commented function's configs before running commands
+	// c.setDefaultFolder()
+	// c.setDefaultAllowedFileTypes()
 	c.setDefaultIgnoreFilesAndFolders()
 	c.setDefaultIgnoreCharacters()
 	c.setDefaultWarningCharacters()
 	c.setDefaultAllowedParseMethods()
-	c.setDefaultPreffix()
-	c.setDefaultSuffix()
+	// c.setDefaultPreffix()
+	// c.setDefaultSuffix()
 	c.setDefaultDetailed()
 	c.setDefaultForce()
 	c.setDefaultLogFolder()
