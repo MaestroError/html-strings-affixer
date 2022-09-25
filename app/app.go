@@ -43,13 +43,16 @@ func Bootstrap() {
 // Application runtime code goes here
 func Start() {
 	command := Configuration.GetCommandName()
-	
+	// Check for required configs
+	checkConfigsAnyCommand()
 	switch command {
 	case "replace":
+		// Check for replace command's required configs
+		checkConfigsReplaceCommand()
 		// Replace command
 		runReplaceCommand()
 	case "check":
-		// Check command\
+		// Check command
 		runCheckCommand()
 	default:
 		fmt.Println("No command found")

@@ -166,11 +166,11 @@ Sometimes you will need to perform some commands only on single file, to reduce 
 - Generate files for bin folder +
 - Next Release (Don't forget to add in release: hsa, hsa.exe, hsawin.zip and hsaInstaller.msi) +
 -------
-- Use error handling instead some of default configs, when one is not specified (From CLI or Config file) 
-    - Folder | File (not use default folder and check it before running commands)
-    - allowed
-    - prefix (for replace command)
-    - suffix (for replace command)
+- Use error handling instead some of default configs, when one is not specified (From CLI or Config file) +
+    - Folder | File (not use default folder and check it before running commands) +
+    - allowed +
+    - prefix (for replace command) +
+    - suffix (for replace command) +
 - Fix error while using HSA out of git repo
 - Add success message function in reporter
 - Make warnings table in reporter
