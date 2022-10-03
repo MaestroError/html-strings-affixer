@@ -171,7 +171,7 @@ Sometimes you will need to perform some commands only on single file, to reduce 
     - allowed +
     - prefix (for replace command) +
     - suffix (for replace command) +
-- Fix error while using HSA out of git repo
+- Fix error while using HSA out of git repo +
 - Add success message function in reporter
 - Make warnings table in reporter
 - Make TrimSpaces controllable as configuration from JSON

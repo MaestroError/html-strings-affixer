@@ -380,8 +380,7 @@ func affix(path string, parser *parsehtml.Parsehtml, totalReplaced *int) {
 func checkGitStatus() bool {
 	out, err := exec.Command("git", "status").Output()
 	if err != nil {
-		// @todo causes error if git command not works, replace with message or false
-		panic(err)
+		Reporter.AddWarning(err.Error());
 	}
 	asString := string(out)
 	if strings.Contains(asString, "nothing to commit, working tree clean") {
