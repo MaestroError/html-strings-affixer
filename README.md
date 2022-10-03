@@ -176,7 +176,7 @@ Sometimes you will need to perform some commands only on single file, to reduce 
 - Add success message function in reporter +
 - Make warnings table in reporter +
 - Make warnings as table controllable from config and add it in Docs +
-- Test for latest changes
+- Test for latest changes +
 - Next Release
 -------
 - Make TrimSpaces controllable as configuration from JSON
