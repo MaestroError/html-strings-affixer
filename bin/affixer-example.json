@@ -21,6 +21,7 @@
     "prefix": "{{ __('",
     "suffix": "') }}",
     "detailed": false,
+    "warn_as_Table": false,
     "force": false,
     "log_folder": "hsa/log"
 }

@@ -23,6 +23,7 @@ type Config struct {
 	Force bool `json:"force"` // both | If true, git status check is ignored
 	// Report
 	Detailed_report bool `json:"detailed"` // both | if true, detailed report will be displayed
+	Warn_as_table bool `json:"warn_as_Table"` // JSON | if true, warnings will be displayed as table
 	// Log
 	Log_folder string `json:"log_folder"` // only JSON | folder to store logs
 	// info
@@ -88,6 +89,10 @@ func (c *Config) SetLogFolder(folder string) {
 	c.Log_folder = folder
 }
 
+func (c *Config) SetWarnAsTable(warn bool) {
+	c.Warn_as_table = warn
+}
+
 // Getters
 
 func (c *Config) GetFolder() string {
@@ -130,6 +135,10 @@ func (c *Config) GetOneFile() string {
 	return c.one_file
 }
 
+func (c *Config) GetWarnAsTable() bool {
+	return c.Warn_as_table
+}
+
 // Defaults
 
 func (c *Config) setDefaults() {
@@ -143,6 +152,7 @@ func (c *Config) setDefaults() {
 	// c.setDefaultPreffix()
 	// c.setDefaultSuffix()
 	c.setDefaultDetailed()
+	c.setDefaultWarnAsTable()
 	c.setDefaultForce()
 	c.setDefaultLogFolder()
 }
@@ -188,6 +198,10 @@ func (c *Config) setDefaultSuffix() {
 
 func (c *Config) setDefaultDetailed() {
 	c.Detailed_report = false
+}
+
+func (c *Config) setDefaultWarnAsTable() {
+	c.Warn_as_table = false
 }
 
 func (c *Config) setDefaultForce() {

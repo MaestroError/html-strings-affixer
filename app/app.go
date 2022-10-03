@@ -42,9 +42,17 @@ func Bootstrap() {
 
 // Application runtime code goes here
 func Start() {
+	// Get current command
 	command := Configuration.GetCommandName()
+
 	// Check for required configs
 	checkConfigsAnyCommand()
+
+	// Check for Warnings as table
+	if Configuration.GetWarnAsTable() {
+		Reporter.WarnAsTable()
+	}
+
 	switch command {
 	case "replace":
 		// Check for replace command's required configs
@@ -221,6 +229,7 @@ func runCheckCommand() {
 	// Prepare reporter
 	Reporter.PrepareCheckTable()
 
+
 	for _, path := range files {
 		parse := parsehtml.Parsehtml{}
 		// path = createTestFile(path)
@@ -379,7 +388,7 @@ func affix(path string, parser *parsehtml.Parsehtml, totalReplaced *int) {
 func checkGitStatus() bool {
 	out, err := exec.Command("git", "status").Output()
 	if err != nil {
-		Reporter.AddWarning(err.Error());
+		Reporter.PrintMsg(err.Error());
 	}
 	asString := string(out)
 	if strings.Contains(asString, "nothing to commit, working tree clean") {
@@ -404,7 +413,7 @@ func checkForWarningChars(found string) []string {
 func checkForPlaceholder(element map[string]string, path string) bool {
 	// if placeholder attribute contains only "placeholder"
 	if strings.ToLower(element["found"]) == "placeholder" {
-		msg := "Couldn't affix, use of 'placeholder' in placeholder attribute not allowed: " + path + ":"+ element["lines"]
+		msg := "Couldn't affix: 'placeholder' in placeholder attribute not allowed -> " + path + ":"+ element["lines"]
 		Reporter.AddWarning(msg)
 		return false
 	}

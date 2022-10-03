@@ -16,6 +16,8 @@ type Reporter struct {
 	errors []string
 	success []string
 	report_table table.Writer
+	warnAsTable bool
+	warnings_table table.Writer
 }
 
 
@@ -31,6 +33,10 @@ func (reporter *Reporter) AddSuccess(message string) {
 	reporter.success = append(reporter.success, message)
 }
 
+func (reporter *Reporter) WarnAsTable() {
+	reporter.warnAsTable = true
+}
+
 func (reporter *Reporter) Report() {
 
 	if reporter.report_table != nil {
@@ -38,7 +44,11 @@ func (reporter *Reporter) Report() {
 	}
 
 	if reporter.warnings != nil {
-		reporter.printWarnings()
+		if reporter.warnAsTable {
+			reporter.printWarningsTable()
+		} else {
+			reporter.printWarnings()
+		}
 	}
 
 	if reporter.errors != nil {
@@ -99,8 +109,22 @@ func (reporter *Reporter) PrintSuccess(msg ...string) {
 func (reporter *Reporter) printWarnings() {
 	var warnColor text.Color = text.FgHiYellow
 	for _, warning := range reporter.warnings {
-		reporter.print(warnColor, "Warning: " + warning)
+		reporter.print(warnColor, "- Warning: " + warning + "\n -----")
 	}
+}
+
+func (reporter *Reporter) printWarningsTable() {
+	reporter.prepareWarningsTable()
+	for _, warning := range reporter.warnings {
+		warn := strings.Split(warning, "->")
+		if len(warn) > 1 {
+			str := strings.Split(warn[0], ":")
+			reporter.warnings_table.AppendRow(table.Row{str[1], warn[1]})
+		} else {
+			reporter.warnings_table.AppendRow(table.Row{warn[0], ""})
+		}
+	}
+	fmt.Println(reporter.warnings_table.Render())
 }
 
 func (reporter *Reporter) printErrors() {
@@ -154,4 +178,11 @@ func (reporter *Reporter) getTable() table.Writer {
 
 func (reporter *Reporter) printTable() {
 	fmt.Println(reporter.report_table.Render())
+}
+
+func (reporter *Reporter) prepareWarningsTable() {
+	t := reporter.getTable()
+	t.SetStyle(table.StyleLight)
+	t.AppendHeader(table.Row{"Warning on:", "location"})
+	reporter.warnings_table = t
 }

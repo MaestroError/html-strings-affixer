@@ -78,6 +78,7 @@ You need to create "affixer.json" file in directory, from where you will run htm
 
     // Report
     (bool) "detailed" - if true, detailed report will be displayed
+    (bool) "warn_as_table" - if true, warnings will be displayed as table
 
     // Log
     (string) "log_folder" - folder to store logs
@@ -172,14 +173,16 @@ Sometimes you will need to perform some commands only on single file, to reduce 
     - prefix (for replace command) +
     - suffix (for replace command) +
 - Fix error while using HSA out of git repo +
-- Add success message function in reporter
-- Make warnings table in reporter
+- Add success message function in reporter +
+- Make warnings table in reporter +
+- Make warnings as table controllable from config and add it in Docs +
+- Test for latest changes
+- Next Release
+-------
 - Make TrimSpaces controllable as configuration from JSON
 - Add --expand option for detailed info in check command
 - Add --report option for detailed report (JSON) in check command
 - Test for latest changes
-- Next Release
--------
 - Next Release
 
 
