@@ -14,6 +14,7 @@ import (
 type Reporter struct {
 	warnings []string
 	errors []string
+	success []string
 	report_table table.Writer
 }
 
@@ -24,6 +25,10 @@ func (reporter *Reporter) AddWarning(message string) {
 
 func (reporter *Reporter) AddError(message string) {
 	reporter.errors = append(reporter.errors, message)
+}
+
+func (reporter *Reporter) AddSuccess(message string) {
+	reporter.success = append(reporter.success, message)
 }
 
 func (reporter *Reporter) Report() {
@@ -38,6 +43,10 @@ func (reporter *Reporter) Report() {
 
 	if reporter.errors != nil {
 		reporter.printErrors()
+	}
+
+	if reporter.success != nil {
+		reporter.printSuccesses()
 	}
 
 }
@@ -78,6 +87,13 @@ func (reporter *Reporter) PrintMsg(msg ...string) {
 	}
 }
 
+func (reporter *Reporter) PrintSuccess(msg ...string) {
+	var msgColor text.Color = text.FgGreen
+	for _, m := range msg {
+		reporter.print(msgColor, "- " + m)
+	}
+}
+
 /* Strings */
 
 func (reporter *Reporter) printWarnings() {
@@ -91,6 +107,13 @@ func (reporter *Reporter) printErrors() {
 	var errorColor text.Color = text.FgHiRed
 	for _, msg := range reporter.errors {
 		reporter.print(errorColor, "Error: " + msg)
+	}
+}
+
+func (reporter *Reporter) printSuccesses() {
+	var sucColor text.Color = text.FgHiGreen
+	for _, msg := range reporter.success {
+		reporter.print(sucColor, "Success: " + msg)
 	}
 }
 

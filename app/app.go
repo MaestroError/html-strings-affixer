@@ -257,8 +257,7 @@ func runClearLogCommand() {
 	if Reporter.AskForConfirmation("Are you sure to clear all logs?", "no") {
 		if Configuration.Log_folder != "" {
 			if Logger.ClearLogs() {
-				// @todo add success message function in reporter
-				Reporter.PrintMsg("All logs removed successfully!")
+				Reporter.PrintSuccess("All logs removed successfully!")
 			} else {
 				Reporter.AddError("Logs didn't remove")
 			}
