@@ -8,6 +8,7 @@ But can be used in any file which contains html (".jsx", ".vue", ".twig") with s
     - [Composer](#composer)
     - [Linux/Unix](#linuxunix)
     - [Windows](#windows)
+    - [MacOS](#macos)
     - [From source](#from-source)
 - [Features](#features)
 - [Config file](#config-file)
@@ -21,7 +22,11 @@ But can be used in any file which contains html (".jsx", ".vue", ".twig") with s
 ### Composer
 It is already available in composer now, you can require it:       
 `composer require maestroerror/html-strings-affixer --dev`.     
-After installation it is accessible by `./vendor/bin/hsa` and `./vendor/bin/hsawin` for Windows
+After installation it is accessible by:      
+- Linux: `./vendor/bin/hsa`
+- Windows: `./vendor/bin/hsawin`
+- MacOS: `./vendor/bin/hsamac`
+- MacOS arm64 (m1): `./vendor/bin/hsamacm1`
 
 ### Linux/Unix
 **Step 1: Download**   
@@ -38,6 +43,10 @@ Find your bin folder (`/usr/bin`, `/usr/sbin` or `~/bin`), or make it with `cd ~
 
 ### Windows
 Download binary [file](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsa.exe) or [Zip](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsawin.zip). Get "hsa.exe" file in needed directory and run with ".\hsa.exe"
+
+
+### MacOS
+Download an [archive](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsamac.zip), Unzip it, get "hsamac" or "hsamacm1" file in needed directory, give to it executable permissions and run with `./hsamac`/`./hsamacm1`
 
 
 ### From source
@@ -139,7 +148,14 @@ Sometimes you will need to perform some commands only on single file, to reduce 
 ```
 ./vendor/bin/hsa replace -file="resources/view/contact.blade.php"
 ```
-         
+
+#### Executables
+There are several executables for different platforms, choose your one and use. They are working exactly same way, you are changing just executable file name in commands:
+- Linux: `./vendor/bin/hsa`
+- Windows: `./vendor/bin/hsawin`
+- MacOS: `./vendor/bin/hsamac`
+- MacOS arm64 (m1): `./vendor/bin/hsamacm1`
+
 ----------------------------------------------------------------
 ----------------------------------------------------------------
                      
