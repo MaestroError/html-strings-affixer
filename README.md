@@ -4,7 +4,7 @@ CLI tool that finds texts in HTML and replaces it with suffixed and prefixed str
 But can be used in any file which contains html (".jsx", ".vue", ".twig") with same purpose. Of course, prefix and suffix are customizable
 
 #### Quick start
-Check out a little [article](https://medium.com/towardsdev/translate-laravel-blade-files-easily-f3753f5395bd) on medium, how to use the tool.
+Check out a little [article](https://medium.com/towardsdev/translate-laravel-blade-files-easily-f3753f5395bd) on Medium about the tool.
 
 # Navigation
 - [Installation](#installation)
