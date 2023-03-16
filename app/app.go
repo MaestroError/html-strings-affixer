@@ -75,6 +75,7 @@ func Shutdown() {
 	os.Exit(1)
 }
 
+// First entry point after bootstrapping
 func resolveCommands() {
 	if len(os.Args) > 1 {
 		switch os.Args[1] {
@@ -429,7 +430,7 @@ func checkConfigsAnyCommand() {
 		shutdown = true
 	}
 	if len(Configuration.GetFileTypes()) <= 0 {
-		Reporter.AddError("'file_types' is required config")
+		Reporter.AddError("'file_types' (--allowed) is required config")
 		shutdown = true
 	}
 	if shutdown {

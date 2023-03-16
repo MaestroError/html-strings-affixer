@@ -17,6 +17,10 @@ But can be used in any file which contains html (".jsx", ".vue", ".twig") with s
     - [Replace command options](#replace-command-options)
     - [Check command options](#check-command-options)
 - [Usage](#usage)
+    - [Just affix it!](#just-affix-it)
+    - [Force replace](#force-replace)
+    - [One File](#work-with-one-file)
+    - [Choose Executable](#executables)
 
 # Installation
 ### Composer
@@ -46,7 +50,7 @@ Download binary [file](https://github.com/MaestroError/html-strings-affixer/rele
 
 
 ### MacOS
-Download an [archive](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsamac.zip), Unzip it, get "hsamac" or "hsamacm1" file in needed directory, give to it executable permissions and run with `./hsamac`/`./hsamacm1`
+Download an [archive](https://github.com/MaestroError/html-strings-affixer/releases/latest/download/hsamac.zip), Unzip it, get "hsamac" or "hsamacm1" file in needed directory, give to it executable permissions and run with `./hsamac` or `./hsamacm1`
 
 
 ### From source
@@ -150,11 +154,15 @@ Sometimes you will need to perform some commands only on single file, to reduce 
 ```
 
 #### Executables
-There are several executables for different platforms, choose your one and use. They are working exactly same way, you are changing just executable file name in commands:
+There are several executables for different platforms, choose your one and use it. They are working the exactly same way, you are changing just the executable file name in command.
 - Linux: `./vendor/bin/hsa`
 - Windows: `./vendor/bin/hsawin`
 - MacOS: `./vendor/bin/hsamac`
-- MacOS arm64 (m1): `./vendor/bin/hsamacm1`
+- MacOS arm64 (m1): `./vendor/bin/hsamacm1`       
+         
+*Note: I am planning to create single command, which will work for any platform, but for now, it is as it is :smile:*       
+          
+
 
 ----------------------------------------------------------------
 ----------------------------------------------------------------
@@ -209,6 +217,7 @@ There are several executables for different platforms, choose your one and use. 
 - Refactor app with Cobra package
 - Use log files to undo last changes in folder_to_scan from log_folder (for dry run)
 - add command: "watch" (for live updates) and "undo" (Undo last changes)
+- Make single executable/command (Bridge) for any platform
 
 #### Resources
 - [goreleaser](https://goreleaser.com/) +
