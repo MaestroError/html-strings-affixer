@@ -9,7 +9,7 @@
         "someFolderNameToIgnore",
         "images"
     ],
-    "ignore": ["#", "_", ">", "^", "*", "="],
+    "ignore": ["#", "_", ">", "^", "*", "=", "@"],
     "warnings": ["%", "{", "(", "}", ")", "$", "'"],
     "methods": [
         "text",

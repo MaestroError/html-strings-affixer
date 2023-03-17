@@ -210,6 +210,7 @@ There are several executables for different platforms, choose your one and use i
 - Add --expand option for detailed info in check command
 - Add --report option for detailed report (JSON) in check command
 - Test for latest changes
+- Add "@" in default ignore characters
 - Next Release
 
 
