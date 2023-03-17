@@ -141,7 +141,8 @@ For example, you can: Easily affix all html strings with @lang directive in temp
 in another words:
 ```
 hsa replace -folder="[Path/To/Your/Folder]" -allowed="[Allowed, File, Extensions]" -prefix="[StringToPrepend]" -suffix="[StringToAppend]"
-```
+```      
+*Note: Keep in mind that "@" character is not a part of default ignore or warning chars, you need to specify it via config file*
               
 #### Force replace
 If you use git and have uncommitted changes, it is recommended to first commit or stash them and after run replace command, so hsa will ask you about it on every run. If you already tested the tool and you know what are you doing, you can use *-force* parameter to skip that prompt.
