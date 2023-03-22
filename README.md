@@ -209,9 +209,12 @@ There are several executables for different platforms, choose your one and use i
 -------
 - Make TrimSpaces controllable as configuration from JSON
 - Add --expand option for detailed info in check command
-- Add --report option for detailed report (JSON) in check command
+- Add --report option for detailed report (JSON) in check command ([issue](https://github.com/MaestroError/html-strings-affixer/issues/2))
+- Add "@" in default ignore characters ([issue](https://github.com/MaestroError/html-strings-affixer/issues/3))
+- Update regex to parse laravel comments correctly ([issue](https://github.com/MaestroError/html-strings-affixer/issues/5))
+- Fix `index out of range [-1]` [issue](https://github.com/MaestroError/html-strings-affixer/issues/4)
+- Handle errors to continue replacement on other files and add error location in output (report)
 - Test for latest changes
-- Add "@" in default ignore characters
 - Next Release
 
 
