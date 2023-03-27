@@ -9,7 +9,7 @@ $output = [];
 $args = implode(' ', $argv);
 
 // execute binary
-exec(__DIR__."/../hsa $args", $output);
+exec('"'.__DIR__."/../hsa" . '"' . " $args", $output);
 
 // Print output line by line
 foreach ($output as $line) {
