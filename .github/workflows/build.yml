@@ -47,6 +47,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        git pull origin maestro --rebase
         git add ./bin/hsa
         git commit -m "Add Ubuntu built binary [skip ci]"
         git push
@@ -56,6 +57,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        git pull origin maestro --rebase
         git add ./bin/hsamac
         git commit -m "Add MacOS built binary [skip ci]"
         git push
@@ -65,6 +67,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        git pull origin maestro --rebase
         git add ./bin/hsa.exe
         git commit -m "Add Windows built binary [skip ci]"
         git push
