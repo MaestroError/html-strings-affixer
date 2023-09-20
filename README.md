@@ -23,6 +23,7 @@ Check out a little [article](https://medium.com/towardsdev/translate-laravel-bla
     - [Just affix it!](#just-affix-it)
     - [Force replace](#force-replace)
     - [One File](#work-with-one-file)
+    - [Too many warnings](#too-many-warning)
     - [Choose Executable](#executables)
 
 # Installation
@@ -222,7 +223,7 @@ Updated 21/09/2023:
 - Add `@` and `{{--` in default ignore characters ([issue](https://github.com/MaestroError/html-strings-affixer/issues/3)) +
 - Update regex to parse laravel comments correctly ([issue](https://github.com/MaestroError/html-strings-affixer/issues/5)) +
 - Fix `index out of range [-1]` [issue](https://github.com/MaestroError/html-strings-affixer/issues/4) +
-- Release
+- Release +
 -------        
 - Make TrimSpaces controllable as configuration from JSON
 - Handle errors to continue replacement on other files and add error location in output (report)
