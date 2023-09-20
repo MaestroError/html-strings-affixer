@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+  if: github.actor != 'github-actions[bot]'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -40,3 +41,30 @@ jobs:
     - name: Build
       if: startsWith(matrix.os, 'windows')
       run: go build -v -o ./bin/hsa.exe
+
+    - name: Commit and Push Binaries (Ubuntu)
+      if: startsWith(matrix.os, 'ubuntu')
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add ./bin/hsa
+        git commit -m "Add Ubuntu built binary [skip ci]"
+        git push
+
+    - name: Commit and Push Binaries (MacOS)
+      if: startsWith(matrix.os, 'macos')
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add ./bin/hsamac
+        git commit -m "Add MacOS built binary [skip ci]"
+        git push
+
+    - name: Commit and Push Binaries (Windows)
+      if: startsWith(matrix.os, 'windows')
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add ./bin/hsa.exe
+        git commit -m "Add Windows built binary [skip ci]"
+        git push
