@@ -23,5 +23,6 @@
     "detailed": false,
     "warn_as_Table": false,
     "force": false,
+    "report": false,
     "log_folder": "hsa/log"
 }

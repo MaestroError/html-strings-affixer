@@ -12,14 +12,13 @@ import (
 )
 
 type Reporter struct {
-	warnings []string
-	errors []string
-	success []string
-	report_table table.Writer
-	warnAsTable bool
+	warnings       []string
+	errors         []string
+	success        []string
+	report_table   table.Writer
+	warnAsTable    bool
 	warnings_table table.Writer
 }
-
 
 func (reporter *Reporter) AddWarning(message string) {
 	reporter.warnings = append(reporter.warnings, message)
@@ -61,15 +60,13 @@ func (reporter *Reporter) Report() {
 
 }
 
-
 func (reporter *Reporter) AskForConfirmation(s string, def string) bool {
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
 		var warnColor text.Color = text.FgYellow
-		msg := s + " y/n ["+def+"]: "
-		reporter.print(warnColor, "Confirm: " + msg)
-		
+		msg := s + " y/n [" + def + "]: "
+		reporter.print(warnColor, "Confirm: "+msg)
 
 		response, err := reader.ReadString('\n')
 		if err != nil {
@@ -93,14 +90,14 @@ func (reporter *Reporter) AskForConfirmation(s string, def string) bool {
 func (reporter *Reporter) PrintMsg(msg ...string) {
 	var msgColor text.Color = text.FgBlue
 	for _, m := range msg {
-		reporter.print(msgColor, "- " + m)
+		reporter.print(msgColor, "- "+m)
 	}
 }
 
 func (reporter *Reporter) PrintSuccess(msg ...string) {
 	var msgColor text.Color = text.FgGreen
 	for _, m := range msg {
-		reporter.print(msgColor, "- " + m)
+		reporter.print(msgColor, "- "+m)
 	}
 }
 
@@ -109,7 +106,7 @@ func (reporter *Reporter) PrintSuccess(msg ...string) {
 func (reporter *Reporter) printWarnings() {
 	var warnColor text.Color = text.FgHiYellow
 	for _, warning := range reporter.warnings {
-		reporter.print(warnColor, "- Warning: " + warning + "\n -----")
+		reporter.print(warnColor, "- Warning: "+warning+"\n -----")
 	}
 }
 
@@ -130,14 +127,14 @@ func (reporter *Reporter) printWarningsTable() {
 func (reporter *Reporter) printErrors() {
 	var errorColor text.Color = text.FgHiRed
 	for _, msg := range reporter.errors {
-		reporter.print(errorColor, "Error: " + msg)
+		reporter.print(errorColor, "Error: "+msg)
 	}
 }
 
 func (reporter *Reporter) printSuccesses() {
 	var sucColor text.Color = text.FgHiGreen
 	for _, msg := range reporter.success {
-		reporter.print(sucColor, "Success: " + msg)
+		reporter.print(sucColor, "Success: "+msg)
 	}
 }
 
@@ -185,4 +182,9 @@ func (reporter *Reporter) prepareWarningsTable() {
 	t.SetStyle(table.StyleLight)
 	t.AppendHeader(table.Row{"Warning on:", "location"})
 	reporter.warnings_table = t
+}
+
+// Getters
+func (reporter *Reporter) GetWarnings() []string {
+	return reporter.warnings
 }

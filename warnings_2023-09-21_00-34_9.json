@@ -1,0 +1,15 @@
+{
+  "count": 9,
+  "run_date": "2023-09-21_00-34",
+  "warnings": [
+    " 'Testing not found {} () string' - test.blade.php:19",
+    " '% Percent %' - test.blade.php:20",
+    " 'Testing 'single' quotes' - test.blade.php:21",
+    " 'Testing single 'quotes'' - test.blade.php:22",
+    " 'Veelgestelde vragen over {{$serviceName}}' - test.blade.php:80",
+    " '{{$serviceName}}' - test.blade.php:84, 90",
+    " 'Some text with 'quotes'' - test.blade.php:23",
+    "Couldn't affix: 'placeholder' in placeholder attribute not allowed - test.blade.php:39",
+    " 'John with 'single'' - test.blade.php:25"
+  ]
+}

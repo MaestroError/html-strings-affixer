@@ -95,6 +95,7 @@ You need to create "affixer.json" file in directory, from where you will run htm
     // Report
     (bool) "detailed" - if true, detailed report will be displayed
     (bool) "warn_as_Table" - if true, warnings will be displayed as table
+    (bool) "report" - if true, warnings will be saved as JSON file
 
     // Log
     (string) "log_folder" - folder to store logs
@@ -117,12 +118,14 @@ Some configs you can pass as arguments, use `hsa [command] --help` to read more 
 - -only="(string)" - Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag
 - -prefix="(string)" - New prefix for strings (**Required**)
 - -suffix="(string)" - New suffix for strings (**Required**)
+- -report - if true, warnings will be saved as JSON file
 
 ### *Check* command options
 - -allowed="(string)" - allowed file types, separated by commas (**Required**)
 - -file="(string)" - Use this argument to run command only on one file
 - -folder="(string)" - Folder to scan (**Required**)
 - -only="(string)" - Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag
+- -report - if true, warnings will be saved as JSON file
 
 # Usage
 It is recommended to use tool with [config file](#config-file), where you can specify all needed info and use all features, that tool is providing. If you already have configured file you can easily run:
@@ -156,6 +159,13 @@ Sometimes you will need to perform some commands only on single file, to reduce 
 ```
 ./vendor/bin/hsa replace -file="resources/view/contact.blade.php"
 ```
+
+#### Too many warning
+Sometimes with large project there are too many warning to check them via terminal. For such cases -report option could be helpful, it will generate JSON file with all warnings in it:
+```
+./vendor/bin/hsa check -report
+```
+Note that `-report` option is availabe for both, `replace` and `check` commands. Also, it can be set via JSON file as `report: true`.
 
 #### Executables
 There are several executables for different platforms, choose your one and use it. They are working the exactly same way, you are changing just the executable file name in command.
@@ -206,13 +216,15 @@ There are several executables for different platforms, choose your one and use i
 - Make warnings as table controllable from config and add it in Docs +
 - Test for latest changes +
 - Next Release +
--------
-- Make TrimSpaces controllable as configuration from JSON
-- Add --expand option for detailed info in check command
-- Add --report option for detailed report (JSON) in check command ([issue](https://github.com/MaestroError/html-strings-affixer/issues/2))
-- Add "@" in default ignore characters ([issue](https://github.com/MaestroError/html-strings-affixer/issues/3)) +
+-------        
+Updated 21/09/2023:         
+- Add --report option for detailed report (JSON) in check command ([issue](https://github.com/MaestroError/html-strings-affixer/issues/2)) +
+- Add `@` and `{{--` in default ignore characters ([issue](https://github.com/MaestroError/html-strings-affixer/issues/3)) +
 - Update regex to parse laravel comments correctly ([issue](https://github.com/MaestroError/html-strings-affixer/issues/5)) +
 - Fix `index out of range [-1]` [issue](https://github.com/MaestroError/html-strings-affixer/issues/4) +
+- Release
+-------        
+- Make TrimSpaces controllable as configuration from JSON
 - Handle errors to continue replacement on other files and add error location in output (report)
 - Test for latest changes
 - Next Release

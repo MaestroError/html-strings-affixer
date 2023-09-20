@@ -114,6 +114,8 @@ func resolveReplaceCommand() {
 	Detailed := Cmd.Bool("detailed", false, "If true, detailed report printed")
 	Force := Cmd.Bool("force", false, "If true, git status check is ignored")
 	oneFile := Cmd.String("file", "", "Use this argument to run command only on one file")
+	reportWarnings := Cmd.Bool("report", false, "If true, warning will be reported as JSON file")
+
 	// Parse arguments
 	Cmd.Parse(os.Args[2:])
 	// set command name
@@ -143,6 +145,9 @@ func resolveReplaceCommand() {
 	if *Force {
 		Configuration.SetForce(*Force)
 	}
+	if *reportWarnings {
+		Configuration.SetReportWarnings(*reportWarnings)
+	}
 }
 
 func runReplaceCommand() {
@@ -154,14 +159,14 @@ func runReplaceCommand() {
 	} else {
 		files = scanFolder()
 	}
-	
+
 	// Controls replace execution
 	replaceAllowed := true
-	
+
 	// Prepare reporter
 	Reporter.PrepareReplaceTable()
 	var totalReplaced int = 0
-	
+
 	// Check git status (Warn if need to commit)
 	if !checkGitStatus() {
 		if !Configuration.Force {
@@ -199,6 +204,8 @@ func resolveCheckCommand() {
 	allowed := checkCmd.String("allowed", "", "allowed file types, separated by commas")
 	methods := checkCmd.String("only", "", "Methods to use while parsing, separated by commas. Available: text, placeholder, alt, title, hashtag")
 	oneFile := checkCmd.String("file", "", "Use this argument to run command only on one file")
+	reportWarnings := checkCmd.Bool("report", false, "If true, warning will be reported as JSON file")
+
 	// Parse arguments
 	checkCmd.Parse(os.Args[2:])
 	// Set configs
@@ -215,6 +222,9 @@ func resolveCheckCommand() {
 	if *oneFile != "" {
 		Configuration.SetOneFile(*oneFile)
 	}
+	if *reportWarnings {
+		Configuration.SetReportWarnings(*reportWarnings)
+	}
 }
 
 func runCheckCommand() {
@@ -226,10 +236,9 @@ func runCheckCommand() {
 	} else {
 		files = scanFolder()
 	}
-	
+
 	// Prepare reporter
 	Reporter.PrepareCheckTable()
-
 
 	for _, path := range files {
 		parse := parsehtml.Parsehtml{}
@@ -248,15 +257,20 @@ func runCheckCommand() {
 				}
 			}
 
-			// Add warning messages if warning characters found
-			if len(foundChars) > 0 {
+			// Add warning messages if warning characters found and it is not "{{--"
+			isBladeComment := strings.Contains(element["found"], "{{--") && strings.Contains(element["found"], "--}}")
+			if len(foundChars) > 0 && !isBladeComment {
 				countWarnings++
-				msg := "Couldn't affix, found warning characters: '" + element["found"] + "' -> " + path + ":"+ element["lines"]
+				msg := "Couldn't affix, found warning characters: '" + element["found"] + "' -> " + path + ":" + element["lines"]
 				Reporter.AddWarning(msg)
 			}
 		}
 
-		Reporter.AddRow(path, strconv.Itoa(countWarnings) + "/" + strconv.Itoa(len(data)))
+		Reporter.AddRow(path, strconv.Itoa(countWarnings)+"/"+strconv.Itoa(len(data)))
+
+		if Configuration.GetReportWarnings() {
+			writeWarningsJson(Reporter.GetWarnings(), countWarnings)
+		}
 	}
 
 	// Report & Shutdown
@@ -326,7 +340,7 @@ func affix(path string, parser *parsehtml.Parsehtml, totalReplaced *int) {
 		// Add warning messages if warning characters found
 		if len(foundChars) > 0 {
 			approved = false
-			msg := "Couldn't affix, found warning characters: '" + element["found"] + "' -> " + path + ":"+ element["lines"]
+			msg := "Couldn't affix, found warning characters: '" + element["found"] + "' -> " + path + ":" + element["lines"]
 			Reporter.AddWarning(msg)
 		}
 
@@ -341,7 +355,7 @@ func affix(path string, parser *parsehtml.Parsehtml, totalReplaced *int) {
 
 		// Add error message if string is approved but not replaced
 		if !replaced && approved {
-			msg := "String '" + element["found"] + "' not found in file " + path + " (Lines: "+ element["lines"] + ") "
+			msg := "String '" + element["found"] + "' not found in file " + path + " (Lines: " + element["lines"] + ") "
 			Reporter.AddError(msg)
 		}
 
@@ -359,12 +373,12 @@ func affix(path string, parser *parsehtml.Parsehtml, totalReplaced *int) {
 			Logger.AddNewItem(path, element)
 		}
 	}
-	
+
 	// Msg for developer about disabled logger in this run
 	if Logger.GetLogFolder() == "" {
 		Reporter.PrintMsg("Logger disabled (You will not able to check/undo this changes")
 	}
-	
+
 	// Set total for report
 	*totalReplaced = *totalReplaced + countReplaced
 	// Make report string r/f format
@@ -374,7 +388,12 @@ func affix(path string, parser *parsehtml.Parsehtml, totalReplaced *int) {
 	if !Configuration.Detailed_report {
 		Reporter.AddRow(path, replacedString)
 	}
-	
+
+	if Configuration.GetReportWarnings() {
+		FoundWarnings := Reporter.GetWarnings()
+		writeWarningsJson(FoundWarnings, len(FoundWarnings))
+	}
+
 	// write file with same name
 	err := ioutil.WriteFile(path, []byte(affixer.GetContent()), 0)
 	if err != nil {
@@ -389,7 +408,7 @@ func affix(path string, parser *parsehtml.Parsehtml, totalReplaced *int) {
 func checkGitStatus() bool {
 	out, err := exec.Command("git", "status").Output()
 	if err != nil {
-		Reporter.PrintMsg("No git command, status check doesn't required (" + err.Error() + ")");
+		Reporter.PrintMsg("No git command, status check doesn't required (" + err.Error() + ")")
 		return true
 	}
 	asString := string(out)
@@ -415,7 +434,7 @@ func checkForWarningChars(found string) []string {
 func checkForPlaceholder(element map[string]string, path string) bool {
 	// if placeholder attribute contains only "placeholder"
 	if strings.ToLower(element["found"]) == "placeholder" {
-		msg := "Couldn't affix: 'placeholder' in placeholder attribute not allowed -> " + path + ":"+ element["lines"]
+		msg := "Couldn't affix: 'placeholder' in placeholder attribute not allowed -> " + path + ":" + element["lines"]
 		Reporter.AddWarning(msg)
 		return false
 	}
@@ -515,7 +534,6 @@ func exists(path string) (bool, error) {
 	return false, err
 }
 
-
 func createDirIfNotExists(path string) {
 	exists, err := exists(path)
 	if err != nil {
@@ -532,4 +550,49 @@ func PrettyPrint(v interface{}) (err error) {
 		fmt.Println(string(b))
 	}
 	return
+}
+
+func writeWarningsJson(warnings []string, count int) {
+	// Remove the prefix "Couldn't affix, found warning characters:" from warnings and replace "->" with "-"
+	for i, warning := range warnings {
+		warnings[i] = strings.TrimPrefix(warning, "Couldn't affix, found warning characters:")
+		warnings[i] = strings.ReplaceAll(warnings[i], "->", "-")
+	}
+
+	// Get the current time and format it
+	currentTime := time.Now()
+	formattedTime := currentTime.Format("2006-01-02_15-04")
+
+	// Create a struct to hold the warning data
+	type WarningsData struct {
+		Count    int      `json:"count"`
+		RunDate  string   `json:"run_date"`
+		Warnings []string `json:"warnings"`
+	}
+
+	// Populate the struct with the provided warnings and count
+	data := WarningsData{
+		Count:    count,
+		RunDate:  formattedTime,
+		Warnings: warnings,
+	}
+
+	// Convert the struct to JSON
+	jsonData, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		fmt.Println("Error marshaling to JSON:", err)
+		return
+	}
+
+	// Generate a filename based on the current date and warning count
+	filename := fmt.Sprintf("warnings_%s_%d.json", formattedTime, count)
+
+	// Write the JSON data to the file
+	err = ioutil.WriteFile(filename, jsonData, 0644)
+	if err != nil {
+		fmt.Println("Error writing JSON to file:", err)
+		return
+	}
+
+	fmt.Println("Warnings written to:", filename)
 }
