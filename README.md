@@ -83,7 +83,7 @@ You need to create "affixer.json" file in directory, from where you will run htm
     (array) "ignore_names" - ignores files and folders with given names
     
     // Parse
-    (array) "ignore" - ignores strings which contains given character
+    (array) "ignore" - ignores strings which contains given character (Group of characters not allowed, only single characters)
     (array) "warnings" - Warns about strings which contains given characters (not replaces)
     (array) "methods" - Uses only given parse methods. Available: text, placeholder, alt, title, hashtag
 
@@ -210,9 +210,9 @@ There are several executables for different platforms, choose your one and use i
 - Make TrimSpaces controllable as configuration from JSON
 - Add --expand option for detailed info in check command
 - Add --report option for detailed report (JSON) in check command ([issue](https://github.com/MaestroError/html-strings-affixer/issues/2))
-- Add "@" in default ignore characters ([issue](https://github.com/MaestroError/html-strings-affixer/issues/3))
-- Update regex to parse laravel comments correctly ([issue](https://github.com/MaestroError/html-strings-affixer/issues/5))
-- Fix `index out of range [-1]` [issue](https://github.com/MaestroError/html-strings-affixer/issues/4)
+- Add "@" in default ignore characters ([issue](https://github.com/MaestroError/html-strings-affixer/issues/3)) +
+- Update regex to parse laravel comments correctly ([issue](https://github.com/MaestroError/html-strings-affixer/issues/5)) +
+- Fix `index out of range [-1]` [issue](https://github.com/MaestroError/html-strings-affixer/issues/4) +
 - Handle errors to continue replacement on other files and add error location in output (report)
 - Test for latest changes
 - Next Release

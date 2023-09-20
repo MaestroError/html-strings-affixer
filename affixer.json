@@ -18,5 +18,9 @@
     ],
     "detailed": false,
     "force": false,
-    "log_folder": "hsa/log"
+    "log_folder": "hsa/log",
+    "prefix": "{{ __('",
+    "suffix": "') }}",
+    "ignore": ["#", "_", ">", "^", "*", "=", "@"],
+    "warnings": ["%", "{", "(", "}", ")", "$", "'"]
 }

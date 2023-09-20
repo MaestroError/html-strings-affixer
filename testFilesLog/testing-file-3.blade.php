@@ -56,7 +56,6 @@
 
     <!-- XX Didn't removes hashtag after replace -->
     <p>{{ __('John with "double"') }}</p>
-
     <input Placeholder='{{ __('Some "text" - 2') }}' />
     
 </body>

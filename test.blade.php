@@ -93,5 +93,7 @@
         CT-CT
     </div>
 
+    {{-- Blade comment --}}
+
 </body>
 </html>

@@ -129,7 +129,7 @@ func (parse *Parsehtml) ExtractText() {
 	parse.parseContent("text")
 }
 
-// opening tag <-> opening tag "(\<[^\/](.{0,10})\>)" text extraction 
+// opening tag <-> opening tag "(\<[^\/](.{0,10})\>)" text extraction
 func (parse *Parsehtml) ExtractTextOO() {
 	// set affixes for simple strings extraction
 	parse.SetPrefix(`(\<[^\/](.{0,10})\>)`)
@@ -140,7 +140,7 @@ func (parse *Parsehtml) ExtractTextOO() {
 	parse.parseContent("text")
 }
 
-// closing tag <-> closing tag "(\<\/(.{0,10})\>)" text extraction 
+// closing tag <-> closing tag "(\<\/(.{0,10})\>)" text extraction
 func (parse *Parsehtml) ExtractTextCC() {
 	// set affixes for simple strings extraction
 	parse.SetPrefix(`(\<\/(.{0,10})\>)`)
@@ -151,7 +151,7 @@ func (parse *Parsehtml) ExtractTextCC() {
 	parse.parseContent("text")
 }
 
-// closing tag <-> opening tag text extraction 
+// closing tag <-> opening tag text extraction
 func (parse *Parsehtml) ExtractTextCO() {
 	// set affixes for simple strings extraction
 	parse.SetPrefix(`(\<\/(.{0,10})\>)`)
@@ -306,7 +306,7 @@ func (parse *Parsehtml) generateRegex() {
 		// THIRD VERSION OF REGEX (!Gives too much empty string!)
 		// reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `]+[^` + deniedCharString + `]+`+`[^` + deniedCharString + `]` + parse.suffix)
 		// VERSION 4 OF REGEX (! Didn't finds with regex shorter then 4 !)
-		reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `]+[A-Za-z0-9][^` + deniedCharString + `]+`+`[^` + deniedCharString + `]` + parse.suffix)
+		reg := regexp.MustCompile(parse.prefix + `[^` + deniedCharString + `]+[A-Za-z0-9][^` + deniedCharString + `]+` + `[^` + deniedCharString + `]` + parse.suffix)
 		parse.search_regex = reg.String()
 		parse.regexp = reg
 		// fmt.Println(parse.search_regex + "\n")
@@ -348,6 +348,11 @@ func (parse *Parsehtml) removeParsePrefix(element string) string {
 	re := regexp.MustCompile(parse.prefix)
 	foundSlice := re.FindAllString(element, -1)
 
+	// Check if foundSlice is empty
+	if len(foundSlice) == 0 {
+		return element // or handle it in some other way
+	}
+
 	found := parse.RemoveFirstOccurrence(element, foundSlice[0])
 	return found
 }
@@ -357,6 +362,12 @@ func (parse *Parsehtml) removeParseSuffix(element string) string {
 	// find all occurrences
 	re := regexp.MustCompile(parse.suffix)
 	foundSlice := re.FindAllString(element, -1)
+
+	// Check if foundSlice is empty
+	if len(foundSlice) == 0 {
+		return element // or handle it in some other way
+	}
+
 	// get needed part of string (the last)
 	needToRemove := foundSlice[len(foundSlice)-1]
 
