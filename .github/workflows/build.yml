@@ -27,7 +27,7 @@ jobs:
       run: go get -v -t -d ./...
 
     - name: Run Tests
-      run: go test -v ./...
+      run: go test
 
     - name: Build
       if: startsWith(matrix.os, 'ubuntu')
