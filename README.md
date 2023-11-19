@@ -220,7 +220,7 @@ Support Our Work? 🌟 You can help us keep the code flowing by making a small d
 
 Or use QR code:
 
-[<img src="https://github.com/MaestroError/resources/blob/maestro/buymeamilk/qr-code.png" width="120px">](https://www.buymeacoffee.com/maestroerror)
+[<img src="https://github.com/MaestroError/resources/blob/maestro/buymeamilk/qr-code.png" width="150px">](https://www.buymeacoffee.com/maestroerror)
 
 ---
 
