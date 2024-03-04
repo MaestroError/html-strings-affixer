@@ -4,6 +4,8 @@ CLI tool that finds texts in HTML and replaces it with suffixed and prefixed str
 `<p>Some nice string</p>` -> `<p>{{ __('Some nice string') }}</p>`  
 But can be used in any file which contains html (".jsx", ".vue", ".twig") with same purpose. Of course, prefix and suffix are customizable
 
+_JavaScript version is already available [here](https://github.com/MaestroError/hsa-js) ([hsa-js](https://github.com/MaestroError/hsa-js))_
+
 #### Quick start
 
 Check out a little [article](https://medium.com/towardsdev/translate-laravel-blade-files-easily-f3753f5395bd) on Medium about the tool.
@@ -220,7 +222,7 @@ Support Our Work? 🌟 You can help us keep the code flowing by making a small d
 
 Or use QR code:
 
-[<img src="https://github.com/MaestroError/resources/blob/maestro/buymeamilk/qr-code.png" width="150px">](https://www.buymeacoffee.com/maestroerror)
+[<img src="https://github.com/MaestroError/resources/blob/maestro/buymeamilk/qr-code.png" width="135px">](https://www.buymeacoffee.com/maestroerror)
 
 ---
 
